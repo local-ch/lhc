@@ -13,6 +13,7 @@ class LHC::Request
   private
 
   def request(options)
+    merge_explicit_params!(options[:params])
     params = options[:params] unless options[:method] == :post
     body = options[:params].to_json if options[:method] == :post
     request = Typhoeus::Request.new(
@@ -42,5 +43,13 @@ class LHC::Request
   def on_error(response)
     error = LHC::Error.find(response.code)
     fail error.new("#{response.code} #{response.body}", response)
+  end
+
+   # Merge explicit params nested in 'params' namespace with original hash.
+  def merge_explicit_params!(params)
+    return true unless params
+    explicit_params = params[:params]
+    params.delete(:params)
+    params.merge!(explicit_params) if explicit_params
   end
 end
