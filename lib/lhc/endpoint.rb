@@ -3,7 +3,7 @@
 # An endpoint can look like ':datastore/v2/:campaign_id/feedbacks'.
 class LHC::Endpoint
 
-  INJECTION = /\:.*?(?=\/)/
+  INJECTION = /\:[\w]+?(?=\/)/
 
   attr_accessor :url
 
@@ -26,10 +26,15 @@ class LHC::Endpoint
   # Removes keys from provided params hash
   # when they are used for injecting them in the provided endpoint.
   def remove_injected_params!(params)
+    removed = {}
     url.scan(INJECTION) do |match|
       match = match.gsub(/^\:/, '')
-      params.delete(match.to_sym) if find_injection(match, params)
+      if injection = find_injection(match, params)
+        removed[match.to_sym] = injection
+        params.delete(match.to_sym)
+      end
     end
+    removed
   end
 
   # Returns all injections used in the url.

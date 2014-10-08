@@ -9,8 +9,11 @@ class LHC::Config
     self.config = {}
   end
 
-  def self.set(name, options)
-    instance.config[name] = options
+  def self.set(name, endpoint, params = {})
+    instance.config[name] = OpenStruct.new({
+      endpoint: endpoint,
+      params: params
+    })
   end
 
   def self.[](name)
