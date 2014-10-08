@@ -17,7 +17,7 @@ describe LHC do
       LHC.get('http://datastore.lb-service/v2/feedbacks', params: parameters)
     end
 
-    it 'does a get request when providing a configured name of an endpoint' do
+    it 'does a get request when providing the name of a configured endpoint' do
       endpoint = 'http://:datastore/v2/feedbacks'
       params = { datastore: 'datastore.lb-service' }
       LHC::Config.set(:feedbacks, endpoint, params)
