@@ -2,16 +2,16 @@ require 'active_support'
 
 module LHC
 
-  module Get
+  module Post
     extend ActiveSupport::Concern
 
     module ClassMethods
 
-      def get(url, options = {})
+      def post(url, options)
         LHC::Request.new(
           options.merge(
             url: url,
-            method: :get
+            method: :post
           )
         ).response
       end
