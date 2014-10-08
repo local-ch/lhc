@@ -11,9 +11,29 @@ LHC
   response.headers  # Hash
 ```
 
-## Available methods
+## Available shorthand methods
 
-Available HTTP methods are `get`, `post`, `put`, `delete`, `options`.
+Available HTTP methods are `get`, `post`, `put` & `delete` other methods are available using LHC::Request directly.
+
+## Make a request from scratch
+
+```
+  response = LHC::Request.new(url: 'http://local.ch', method: :options)
+  response.headers
+
+  response = LHC::Request.new(url: 'http://datastore-stg.lb-service.sunrise.intra.local.ch/v2/feedbacks', method: :get)
+  response.data
+```
+
+## Transfer data through the body
+
+Data that is transfered using the HTTP request body is transfered as you provied it.
+If you want to send it as json you should transfer it to be json first.
+
+```
+  LHC.post('http://datastore.lb-service/v2/feedbacks', body: feedback.to_json)
+```
+
 
 ## Configure endpoints
 
