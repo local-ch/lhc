@@ -1,25 +1,55 @@
 require 'typhoeus'
 
+# A abstraction of a response.
+# In this case we abstract the thphoues response.
 class LHC::Response
 
-  attr_accessor :response
+  @raw
 
-  def initialize(response)
-    self.response = response
+  def initialize(raw)
+    self.raw = raw
   end
 
   # Access response data.
   # Cache parsing.
   def data
-    @data ||= JSON.parse(response.body, object_class: OpenStruct)
+    @data ||= JSON.parse(raw.body, object_class: OpenStruct)
     @data
   end
 
   def body
-    response.body
+    raw.body
+  end
+
+  def code
+    raw.code
   end
 
   def headers
-    response.headers
+    raw.headers
   end
+
+  def request_url
+    raw.request.base_url
+  end
+
+  def request_method
+    raw.request.options.fetch(:method, :get).to_sym
+  end
+
+  # Provides response time in ms.
+  def time
+    (raw.time || 0) * 1000
+  end
+
+  private
+
+  def raw=(raw)
+    @raw = raw
+  end
+
+  def raw
+    @raw
+  end
+
 end
