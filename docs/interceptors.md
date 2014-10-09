@@ -15,10 +15,12 @@ Interceptors
 
 ## Callbacks
 
-`before_request` is called when the request is prepared and about to be executed.
+`before_request(request)` is called when the request is prepared and about to be executed.
 
-`after_request` and `before_response` are the same and are called after the request is fired but before the response arrives.
+`after_request(request)` is called after request was fired.
 
-`after_response` is called after the response arrives.
+`before_response(request)` is called before response arrives, so directly after `after_request` was called.
+
+`after_response(response)` is called after the response arrives.
 
 ## Priority

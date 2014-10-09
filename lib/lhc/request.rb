@@ -5,18 +5,21 @@ class LHC::Request
   attr_accessor :response
 
   def initialize(options)
-    request(options).run
+    request = create_request(options)
+    LHC::Interceptor.intercept!(:before_request, request)
+    request.run
+    LHC::Interceptor.intercept!(:after_request, request)
+    LHC::Interceptor.intercept!(:before_response, request)
     self
   end
 
   private
 
-  def request(options)
+  def create_request(options)
     options.merge!(url: compute_url(options[:url], options[:params]))
     options.merge!(followlocation: true) unless options[:followlocation]
     request = Typhoeus::Request.new(options.delete(:url), options)
     request.on_complete { |response| on_complete(response) }
-    LHC::Interceptor.intercept!(:before_request, request)
     request
   end
 
@@ -30,6 +33,7 @@ class LHC::Request
 
   def on_complete(response)
     self.response = LHC::Response.new(response)
+    LHC::Interceptor.intercept!(:after_response, self.response)
     if response.code.to_s[/^(2\d\d+)/]
       on_success(response)
     else
