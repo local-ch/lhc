@@ -36,7 +36,7 @@ If you want to send it as json you should transfer it to be json first.
 
 ## Configure endpoints
 
-You can configure endpoints and then use HTTP methods targeting that endpoint by name:
+You can configure endpoints and then use HTTP methods targeting that endpoint by name.
 
 ```
   endpoint = 'http://:datastore/v2/feedbacks'
