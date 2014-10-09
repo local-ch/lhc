@@ -18,11 +18,11 @@ Available HTTP methods are `get`, `post`, `put` & `delete` other methods are ava
 ## Make a request from scratch
 
 ```
-  response = LHC::Request.new(url: 'http://local.ch', method: :options)
-  response.headers
+  request = LHC::Request.new(url: 'http://local.ch', method: :options)
+  request.response.headers
 
   response = LHC::Request.new(url: 'http://datastore-stg.lb-service.sunrise.intra.local.ch/v2/feedbacks', method: :get)
-  response.data
+  request.response.data
 ```
 
 ## Transfer data through the body
