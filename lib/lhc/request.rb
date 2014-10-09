@@ -16,6 +16,7 @@ class LHC::Request
     options.merge!(followlocation: true) unless options[:followlocation]
     request = Typhoeus::Request.new(options.delete(:url), options)
     request.on_complete { |response| on_complete(response) }
+    LHC::Interceptor.intercept!(:before_request, request)
     request
   end
 
