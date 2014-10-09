@@ -34,7 +34,6 @@ If you want to send it as json you should transfer it to be json first.
   LHC.post('http://datastore.lb-service/v2/feedbacks', body: feedback.to_json)
 ```
 
-
 ## Configure endpoints
 
 You can configure endpoints and then use HTTP methods targeting that endpoint by name:
@@ -45,3 +44,19 @@ You can configure endpoints and then use HTTP methods targeting that endpoint by
   LHC::Config.set(:feedbacks, endpoint, params)
   LHC.get(:feedbacks)
 ```
+
+## Interceptors
+
+```
+
+  class TrackingIdInterceptor < LHC::Interceptor
+
+    def before_request(request)
+      request.options[:params] ||= {}
+      request.options[:params][:tid] = 123
+    end
+  end
+
+```
+
+[Read more about interceptors](docs/interceptors.md).
