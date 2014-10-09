@@ -59,4 +59,4 @@ You can configure endpoints and then use HTTP methods targeting that endpoint by
 
 ```
 
-[Read more about interceptors](docs/interceptors.md).
+→ [Read more about interceptors](docs/interceptors.md)
