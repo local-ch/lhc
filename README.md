@@ -13,7 +13,7 @@ LHC
 
 ## Available shorthand methods
 
-Available HTTP methods are `get`, `post`, `put` & `delete` other methods are available using LHC::Request directly.
+Available HTTP methods are `get`, `post`, `put` & `delete` other methods are available using `LHC::Request.new(options)` directly.
 
 ## Make a request from scratch
 
@@ -59,4 +59,4 @@ You can configure endpoints and then use HTTP methods targeting that endpoint by
 
 ```
 
-[Read more about interceptors](docs/interceptors.md).
+→ [Read more about interceptors](docs/interceptors.md)
