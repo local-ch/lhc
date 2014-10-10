@@ -15,15 +15,15 @@ LHC uses [typhoeus](https://github.com/typhoeus/typhoeus) to make http requests.
 
 ## Available shorthand methods
 
-Available HTTP methods are `get`, `post`, `put` & `delete` other methods are available using `LHC::Request.new(options)` directly.
+Available HTTP methods are `get`, `post`, `put` & `delete` other methods are available using `LHC.request(options)` directly.
 
 ## Make a request from scratch
 
 ```ruby
-  request = LHC::Request.new(url: 'http://local.ch', method: :options)
+  request = LHC.request(url: 'http://local.ch', method: :options)
   request.response.headers
 
-  response = LHC::Request.new(url: 'http://datastore-stg.lb-service.sunrise.intra.local.ch/v2/feedbacks', method: :get)
+  response = LHC.request(url: 'http://datastore-stg.lb-service.sunrise.intra.local.ch/v2/feedbacks', method: :get)
   request.response.data
 ```
 

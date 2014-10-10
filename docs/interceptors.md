@@ -34,7 +34,7 @@ Interceptors are mainly global. You can opt-out any global interceptor by using 
   class GeneralStatsInterceptor < LHC::Interceptor
   end
 
-  LHC::Request.new({opt_out: :general_stats_interceptor}) # is not calling the GeneralStatsInterceptor
+  LHC.request({opt_out: :general_stats_interceptor, url: 'http://local.ch'}) # is not calling the GeneralStatsInterceptor
 ```
 
 ## Opt-in
@@ -48,5 +48,5 @@ To do so you have to define the Interceptor to be `opt_in`.
     opt_in
   end
 
-  LHC::Request.new({opt_in: :special_stats_interceptor}) # is calling the SpecialStatsInterceptor
+  LHC.request({opt_in: :special_stats_interceptor, url: 'http://local.ch'}) # is calling the SpecialStatsInterceptor
 ```
