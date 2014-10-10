@@ -53,8 +53,7 @@ You can configure endpoints and then use HTTP methods targeting that endpoint by
   class TrackingIdInterceptor < LHC::Interceptor
 
     def before_request(request)
-      request.options[:params] ||= {}
-      request.options[:params][:tid] = 123
+      request.add_param(tid: 123)
     end
   end
 ```

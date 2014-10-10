@@ -2,15 +2,20 @@ require 'typhoeus'
 
 class LHC::Request
 
-  attr_accessor :response
+  attr_accessor :response, :raw_request
 
   def initialize(options)
-    request = create_request(options)
-    LHC::Interceptor.intercept!(:before_request, request)
-    request.run
-    LHC::Interceptor.intercept!(:after_request, request)
-    LHC::Interceptor.intercept!(:before_response, request)
+    self.raw_request = create_request(options)
+    LHC::Interceptor.intercept!(:before_request, self)
+    raw_request.run
+    LHC::Interceptor.intercept!(:after_request, self)
+    LHC::Interceptor.intercept!(:before_response, self)
     self
+  end
+
+  def add_param(param)
+    raw_request.options[:params] ||= {}
+    raw_request.options[:params].merge!(param)
   end
 
   private

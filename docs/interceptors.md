@@ -9,8 +9,7 @@ Interceptors are registered globally as soon as you intherit from LHC::Intercept
   class TrackingIdInterceptor < LHC::Interceptor
 
     def before_request(request)
-      request.options[:params] ||= {}
-      request.options[:params][:tid] = 123
+      request.add_param(tid: 123)
     end
   end
 ```
