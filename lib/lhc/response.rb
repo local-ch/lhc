@@ -6,7 +6,10 @@ class LHC::Response
 
   @raw
 
-  def initialize(raw)
+  attr_accessor :request
+
+  def initialize(raw, request)
+    self.request = request
     self.raw = raw
   end
 
@@ -15,6 +18,16 @@ class LHC::Response
   def data
     @data ||= JSON.parse(raw.body, object_class: OpenStruct)
     @data
+  end
+
+  # List of interceptors opt-in
+  def opt_in
+    request.opt_in
+  end
+
+  # List of interceptors opt-out
+  def opt_out
+    request.opt_out
   end
 
   def body

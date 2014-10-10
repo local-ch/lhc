@@ -8,10 +8,10 @@ describe LHC::Response do
 
     let(:request) { OpenStruct.new({ options: options }) }
 
+    let(:raw_response) { OpenStruct.new({request: request}) }
+
     it 'provides response options' do
-      response = LHC::Response.new(
-        OpenStruct.new({request: request})
-      )
+      response = LHC::Response.new(raw_response, nil)
       expect(response.request_options).to eq options
     end
   end

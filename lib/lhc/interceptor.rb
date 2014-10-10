@@ -1,5 +1,7 @@
 class LHC::Interceptor
 
+  include Opt
+
   attr_accessor :priority
 
   cattr_accessor :interceptors
@@ -13,6 +15,7 @@ class LHC::Interceptor
 
   def self.intercept!(name, target)
     interceptors.each do |interceptor|
+      next if opted_out?(interceptor, target)
       interceptor.send(name, target)
     end
   end
