@@ -31,7 +31,7 @@ describe LHC do
     it 'does a post request when providing the name of a configured endpoint' do
       endpoint = 'http://:datastore/v2/feedbacks'
       options = { params: { datastore: 'datastore.lb-service' } }
-      LHC::Config.set(:feedbacks, endpoint, options)
+      LHC.set(:feedbacks, endpoint, options)
       LHC.put(:feedbacks, body: change.to_json)
     end
 

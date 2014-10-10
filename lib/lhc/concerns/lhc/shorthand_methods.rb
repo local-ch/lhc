@@ -7,6 +7,10 @@ module LHC
 
     module ClassMethods
 
+      def set(name, endpoint, options = {})
+        LHC::Config.set(name, endpoint, options)
+      end
+
       def get(url, options = {})
         request(options.merge(
           url: url,
