@@ -8,8 +8,7 @@ describe LHC do
       class TrackingIdInterceptor < LHC::Interceptor
 
         def before_request(request)
-          request.options[:params] ||= {}
-          request.options[:params][:tid] = 123
+          request.add_param(tid: 123)
         end
       end
     end
