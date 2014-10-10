@@ -6,7 +6,7 @@ LHC uses [typhoeus](https://github.com/typhoeus/typhoeus) for http requests.
 ## Quick Start Guide
 
 ```ruby
-  response = LHC.get('http://datastore-stg.lb-service.sunrise.intra.local.ch/v2/feedbacks', has_reviews: true)
+  response = LHC.get('http://datastore-stg.lb-service.sunrise.intra.local.ch/v2/feedbacks')
   response.data.items[0]
   response.data.items[0].recommended
   response.body     # String
