@@ -1,6 +1,8 @@
 LHC
 ===
 
+LHC uses [typhoeus](https://github.com/typhoeus/typhoeus) to make http requests.
+
 ## Quick Start Guide
 
 ```
