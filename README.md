@@ -3,6 +3,8 @@ LHC
 
 LHC uses [typhoeus](https://github.com/typhoeus/typhoeus) for http requests.
 
+Get a look at [LHS](https://github.com/local-ch/LHS), if you are searching for something more 'high level' that can query webservices easily and provides easy data access.
+
 ## Quick Start Guide
 
 ```ruby
