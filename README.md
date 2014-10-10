@@ -20,11 +20,11 @@ Available HTTP methods are `get`, `post`, `put` & `delete` other methods are ava
 ## Make a request from scratch
 
 ```ruby
-  request = LHC.request(url: 'http://local.ch', method: :options)
-  request.response.headers
+  response = LHC.request(url: 'http://local.ch', method: :options)
+  response.headers
 
   response = LHC.request(url: 'http://datastore-stg.lb-service.sunrise.intra.local.ch/v2/feedbacks', method: :get)
-  request.response.data
+  response.data
 ```
 
 ## Transfer data through the body
