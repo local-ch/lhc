@@ -8,10 +8,10 @@ describe LHC::Response do
 
     let(:request) { OpenStruct.new({ base_url: url }) }
 
+    let(:raw_response) { OpenStruct.new({request: request}) }
+
     it 'provides request_url' do
-      response = LHC::Response.new(
-        OpenStruct.new({request: request})
-      )
+      response = LHC::Response.new(raw_response, nil)
       expect(response.request_url).to eq url
     end
   end

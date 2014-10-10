@@ -2,15 +2,26 @@ require 'typhoeus'
 
 class LHC::Request
 
-  attr_accessor :response, :raw_request
+  attr_accessor :response, :raw_request, :opt_in, :opt_out
 
   def initialize(options)
+    opt(options)
     self.raw_request = create_request(options)
     LHC::Interceptor.intercept!(:before_request, self)
     raw_request.run
     LHC::Interceptor.intercept!(:after_request, self)
     LHC::Interceptor.intercept!(:before_response, self)
     self
+  end
+
+  # Store and provide interceptors either opt-in or opt-out in request and remove from options
+  def opt(options)
+    self.opt_in = Array(options.delete(:opt_in)) || []
+    self.opt_out = Array(options.delete(:opt_out)) || []
+  end
+
+  def options
+    raw_request.options
   end
 
   def add_param(param)
@@ -45,7 +56,7 @@ class LHC::Request
   end
 
   def on_complete(response)
-    self.response = LHC::Response.new(response)
+    self.response = LHC::Response.new(response, self)
     LHC::Interceptor.intercept!(:after_response, self.response)
     if response.code.to_s[/^(2\d\d+)/]
       on_success(response)
