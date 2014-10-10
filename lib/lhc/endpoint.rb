@@ -3,7 +3,7 @@
 # An endpoint can look like ':datastore/v2/:campaign_id/feedbacks'.
 class LHC::Endpoint
 
-  INJECTION = /\:[\w]+?(?=\/)/
+  INJECTION = /\:[\w]+/
 
   attr_accessor :url
 
