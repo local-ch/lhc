@@ -8,9 +8,9 @@ describe LHC::Response do
 
     it 'provides response code' do
       response = LHC::Response.new(
-        OpenStruct.new({code: 200})
+        OpenStruct.new({code: code})
       )
-      expect(response.code).to eq 200
+      expect(response.code).to eq code
     end
   end
 end

@@ -29,6 +29,10 @@ class LHC::Response
     raw.headers
   end
 
+  def request_options
+    raw.request.options
+  end
+
   def request_url
     raw.request.base_url
   end
