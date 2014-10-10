@@ -16,19 +16,27 @@ class LHC::Request
   private
 
   def create_request(options)
-    options.merge!(url: compute_url(options[:url], options[:params]))
-    options.merge!(followlocation: true) unless options[:followlocation]
+    options = options.merge(options_from_config(options)) if LHC::Config[options[:url]]
     request = Typhoeus::Request.new(options.delete(:url), options)
     request.on_complete { |response| on_complete(response) }
     request
   end
 
-  def compute_url(url, params = {})
-    return url unless url.is_a? Symbol
-    configuration = LHC::Config[url] || fail("No endpoint found for #{url}")
+  def options_from_config(options)
+    url = options[:url]
+    configuration = LHC::Config[url]
+    options = options.deep_merge(configuration.options)
+    options = compute_url_options!(options) if url.is_a?(Symbol)
+    options
+  end
+
+  def compute_url_options!(options)
+    configuration = LHC::Config[options[:url]] || fail("No endpoint found for #{options[:url]}")
+    options = options.deep_merge(configuration.options)
     endpoint = LHC::Endpoint.new(configuration[:endpoint])
-    params = (params || {}).merge(configuration.params)
-    endpoint.inject(params)
+    options[:url] = endpoint.inject(options[:params])
+    endpoint.remove_injected_params!(options[:params])
+    options
   end
 
   def on_complete(response)

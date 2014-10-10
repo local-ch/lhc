@@ -42,8 +42,8 @@ You can configure endpoints and then use HTTP methods targeting that endpoint by
 
 ```ruby
   endpoint = 'http://:datastore/v2/feedbacks'
-  params = { datastore: 'datastore.lb-service' }
-  LHC::Config.set(:feedbacks, endpoint, params)
+  options = { params: { datastore: 'datastore.lb-service' } }
+  LHC::Config.set(:feedbacks, endpoint, options)
   LHC.get(:feedbacks)
 ```
 
