@@ -33,7 +33,7 @@ Other methods are available using `LHC.request(options)`.
 
 Data that is transfered using the HTTP request body is transfered as you provied it.
 
-If you want to send it as json, you should transfer it to be json first.
+If you want to send it as json, you should transfer it to json first.
 
 ```ruby
   LHC.post('http://datastore.lb-service/v2/feedbacks', body: feedback.to_json)
