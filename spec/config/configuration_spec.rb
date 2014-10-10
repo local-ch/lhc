@@ -13,7 +13,7 @@ describe LHC do
       }
     end
 
-    before(:each) { LHC::Config.set(:kpi_tracker, endpoint, options) }
+    before(:each) { LHC.set(:kpi_tracker, endpoint, options) }
 
     it 'configures urls to be able to access them by name later' do
       expect(LHC::Config[:kpi_tracker].endpoint).to eq endpoint
