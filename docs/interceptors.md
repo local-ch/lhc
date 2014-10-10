@@ -5,7 +5,7 @@ Interceptors
 
 Interceptors are registered globally as soon as you intherit from LHC::Interceptor.
 
-```
+```ruby
   class TrackingIdInterceptor < LHC::Interceptor
 
     def before_request(request)
@@ -31,10 +31,10 @@ Interceptors are registered globally as soon as you intherit from LHC::Intercept
 
 Interceptors are mainly global. You can opt-out any global interceptor by using the `opt_out` keyword when passing options to a request.
 
-```
+```ruby
   class GeneralStatsInterceptor < LHC::Interceptor
   end
-  
+
   LHC::Request.new({opt_out: :general_stats_interceptor}) # is not calling the GeneralStatsInterceptor
 ```
 
@@ -44,10 +44,10 @@ You can also define Interceptors that are just called when opt-in for specific r
 
 To do so you have to define the Interceptor to be `opt_in`.
 
-```
+```ruby
   class SpecialStatsInterceptor < LHC::Interceptor
     opt_in
   end
-  
+
   LHC::Request.new({opt_in: :special_stats_interceptor}) # is calling the SpecialStatsInterceptor
 ```
