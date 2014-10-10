@@ -15,7 +15,9 @@ LHC uses [typhoeus](https://github.com/typhoeus/typhoeus) for http requests.
 
 ## Available shorthand methods
 
-Available HTTP methods are `get`, `post`, `put` & `delete` other methods are available using `LHC.request(options)` directly.
+Available HTTP methods are `get`, `post`, `put` & `delete`.
+
+Other methods are available using `LHC.request(options)`.
 
 ## Make a request from scratch
 
@@ -30,7 +32,8 @@ Available HTTP methods are `get`, `post`, `put` & `delete` other methods are ava
 ## Transfer data through the body
 
 Data that is transfered using the HTTP request body is transfered as you provied it.
-If you want to send it as json you should transfer it to be json first.
+
+If you want to send it as json, you should transfer it to be json first.
 
 ```ruby
   LHC.post('http://datastore.lb-service/v2/feedbacks', body: feedback.to_json)
