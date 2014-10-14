@@ -1,12 +1,14 @@
 LHC
 ===
 
-LHC uses [typhoeus](https://github.com/typhoeus/typhoeus) to make http requests.
+LHC uses [typhoeus](https://github.com/typhoeus/typhoeus) for http requests.
+
+Get a look at [LHS](https://github.com/local-ch/LHS), if you are searching for something more **high level** that can query webservices easily and provides easy data access.
 
 ## Quick Start Guide
 
 ```ruby
-  response = LHC.get('http://datastore-stg.lb-service.sunrise.intra.local.ch/v2/feedbacks', has_reviews: true)
+  response = LHC.get('http://datastore.lb-service/v2/feedbacks')
   response.data.items[0]
   response.data.items[0].recommended
   response.body     # String
@@ -15,7 +17,9 @@ LHC uses [typhoeus](https://github.com/typhoeus/typhoeus) to make http requests.
 
 ## Available shorthand methods
 
-Available HTTP methods are `get`, `post`, `put` & `delete` other methods are available using `LHC.request(options)` directly.
+Available HTTP methods are `get`, `post`, `put` & `delete`.
+
+Other methods are available using `LHC.request(options)`.
 
 ## Make a request from scratch
 
@@ -23,14 +27,15 @@ Available HTTP methods are `get`, `post`, `put` & `delete` other methods are ava
   response = LHC.request(url: 'http://local.ch', method: :options)
   response.headers
 
-  response = LHC.request(url: 'http://datastore-stg.lb-service.sunrise.intra.local.ch/v2/feedbacks', method: :get)
+  response = LHC.request(url: 'http://datastore.lb-service/v2/feedbacks', method: :get)
   response.data
 ```
 
 ## Transfer data through the body
 
 Data that is transfered using the HTTP request body is transfered as you provied it.
-If you want to send it as json you should transfer it to be json first.
+
+If you want to send it as json, you should transfer it to json first.
 
 ```ruby
   LHC.post('http://datastore.lb-service/v2/feedbacks', body: feedback.to_json)
