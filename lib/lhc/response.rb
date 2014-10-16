@@ -4,8 +4,6 @@ require 'typhoeus'
 # In this case we abstract the thphoues response.
 class LHC::Response
 
-  @raw
-
   attr_accessor :request
 
   def initialize(raw, request)
@@ -61,12 +59,6 @@ class LHC::Response
 
   private
 
-  def raw=(raw)
-    @raw = raw
-  end
-
-  def raw
-    @raw
-  end
+  attr_accessor :raw
 
 end
