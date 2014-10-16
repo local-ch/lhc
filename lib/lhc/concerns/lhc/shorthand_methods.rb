@@ -7,41 +7,24 @@ module LHC
 
     module ClassMethods
 
+      def request(options)
+        LHC::Request.new(options).response
+      end
+
       def set(name, endpoint, options = {})
         LHC::Config.set(name, endpoint, options)
       end
 
-      def get(url, options = {})
-        request(options.merge(
-          url: url,
-          method: :get
-        ))
-      end
-
-      def post(url, options)
-        request(options.merge(
-          url: url,
-          method: :post
-        ))
-      end
-
-      def put(url, options)
-        request(options.merge(
-          url: url,
-          method: :put
-        ))
-      end
-
-      def delete(url, options = {})
-        request(options.merge(
-          url: url,
-          method: :delete
-        ))
-      end
-
-      def request(options)
-        LHC::Request.new(options).response
+      [:get, :post, :put, :delete].each do |http_method|
+        define_method(http_method) do |url, options = {}|
+          request(options.merge(
+            url: url,
+            method: http_method
+          ))
+        end
       end
     end
+
   end
+
 end
