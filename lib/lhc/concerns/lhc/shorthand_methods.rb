@@ -16,7 +16,7 @@ module LHC
       end
 
       [:get, :post, :put, :delete].each do |http_method|
-        define_method http_method do |url, options = {}|
+        define_method(http_method) do |url, options = {}|
           request(options.merge(
             url: url,
             method: http_method
