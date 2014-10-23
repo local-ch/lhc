@@ -5,17 +5,15 @@ class LHC::Request
   attr_accessor :response, :raw_request, :opt_in, :opt_out
 
   def initialize(options)
-    opt(options)
+    opt_interceptors(options)
     self.raw_request = create_request(options)
     LHC::Interceptor.intercept!(:before_request, self)
     raw_request.run
-    LHC::Interceptor.intercept!(:after_request, self)
-    LHC::Interceptor.intercept!(:before_response, self)
     self
   end
 
   # Store and provide interceptors either opt-in or opt-out in request and remove from options
-  def opt(options)
+  def opt_interceptors(options)
     self.opt_in = Array(options.delete(:opt_in)) || []
     self.opt_out = Array(options.delete(:opt_out)) || []
   end
@@ -34,6 +32,10 @@ class LHC::Request
   def create_request(options)
     options = options.merge(options_from_config(options)) if LHC::Config[options[:url]]
     request = Typhoeus::Request.new(options.delete(:url), options)
+    request.on_headers do |response|
+      LHC::Interceptor.intercept!(:after_request, self)
+      LHC::Interceptor.intercept!(:before_response, self)
+    end
     request.on_complete { |response| on_complete(response) }
     request
   end
