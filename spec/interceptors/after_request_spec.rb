@@ -13,7 +13,7 @@ describe LHC do
     end
 
     it 'can perform some actions after a request was fired' do
-      interceptor = LHC::Interceptor.interceptors.first
+      interceptor = LHC::InterceptorProcessor.interceptors.first
       expect(interceptor).to receive(:after_request)
       stub_request(:get, 'http://local.ch')
       LHC.get('http://local.ch')

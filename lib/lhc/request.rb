@@ -6,11 +6,14 @@ class LHC::Request
 
   def initialize(options)
     opt_interceptors(options)
+    self.iprocessor = LHC::InterceptorProcessor.new
     self.raw = create_request(options)
-    LHC::Interceptor.intercept!(:before_request, self)
-    raw.run
-  rescue LHC::ImmediateInterception => e
-    self.response = LHC::Response.new(e.response, self) if e.response
+    iprocessor.intercept(:before_request, self)
+    if iprocessor.response
+      self.response = LHC::Response.new(iprocessor.response, self)
+    else
+      raw.run
+    end
   end
 
   # Store and provide interceptors either opt-in or opt-out in request and remove from options
@@ -34,14 +37,14 @@ class LHC::Request
 
   private
 
-  attr_accessor :raw
+  attr_accessor :raw, :iprocessor
 
   def create_request(options)
     options = options.merge(options_from_config(options)) if LHC::Config[options[:url]]
     request = Typhoeus::Request.new(options.delete(:url), options)
     request.on_headers do |response|
-      LHC::Interceptor.intercept!(:after_request, self)
-      LHC::Interceptor.intercept!(:before_response, self)
+      iprocessor.intercept(:after_request, self)
+      iprocessor.intercept(:before_response, self)
     end
     request.on_complete { |response| on_complete(response) }
     request
@@ -66,7 +69,8 @@ class LHC::Request
 
   def on_complete(response)
     self.response = LHC::Response.new(response, self)
-    LHC::Interceptor.intercept!(:after_response, self.response)
+    iprocessor.intercept(:after_response, self.response)
+    self.response = LHC::Response.new(iprocessor.response, self) if iprocessor.response
     if response.code.to_s[/^(2\d\d+)/]
       on_success(response)
     else
