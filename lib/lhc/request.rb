@@ -9,7 +9,6 @@ class LHC::Request
     self.raw_request = create_request(options)
     LHC::Interceptor.intercept!(:before_request, self)
     raw_request.run
-    self
   end
 
   # Store and provide interceptors either opt-in or opt-out in request and remove from options
