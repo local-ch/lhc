@@ -2,13 +2,15 @@ require 'typhoeus'
 
 class LHC::Request
 
-  attr_accessor :response, :raw_request, :opt_in, :opt_out
+  attr_accessor :response, :opt_in, :opt_out
 
   def initialize(options)
     opt_interceptors(options)
-    self.raw_request = create_request(options)
+    self.raw = create_request(options)
     LHC::Interceptor.intercept!(:before_request, self)
-    raw_request.run
+    raw.run
+  rescue LHC::ImmediateInterception => e
+    self.response = LHC::Response.new(e.response, self) if e.response
   end
 
   # Store and provide interceptors either opt-in or opt-out in request and remove from options
@@ -18,15 +20,21 @@ class LHC::Request
   end
 
   def options
-    raw_request.options
+    raw.options
   end
 
   def add_param(param)
-    raw_request.options[:params] ||= {}
-    raw_request.options[:params].merge!(param)
+    raw.options[:params] ||= {}
+    raw.options[:params].merge!(param)
+  end
+
+  def url
+    raw.base_url
   end
 
   private
+
+  attr_accessor :raw
 
   def create_request(options)
     options = options.merge(options_from_config(options)) if LHC::Config[options[:url]]
