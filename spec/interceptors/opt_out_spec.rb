@@ -9,7 +9,7 @@ describe LHC do
       end
     end
 
-    let(:interceptor) { LHC::Interceptor.interceptors.first }
+    let(:interceptor) { LHC::InterceptorProcessor.interceptors.first }
 
     it 'is using interceptors globally when they not opt_out in request' do
       expect(interceptor).to receive(:before_request)

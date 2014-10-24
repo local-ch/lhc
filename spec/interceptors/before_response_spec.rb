@@ -13,7 +13,7 @@ describe LHC do
     end
 
     it 'can perform some actions before a reponse is received' do
-      interceptor = LHC::Interceptor.interceptors.first
+      interceptor = LHC::InterceptorProcessor.interceptors.first
       expect(interceptor).to receive(:before_response)
       stub_request(:get, 'http://local.ch')
       LHC.get('http://local.ch')
