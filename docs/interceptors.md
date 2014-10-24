@@ -50,3 +50,23 @@ To do so you have to define the Interceptor to be `opt_in`.
 
   LHC.request({opt_in: :special_stats_interceptor, url: 'http://local.ch'}) # is calling the SpecialStatsInterceptor
 ```
+
+## Immediate Interceptors
+
+Sometimes you want to interrupt the http communication and return to the caller immediately.
+
+Mainly focused on caching, LHC provides immediate interceptors to be able to stop the flow from inside an interceptor.
+
+```ruby
+
+class CacheInterceptor < LHC::Interceptor
+
+  def before_request(request)
+    cached_response = Rails.cache.fetch(request.url)
+    if cached_response
+      raise LHC::ImmediateInterception.new('Serve cached response', cached_response)
+    end
+  end
+end
+
+```
