@@ -6,7 +6,7 @@ Interceptors
 Interceptors are registered globally as soon as you intherit from LHC::Interceptor.
 
 ```ruby
-  class TrackingIdInterceptor < LHC::Interceptor
+  class TrackingId < LHC::Interceptor
 
     def before_request(request)
       request.add_param(tid: 123)
@@ -26,27 +26,27 @@ Interceptors are registered globally as soon as you intherit from LHC::Intercept
 
 ## Priority
 
-## Opt-out
+## Excluding Interceptors
 
-Interceptors are mainly global. You can opt-out any global interceptor by using the `opt_out` keyword when passing options to a request.
+Interceptors are mainly global. You can opt-out any global interceptor by using the `without` keyword when passing options to a request.
 
 ```ruby
-  class GeneralStatsInterceptor < LHC::Interceptor
+  class GeneralStats < LHC::Interceptor
   end
 
-  LHC.request({opt_out: :general_stats_interceptor, url: 'http://local.ch'}) # is not calling the GeneralStatsInterceptor
+  LHC.request({without: :general_stats, url: 'http://local.ch'}) # is not calling the GeneralStats interceptor
 ```
 
 ## Opt-in
 
-You can also define Interceptors that are just called when opt-in for specific requests by using the `opt_in` keyword when passing options to a request.
+You can also define Interceptors that are only called for specific requests by using the `with` keyword when passing options to a request.
 
-To do so you have to define the Interceptor to be `opt_in`.
+To do so you have to define the Interceptor to be `optional`.
 
 ```ruby
-  class SpecialStatsInterceptor < LHC::Interceptor
-    opt_in
+  class SpecialStats < LHC::Interceptor
+    optional
   end
 
-  LHC.request({opt_in: :special_stats_interceptor, url: 'http://local.ch'}) # is calling the SpecialStatsInterceptor
+  LHC.request({with: :special_stats, url: 'http://local.ch'}) # is calling the SpecialStats interceptor
 ```
