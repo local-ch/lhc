@@ -10,7 +10,7 @@ describe LHC do
     end
 
     it 'is registered when inherit from LHC::Interceptor' do
-      expect(LHC::Interceptor.interceptors.first).to be_kind_of SomeInterceptor
+      expect(LHC::InterceptorProcessor.interceptors.first).to be_kind_of SomeInterceptor
     end
   end
 end
