@@ -11,6 +11,7 @@ describe LHC do
           request.add_param(tid: 123)
         end
       end
+      LHC.default_interceptors = [TrackingIdInterceptor]
     end
 
     it 'can modify requests before they are send' do
