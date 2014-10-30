@@ -32,20 +32,27 @@ class LHC::Request
   attr_accessor :raw, :iprocessor
 
   def create_request
-    request = Typhoeus::Request.new(options[:url],
-      method: options[:method] || :get,
-      body: options[:body],
-      params: options[:params],
-      headers: options[:headers],
-      followlocation: options[:followlocation],
-      timeout: options[:timeout]
-    )
+    request = Typhoeus::Request.new(options[:url], typhoeusize(options))
     request.on_headers do
       iprocessor.intercept(:after_request, self)
       iprocessor.intercept(:before_response, self)
     end
     request.on_complete { |response| on_complete(response) }
     request
+  end
+
+  def typhoeusize(input)
+    options = {
+      method: input[:method] || :get,
+      body: input[:body],
+      params: input[:params],
+      headers: input[:headers],
+      followlocation: input[:followlocation]
+    }
+    [:timeout, :timeout_ms, :connecttimeout, :connecttimeout_ms].each do |sym|
+      options[sym] = input[sym] if input[sym]
+    end
+    options
   end
 
   def merge_options_from_config!
