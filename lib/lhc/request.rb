@@ -2,28 +2,20 @@ require 'typhoeus'
 
 class LHC::Request
 
-  attr_accessor :response, :opt_in, :opt_out
+  attr_accessor :response, :options
 
   def initialize(options)
-    opt_interceptors(options)
+    self.options = options
+    merge_options_from_config!
+    inject_url_params!
     self.iprocessor = LHC::InterceptorProcessor.new
-    self.raw = create_request(options)
+    self.raw = create_request
     iprocessor.intercept(:before_request, self)
     if iprocessor.response
       self.response = LHC::Response.new(iprocessor.response, self)
     else
       raw.run
     end
-  end
-
-  # Store and provide interceptors either opt-in or opt-out in request and remove from options
-  def opt_interceptors(options)
-    self.opt_in = Array(options.delete(:opt_in)) || []
-    self.opt_out = Array(options.delete(:opt_out)) || []
-  end
-
-  def options
-    raw.options
   end
 
   def add_param(param)
@@ -39,10 +31,16 @@ class LHC::Request
 
   attr_accessor :raw, :iprocessor
 
-  def create_request(options)
-    options = options.merge(options_from_config(options)) if LHC::Config[options[:url]]
-    request = Typhoeus::Request.new(options.delete(:url), options)
-    request.on_headers do |response|
+  def create_request
+    request = Typhoeus::Request.new(options[:url],
+      method: options[:method] || :get,
+      body: options[:body],
+      params: options[:params],
+      headers: options[:headers],
+      followlocation: options[:followlocation],
+      timeout: options[:timeout]
+    )
+    request.on_headers do
       iprocessor.intercept(:after_request, self)
       iprocessor.intercept(:before_response, self)
     end
@@ -50,21 +48,17 @@ class LHC::Request
     request
   end
 
-  def options_from_config(options)
-    url = options[:url]
-    configuration = LHC::Config[url]
-    options = options.deep_merge(configuration.options)
-    options = compute_url_options!(options) if url.is_a?(Symbol)
-    options
+  def merge_options_from_config!
+    return unless (config = LHC::Config[options[:url]])
+    options.deep_merge!(config.options)
+    options[:url] = config.endpoint
   end
 
-  def compute_url_options!(options)
-    configuration = LHC::Config[options[:url]] || fail("No endpoint found for #{options[:url]}")
-    options = options.deep_merge(configuration.options)
-    endpoint = LHC::Endpoint.new(configuration[:endpoint])
+  def inject_url_params!
+    config = LHC::Config[options[:url]]
+    endpoint = LHC::Endpoint.new(config.try(:endpoint) || options[:url])
     options[:url] = endpoint.inject(options[:params])
     endpoint.remove_injected_params!(options[:params])
-    options
   end
 
   def on_complete(response)

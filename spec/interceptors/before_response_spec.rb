@@ -7,14 +7,14 @@ describe LHC do
     before(:each) do
       class SomeInterceptor < LHC::Interceptor
 
-        def before_response
+        def before_response(request)
         end
       end
+      LHC.default_interceptors = [SomeInterceptor]
     end
 
     it 'can perform some actions before a reponse is received' do
-      interceptor = LHC::InterceptorProcessor.interceptors.first
-      expect(interceptor).to receive(:before_response)
+      expect_any_instance_of(SomeInterceptor).to receive(:before_response)
       stub_request(:get, 'http://local.ch')
       LHC.get('http://local.ch')
     end

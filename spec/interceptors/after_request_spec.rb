@@ -6,15 +6,15 @@ describe LHC do
 
     before(:each) do
       class SomeInterceptor < LHC::Interceptor
-
         def after_request(request)
         end
       end
+
+      LHC.default_interceptors = [SomeInterceptor]
     end
 
     it 'can perform some actions after a request was fired' do
-      interceptor = LHC::InterceptorProcessor.interceptors.first
-      expect(interceptor).to receive(:after_request)
+      expect_any_instance_of(SomeInterceptor).to receive(:after_request)
       stub_request(:get, 'http://local.ch')
       LHC.get('http://local.ch')
     end

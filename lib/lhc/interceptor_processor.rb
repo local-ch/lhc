@@ -1,18 +1,19 @@
 class LHC::InterceptorProcessor
 
-  include Opt
-
   cattr_accessor :interceptors
   @@interceptors = []
 
-  attr_accessor :skip_others
+  attr_accessor :interceptors
   attr_reader :response
 
+  def initialize
+    self.interceptors = @@interceptors.map{|i| i.new }
+  end
+
   def intercept(name, target)
-    @@interceptors.each do |interceptor|
-      next if opted_out?(interceptor, target) || skip_others
+    interceptors.each do |interceptor|
+      next unless should_process?(interceptor, target)
       result = interceptor.send(name, target)
-      self.skip_others = true if result.is_a? LHC::ResponseInterrupt
       self.response = result.response if result.is_a? LHC::ResponseReturn
     end
   end
@@ -22,7 +23,13 @@ class LHC::InterceptorProcessor
     @response = response
   end
 
-  def self.add(interceptor)
-    @@interceptors.push(interceptor)
+  private
+
+  def should_process?(interceptor, target)
+    options = target.options if target.is_a? LHC::Request
+    options ||= target.request.options if target.is_a? LHC::Response
+    interceptors = options[:interceptors] || LHC.default_interceptors
+    interceptors.include? interceptor.class
   end
+
 end

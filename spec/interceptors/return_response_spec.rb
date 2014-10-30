@@ -4,75 +4,30 @@ describe LHC do
 
   context 'interceptor' do
 
-    let(:body) do
-      'im served from cache'
+    before(:each) do
+      class CacheInterceptor < LHC::Interceptor
+
+        def before_request(request)
+          return_response Typhoeus::Response.new(response_body: 'Im served from cache')
+        end
+      end
+      LHC.default_interceptors = [CacheInterceptor]
     end
 
-    let(:response) do
-      Typhoeus::Response.new(response_body: body)
-    end
-
-    context 'immediate return of response' do
-
-      before(:each) do
-        class ImmidateCacheInterceptor < LHC::Interceptor
-          cattr_accessor :response
-
-          def before_request(request)
-            return_response!(response) if request.url == 'http://local.ch'
-          end
-        end
-        ImmidateCacheInterceptor.response = response
-        class SomeInterceptor < LHC::Interceptor
-          def before_request(request); end
-        end
-      end
-
-      it 'is intercepting immediately and injects a response that will be returned instead (caching)' do
-        another_interceptor = LHC::InterceptorProcessor.interceptors.find{|i| ! i.is_a? ImmidateCacheInterceptor }
-        expect(another_interceptor).not_to receive(:before_response)
-        response = LHC.get('http://local.ch')
-        expect(response.body).to eq body
-      end
-    end
-
-    context 'return response for the usual return' do
-
-      before(:each) do
-        class CacheInterceptor < LHC::Interceptor
-          cattr_accessor :response
-
-          def before_request(request)
-            return_response(response) if request.url == 'http://local.ch'
-          end
-        end
-        CacheInterceptor.response = response
-        class SomeInterceptor < LHC::Interceptor
-          def before_request(request);end
-        end
-      end
-
-      it 'is intercepting immediately and injects a response that will be returned instead (caching)' do
-        another_interceptor = LHC::InterceptorProcessor.interceptors.find{|i| ! i.is_a? CacheInterceptor }
-        expect(another_interceptor).to receive(:before_request)
-        response = LHC.get('http://local.ch')
-        expect(response.body).to eq body
-      end
+    it 'can return a response rather then doing a real request' do
+      response = LHC.get('http://local.ch')
+      expect(response.body).to eq 'Im served from cache'
     end
 
     context 'misusage' do
 
       before(:each) do
-        class CacheInterceptor < LHC::Interceptor
-          def before_request(request)
-            return_response(Typhoeus::Response.new({}))
-          end
-        end
         class AnotherInterceptor < LHC::Interceptor
           def before_request(request)
             return_response(Typhoeus::Response.new({}))
           end
         end
+        LHC.default_interceptors = [CacheInterceptor, AnotherInterceptor]
       end
 
       it 'raises an exception when two interceptors try to return a response' do

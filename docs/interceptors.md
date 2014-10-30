@@ -3,8 +3,6 @@ Interceptors
 
 ## Quick Start Guide
 
-Interceptors are registered globally as soon as you intherit from LHC::Interceptor.
-
 ```ruby
   class TrackingIdInterceptor < LHC::Interceptor
 
@@ -12,6 +10,14 @@ Interceptors are registered globally as soon as you intherit from LHC::Intercept
       request.add_param(tid: 123)
     end
   end
+```
+
+```ruby
+  LHC.default_interceptors = [TrackingIdInterceptor] # global list of default interceptors
+```
+
+```ruby
+  LHC.request({url: 'http://local.ch', interceptors: []}) # no interceptor for this request
 ```
 
 ## Callbacks
@@ -24,47 +30,39 @@ Interceptors are registered globally as soon as you intherit from LHC::Intercept
 
 `after_response(response)` is called after the response arrives.
 
-## Priority
+## Global default interceptors
 
-Interceptors will be processed FIFO. So take care that you define them in the order you want to have them executed globally later.
-
-## Opt-out
-
-Interceptors are mainly global. You can opt-out any global interceptor by using the `opt_out` keyword when passing options to a request.
+Setup the list of global default interceptors by storing them in the list of default interceptors of the global interceptor processor.
+The global default interceptors are processed in the order you provide them.
 
 ```ruby
-  class GeneralStatsInterceptor < LHC::Interceptor
-  end
-
-  LHC.request({opt_out: :general_stats_interceptor, url: 'http://local.ch'}) # is not calling the GeneralStatsInterceptor
+  LHC.default_interceptors = [CachingInterceptor, MonitorInterceptor, TrackingIdInterceptor]
 ```
 
-## Opt-in
+## Interceptors on request level
 
-You can also define Interceptors that are just called when opt-in for specific requests by using the `opt_in` keyword when passing options to a request.
-
-To do so you have to define the Interceptor to be `opt_in`.
+You can override the global default interceptors on request level:
 
 ```ruby
-  class SpecialStatsInterceptor < LHC::Interceptor
-    opt_in
-  end
-
-  LHC.request({opt_in: :special_stats_interceptor, url: 'http://local.ch'}) # is calling the SpecialStatsInterceptor
+  interceptors = LHC.default_interceptors
+  interceptors -= [CachingInterceptor] # remove caching
+  interceptors += [RetryInterceptor] # add retry
+  LHC.request({url: 'http://local.ch', retry: 2, interceptors: interceptors})
 ```
 
 ## Inject Response
 
-Sometimes you want to inject another response in the http communication (e.g. caching). LHC provides the functionality to return a response inside an interceptor.
-You can return a response either immediately (so all other interceptors are skiped) using `return_response!`
-or you can provide a response that is returned after all interceptors run with `return_response`.
+Inside an interceptor you are able to provide a response, rather then doing a real request.
+This is usualy used for beeing able to implement an interceptor for caching.
+
+Take care that having more than one interceptor trying to return a response will cause an exception.
 
 ```ruby
 class CacheInterceptor < LHC::Interceptor
 
   def before_request(request)
     cached_response = Rails.cache.fetch(request.url)
-    return_response!(cached_response) if cached_response
+    return_response(cached_response) if cached_response
   end
 end
 ```
