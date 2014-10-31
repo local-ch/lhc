@@ -8,11 +8,11 @@ module LHC
     module ClassMethods
 
       def default_interceptors=(interceptors)
-        LHC::InterceptorProcessor.interceptors = interceptors
+        LHC::Config.instance.default_interceptors = interceptors
       end
 
       def default_interceptors
-        LHC::InterceptorProcessor.interceptors
+        LHC::Config.instance.default_interceptors
       end
     end
   end
