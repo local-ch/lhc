@@ -6,6 +6,3 @@ class LHC::ResponseReturn
     self.response = response
   end
 end
-
-class LHC::ResponseInterrupt < LHC::ResponseReturn
-end
