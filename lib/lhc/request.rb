@@ -37,17 +37,10 @@ class LHC::Request
     request
   end
 
-  def typhoeusize(input)
-    options = {
-      method: input[:method] || :get,
-      body: input[:body],
-      params: input[:params],
-      headers: input[:headers],
-      followlocation: input[:followlocation]
-    }
-    [:timeout, :timeout_ms, :connecttimeout, :connecttimeout_ms].each do |sym|
-      options[sym] = input[sym] if input[sym]
-    end
+  def typhoeusize(options)
+    options = options.deep_dup
+    options.delete :url
+    options.delete :interceptors
     options
   end
 
