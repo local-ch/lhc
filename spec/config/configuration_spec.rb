@@ -20,7 +20,7 @@ describe LHC do
       expect(LHC::Config[:kpi_tracker].options).to eq options
     end
 
-    it 'creates the url by injecting endpoint params and use configured params and options' do
+    it 'creates the url by injecting endpoint params and uses configured params and options' do
       stub_request(:get, 'http://analytics.lb-service/track/123/w/request?env=PROD')
       response = LHC.get(:kpi_tracker, params: { entity_id: 123, type: 'request' })
       expect(response.request_options[:followlocation]).to eq false

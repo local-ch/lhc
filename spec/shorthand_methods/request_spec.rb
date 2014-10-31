@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe LHC do
 
-  context 'get' do
+  context 'request' do
 
     let(:total) { 99 }
 
