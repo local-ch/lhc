@@ -12,7 +12,7 @@ module LHC
       end
 
       def default_interceptors
-        LHC::Config.instance.default_interceptors
+        LHC::Config.instance.default_interceptors || []
       end
     end
   end
