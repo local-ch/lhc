@@ -1,4 +1,4 @@
-class LHC::ResponseReturn
+class LHC::ResponseToReturn
 
   attr_accessor :response
 
