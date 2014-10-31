@@ -9,7 +9,7 @@
 if [ -z "$SKIP_RVM" ]; then
   [[ -s "/usr/local/rvm/scripts/rvm" ]] && . "/usr/local/rvm/scripts/rvm"
   RUBY=${RUBY:-ruby-2.1.2}
-  GEMSET=${GEMSET:-phonebook-gem}
+  GEMSET=${GEMSET:-LHC}
   rvm use ${RUBY}@${GEMSET} --create
   gem install bundler --no-rdoc --no-ri
 fi
