@@ -11,11 +11,7 @@ class LHC::Request
     self.iprocessor = LHC::InterceptorProcessor.new(self)
     self.raw = create_request
     iprocessor.intercept(:before_request, self)
-    if iprocessor.response
-      self.response = LHC::Response.new(iprocessor.response, self)
-    else
-      raw.run
-    end
+    raw.run unless response
   end
 
   def add_param(param)
@@ -24,7 +20,7 @@ class LHC::Request
   end
 
   def url
-    raw.base_url
+    raw.base_url || options[:url]
   end
 
   private
@@ -69,20 +65,19 @@ class LHC::Request
   end
 
   def on_complete(response)
-    self.response = LHC::Response.new(response, self)
+    self.response ||= LHC::Response.new(response, self)
     iprocessor.intercept(:after_response, self.response)
-    self.response = LHC::Response.new(iprocessor.response, self) if iprocessor.response
-    if response.code.to_s[/^(2\d\d+)/]
-      on_success(response)
+    if self.response.code.to_s[/^(2\d\d+)/]
+      on_success
     else
-      on_error(response)
+      on_error
     end
   end
 
-  def on_success(response)
+  def on_success
   end
 
-  def on_error(response)
+  def on_error
     error = LHC::Error.find(response.code)
     fail error.new("#{response.code} #{response.body}", response)
   end

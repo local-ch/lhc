@@ -4,7 +4,6 @@ class LHC::InterceptorProcessor
   @@interceptors = []
 
   attr_accessor :interceptors
-  attr_reader :response
 
   def initialize(target)
     options = target.options if target.is_a? LHC::Request
@@ -15,13 +14,11 @@ class LHC::InterceptorProcessor
   def intercept(name, target)
     interceptors.each do |interceptor|
       result = interceptor.send(name, target)
-      self.response = result.response if result.is_a? LHC::ResponseReturn
+      if result.is_a? LHC::ResponseReturn
+        fail 'Response already set from another interceptor' if @response
+        request = target.is_a?(LHC::Request) ? target : target.request
+        @response = request.response = LHC::Response.new(result.response, request)
+      end
     end
   end
-
-  def response=(response)
-    fail 'Response already set from another interceptor' if @response
-    @response = response
-  end
-
 end
