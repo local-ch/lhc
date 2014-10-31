@@ -8,7 +8,7 @@ class LHC::Request
     self.options = options
     merge_options_from_config!
     inject_url_params!
-    self.iprocessor = LHC::InterceptorProcessor.new
+    self.iprocessor = LHC::InterceptorProcessor.new(self)
     self.raw = create_request
     iprocessor.intercept(:before_request, self)
     if iprocessor.response
