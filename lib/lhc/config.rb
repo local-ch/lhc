@@ -3,7 +3,7 @@ require 'singleton'
 class LHC::Config
   include Singleton
 
-  attr_accessor :config
+  attr_accessor :config, :default_interceptors
 
   def initialize
     self.config = {}

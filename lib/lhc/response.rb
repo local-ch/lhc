@@ -18,16 +18,6 @@ class LHC::Response
     @data
   end
 
-  # List of interceptors opt-in
-  def opt_in
-    request.opt_in
-  end
-
-  # List of interceptors opt-out
-  def opt_out
-    request.opt_out
-  end
-
   def body
     raw.body
   end
