@@ -11,7 +11,7 @@ describe LHC do
           return_response Typhoeus::Response.new(response_body: 'Im served from cache')
         end
       end
-      LHC.default_interceptors = [CacheInterceptor]
+      LHC.config.interceptors = [CacheInterceptor]
     end
 
     it 'can return a response rather then doing a real request' do
@@ -27,12 +27,11 @@ describe LHC do
             return_response(Typhoeus::Response.new({}))
           end
         end
-        LHC.default_interceptors = [CacheInterceptor, AnotherInterceptor]
       end
 
       it 'raises an exception when two interceptors try to return a response' do
         expect(->{
-          LHC.get('http://local.ch')
+          LHC.get('http://local.ch', interceptors: [CacheInterceptor, AnotherInterceptor])
         }).to raise_error 'Response already set from another interceptor'
       end
     end

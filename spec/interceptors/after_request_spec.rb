@@ -10,7 +10,7 @@ describe LHC do
         end
       end
 
-      LHC.default_interceptors = [SomeInterceptor]
+      LHC.config.interceptors = [SomeInterceptor]
     end
 
     it 'can perform some actions after a request was fired' do

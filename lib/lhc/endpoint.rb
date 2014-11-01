@@ -26,6 +26,7 @@ class LHC::Endpoint
   # Removes keys from provided params hash
   # when they are used for injecting them in the provided endpoint.
   def remove_injected_params!(params)
+    params ||= {}
     removed = {}
     url.scan(INJECTION) do |match|
       match = match.gsub(/^\:/, '')
@@ -48,7 +49,7 @@ class LHC::Endpoint
   # Find an injection either in the configuration
   # or in the provided params.
   def find_injection(match, params)
-    match = match.gsub(/^\:/, '')
-    LHC::Config[match] || params[match.to_sym]
+    match = match.gsub(/^\:/, '').to_sym
+    LHC.config.injections[match] || params[match]
   end
 end

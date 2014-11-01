@@ -10,7 +10,7 @@ describe LHC do
         def before_response(request)
         end
       end
-      LHC.default_interceptors = [SomeInterceptor]
+      LHC.config.interceptors = [SomeInterceptor]
     end
 
     it 'can perform some actions before a reponse is received' do
