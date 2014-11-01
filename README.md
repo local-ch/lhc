@@ -32,11 +32,12 @@ Other methods are available using `LHC.request(options)`.
 ```
 
 → [Read more about the request object](docs/request.md)
+
 → [Read more about the response object](docs/response.md)
 
 ## Transfer data through the body
 
-Data that is transfered using the HTTP request body is transfered as you provied it.
+Data that is transfered using the HTTP request body is transfered as you provide it.
 
 If you want to send it as json, you should transfer it to json first.
 
@@ -75,7 +76,7 @@ This also works if you dont configure endpoints but just want to have it working
   LHC.get('http://datastore-stg.lb-service:8080/v2/feedbacks/:id', params:{id: 123})
 ```
 
-If you miss to provided an parameter that is part of the pattern, an exception will occur.
+If you miss to provide an parameter that is part of the pattern, an exception will occur.
 
 ## Interceptors
 

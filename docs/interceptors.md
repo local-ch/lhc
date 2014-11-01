@@ -31,6 +31,7 @@ Interceptors
 `after_response(response)` is called after the response arrives.
 
 → [Read more about the request object](request.md)
+
 → [Read more about the response object](response.md)
 
 ## Global default interceptors
