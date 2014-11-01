@@ -16,12 +16,12 @@ describe LHC do
       class StatsTimingInterceptor < LHC::Interceptor
 
         def after_response(response)
-          uri = URI.parse(response.request_url)
+          uri = URI.parse(response.request.url)
           path = [
             'web',
             Rails.application.class.parent_name,
             Rails.env,
-            response.request_method,
+            response.request.method,
             uri.scheme,
             uri.host,
             response.code

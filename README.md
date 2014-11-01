@@ -46,8 +46,8 @@ If you want to send it as json, you should transfer it to json first.
 You can configure endpoints and then use HTTP methods targeting that endpoint by name.
 
 ```ruby
-  endpoint = 'http://:datastore/v2/feedbacks'
-  options = { params: { datastore: 'datastore.lb-service' } }
+  endpoint = 'http://datastore.lb-service/v2/feedbacks'
+  options = { params: { has_reviews: true } }
   LHC.set(:feedbacks, endpoint, options)
   LHC.get(:feedbacks)
 ```

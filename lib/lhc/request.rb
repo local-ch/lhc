@@ -23,6 +23,10 @@ class LHC::Request
     raw.base_url || options[:url]
   end
 
+  def method
+    (raw.options[:method] || options[:method] || :get).to_sym
+  end
+
   private
 
   attr_accessor :raw, :iprocessor
