@@ -27,7 +27,7 @@ describe LHC do
         end
       end
 
-      LHC.default_interceptors = [LocalCacheInterceptor, RemoteCacheInterceptor]
+      LHC.config.interceptors = [LocalCacheInterceptor, RemoteCacheInterceptor]
     end
 
     it 'can handle multiple interceptors that compete for returning the response' do

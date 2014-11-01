@@ -13,7 +13,7 @@ Interceptors
 ```
 
 ```ruby
-  LHC.default_interceptors = [TrackingIdInterceptor] # global list of default interceptors
+  LHC.config.interceptors = [TrackingIdInterceptor] # global list of default interceptors
 ```
 
 ```ruby
@@ -39,7 +39,7 @@ Setup the list of global default interceptors by storing them in the list of def
 The global default interceptors are processed in the order you provide them.
 
 ```ruby
-  LHC.default_interceptors = [CachingInterceptor, MonitorInterceptor, TrackingIdInterceptor]
+  LHC.config.interceptors = [CachingInterceptor, MonitorInterceptor, TrackingIdInterceptor]
 ```
 
 ## Interceptors on request level
@@ -47,7 +47,7 @@ The global default interceptors are processed in the order you provide them.
 You can override the global default interceptors on request level:
 
 ```ruby
-  interceptors = LHC.default_interceptors
+  interceptors = LHC.config.interceptors
   interceptors -= [CachingInterceptor] # remove caching
   interceptors += [RetryInterceptor] # add retry
   LHC.request({url: 'http://local.ch', retry: 2, interceptors: interceptors})

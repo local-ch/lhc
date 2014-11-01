@@ -12,7 +12,7 @@ describe LHC do
     end
 
     it 'performs interceptor when they are set globally' do
-      LHC.default_interceptors = [SomeInterceptor]
+      LHC.config.interceptors = [SomeInterceptor]
       expect_any_instance_of(SomeInterceptor).to receive(:before_request)
       stub_request(:get, 'http://local.ch')
       LHC.get('http://local.ch')

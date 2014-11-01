@@ -15,7 +15,7 @@ Get a look at [LHS](https://github.com/local-ch/LHS), if you are searching for s
   response.headers  # Hash
 ```
 
-## Available shorthand methods
+## Basic methods
 
 Available HTTP methods are `get`, `post`, `put` & `delete`.
 
@@ -44,23 +44,17 @@ If you want to send it as json, you should transfer it to json first.
   LHC.post('http://datastore.lb-service/v2/feedbacks', body: feedback.to_json)
 ```
 
-## Configure endpoints
+## Configuration
 
-You can configure endpoints and then use HTTP methods targeting that endpoint by name.
-
-```ruby
-  endpoint = 'http://datastore.lb-service/v2/feedbacks'
-  options = { params: { has_reviews: true } }
-  LHC.set(:feedbacks, endpoint, options)
-  LHC.get(:feedbacks)
-```
-
-Explicit request options are overriding configured options:
+You can configure endpoints, injections and default_interceptors.
 
 ```ruby
-  LHC.get(:feedbacks, params: { has_reviews: false })
+  LHC.config.injections(:datastore, 'http://datastore.lb-service/v2')
+  LHC.config.endpoint(:feedbacks, ':datastore/feedbacks', params: { has_reviews: true })
+  LHC.config.default_interceptors = [CacheInterceptor]
 ```
-This would override configured params for has_reviews.
+
+→ [Read more about configuration](docs/configuration.md)
 
 ## URL-Patterns
 
@@ -69,9 +63,9 @@ This is especially handy for configuring endpoints once and get generated urls w
 
 ```ruby
   options = { params: {
-    datastore: 'http://datastore-stg.lb-service/v2'
+    has_reviews = true
   }}
-  LHC.set(:find_feedback, ':datastore/feedbacks/:id', options)
+  LHC.config.endpoint(:find_feedback, 'http://datastore-stg.lb-service/v2/feedbacks/:id', options)
   LHC.get(:find_feedback, params:{id: 123})
 ```
 

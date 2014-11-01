@@ -3,22 +3,38 @@ require 'singleton'
 class LHC::Config
   include Singleton
 
-  attr_accessor :config, :default_interceptors
-
   def initialize
-    self.config = {}
+    @endpoints = {}
+    @injections = {}
   end
 
-  def self.set(name, endpoint, options = {})
-    fail 'Configuration already exists for that name' if instance.config[name]
-    instance.config[name] = OpenStruct.new({
-      endpoint: endpoint,
+  def endpoint(name, url, options = {})
+    fail 'Endpoint already exists for that name' if @endpoints[name]
+    @endpoints[name] = OpenStruct.new({
+      url: url,
       options: options
     })
   end
 
-  def self.[](name)
-    config = instance.config[name]
-    return config.dup if config
+  def endpoints
+    @endpoints.dup
+  end
+
+  def injection(name, value)
+    fail 'Injection already exists for that name' if @injections[name]
+    @injections[name] = value
+  end
+
+  def injections
+    @injections.dup
+  end
+
+  def interceptors
+    @interceptors || []
+  end
+
+  def interceptors=(interceptors)
+    fail 'Default interceptors already set and can only be set once' if @interceptors
+    @interceptors = interceptors
   end
 end

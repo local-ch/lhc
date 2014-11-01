@@ -2,17 +2,13 @@ require 'active_support'
 
 module LHC
 
-  module ShorthandMethods
+  module BasicMethods
     extend ActiveSupport::Concern
 
     module ClassMethods
 
       def request(options)
         LHC::Request.new(options).response
-      end
-
-      def set(name, endpoint, options = {})
-        LHC::Config.set(name, endpoint, options)
       end
 
       [:get, :post, :put, :delete].each do |http_method|

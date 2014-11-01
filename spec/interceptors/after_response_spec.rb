@@ -29,7 +29,7 @@ describe LHC do
           Services.timing(path.downcase, response.time)
         end
       end
-      LHC.default_interceptors = [StatsTimingInterceptor]
+      LHC.config.interceptors = [StatsTimingInterceptor]
     end
 
     let(:url) { "http://datastore-stg.lb-service.sunrise.intra.local.ch/v2/feedbacks/-Sc4_pYNpqfsudzhtivfkA" }
