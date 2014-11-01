@@ -25,5 +25,10 @@ describe LHC do
       response = LHC.get(:kpi_tracker, params: { entity_id: 123, type: 'request' })
       expect(response.request.options[:followlocation]).to eq false
     end
+
+    it 'gets overwritten by explicit request options' do
+      stub_request(:get, 'http://analytics.lb-service/track/123/w/request?env=STG')
+      response = LHC.get(:kpi_tracker, params: { entity_id: 123, type: 'request', env: 'STG' })
+    end
   end
 end

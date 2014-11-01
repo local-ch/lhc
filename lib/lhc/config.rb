@@ -18,6 +18,7 @@ class LHC::Config
   end
 
   def self.[](name)
-    instance.config[name]
+    config = instance.config[name]
+    return config.dup if config
   end
 end
