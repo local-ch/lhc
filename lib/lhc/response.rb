@@ -6,6 +6,8 @@ class LHC::Response
 
   attr_accessor :request
 
+  # A response is initalized with the underlying raw response (typhoeus in our case)
+  # and the associated request.
   def initialize(raw, request)
     self.request = request
     self.raw = raw
@@ -28,18 +30,6 @@ class LHC::Response
 
   def headers
     raw.headers
-  end
-
-  def request_options
-    raw.request.options
-  end
-
-  def request_url
-    raw.request.base_url
-  end
-
-  def request_method
-    raw.request.options.fetch(:method, :get).to_sym
   end
 
   # Provides response time in ms.
