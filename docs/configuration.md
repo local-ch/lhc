@@ -21,7 +21,7 @@ This would override configured params for has_reviews.
 
 ## Injections
 
-You can configure global injections, that are used when injecting values in url-patterns.
+You can configure global injections, that are used when injecting values in url patterns.
 
 ```ruby
   url = ':datastore/feedbacks'
