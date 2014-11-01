@@ -66,7 +66,8 @@ This is especially handy for configuring endpoints once and get generated urls w
   options = { params: {
     has_reviews = true
   }}
-  LHC.config.endpoint(:find_feedback, 'http://datastore-stg.lb-service/v2/feedbacks/:id', options)
+  url = 'http://datastore-stg.lb-service/v2/feedbacks/:id'
+  LHC.config.endpoint(:find_feedback, url, options)
   LHC.get(:find_feedback, params:{id: 123})
 ```
 
