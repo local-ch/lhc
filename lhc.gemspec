@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
 
   s.requirements << 'Ruby >= 1.9.2'
   s.requirements << 'Access to the local.ch network'
-  s.required_ruby_version = '~> 1.9.2'
+  s.required_ruby_version = '>= 1.9.2'
 
   s.add_dependency 'rails', '~> 4.1.1'
   s.add_dependency 'typhoeus'
