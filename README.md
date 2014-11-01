@@ -49,7 +49,7 @@ If you want to send it as json, you should transfer it to json first.
 You can configure endpoints, injections and default_interceptors.
 
 ```ruby
-  LHC.config.injections(:datastore, 'http://datastore.lb-service/v2')
+  LHC.config.injection(:datastore, 'http://datastore.lb-service/v2')
   LHC.config.endpoint(:feedbacks, ':datastore/feedbacks', params: { has_reviews: true })
   LHC.config.default_interceptors = [CacheInterceptor]
 ```
