@@ -15,9 +15,8 @@ You can configure endpoints by name to later run http-requests using the configu
 Explicit request options are overriding configured options:
 
 ```ruby
-  LHC.get(:feedbacks, params: { has_reviews: false })
+  LHC.get(:feedbacks, params: { has_reviews: false }) # Overrides configured params
 ```
-This would override configured params for has_reviews.
 
 ## Injections
 
