@@ -1,7 +1,7 @@
 require 'typhoeus'
 
-# A abstraction of a response.
-# In this case we abstract the thphoues response.
+# The response contains the raw response (typhoeus)
+# and provides functionality to access response data.
 class LHC::Response
 
   attr_accessor :request

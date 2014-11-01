@@ -1,22 +1,26 @@
 require 'typhoeus'
 
+# The request is doing an http-request using typhoeus.
+# It provides functionalities to access and alter request data
+# and it communicates with interceptors.
 class LHC::Request
 
   attr_accessor :response, :options
 
   def initialize(options)
     self.options = options.deep_dup
-    merge_options_from_config!
-    inject_url_params!
+    merge_config!
+    inject_schema_params!
     self.iprocessor = LHC::InterceptorProcessor.new(self)
     self.raw = create_request
     iprocessor.intercept(:before_request, self)
     raw.run unless response
   end
 
-  def add_param(param)
-    raw.options[:params] ||= {}
-    raw.options[:params].merge!(param)
+  def merge_params!(hash)
+    raw.options[:params] = options[:params] ||= {}
+    options[:params].merge!(hash)
+    raw.options[:params].merge!(hash)
   end
 
   def url
@@ -48,15 +52,17 @@ class LHC::Request
     options
   end
 
-  def merge_options_from_config!
+  # Get configuration and merge them with request options.
+  # Explicit request options are overriding configured options.
+  def merge_config!
     return unless (config = LHC::Config[options[:url]])
+    config.options.deep_merge!(options)
     options.deep_merge!(config.options)
     options[:url] = config.endpoint
   end
 
-  def inject_url_params!
-    config = LHC::Config[options[:url]]
-    endpoint = LHC::Endpoint.new(config.try(:endpoint) || options[:url])
+  def inject_schema_params!
+    endpoint = LHC::Endpoint.new(options[:url])
     options[:url] = endpoint.inject(options[:params])
     endpoint.remove_injected_params!(options[:params])
   end

@@ -7,7 +7,7 @@ Interceptors
   class TrackingIdInterceptor < LHC::Interceptor
 
     def before_request(request)
-      request.add_param(tid: 123)
+      request.merge_params!(tid: 123)
     end
   end
 ```
@@ -29,6 +29,9 @@ Interceptors
 `before_response(request)` is called before response arrives, so directly after `after_request` was called.
 
 `after_response(response)` is called after the response arrives.
+
+→ [Read more about the request object](request.md)
+→ [Read more about the response object](response.md)
 
 ## Global default interceptors
 

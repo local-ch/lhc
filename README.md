@@ -31,6 +31,9 @@ Other methods are available using `LHC.request(options)`.
   response.data
 ```
 
+→ [Read more about the request object](docs/request.md)
+→ [Read more about the response object](docs/response.md)
+
 ## Transfer data through the body
 
 Data that is transfered using the HTTP request body is transfered as you provied it.
@@ -52,13 +55,41 @@ You can configure endpoints and then use HTTP methods targeting that endpoint by
   LHC.get(:feedbacks)
 ```
 
+Explicit request options are overriding configured options:
+
+```ruby
+  LHC.get(:feedbacks, params: { has_reviews: false })
+```
+This would override configured params for has_reviews.
+
+## URL-Patterns
+
+Instead of providing a concrete URL you can just provide the pattern of a URL containing placeholders.
+This is especially handy for configuring endpoints once and get generated urls when doing the requests automaticaly.
+
+```ruby
+  options = { params: {
+    datastore: 'http://datastore-stg.lb-service/v2'
+  }}
+  LHC.set(:find_feedback, ':datastore/feedbacks/:id', options)
+  LHC.get(:find_feedback, params:{id: 123})
+```
+
+This also works if you dont configure endpoints but just want to have it working for explicit requests:
+
+```ruby
+  LHC.get('http://datastore-stg.lb-service:8080/v2/feedbacks/:id', params:{id: 123})
+```
+
+If you miss to provided an parameter that is part of the pattern, an exception will occur.
+
 ## Interceptors
 
 ```ruby
   class TrackingIdInterceptor < LHC::Interceptor
 
     def before_request(request)
-      request.add_param(tid: 123)
+      request.merge_params!(tid: 123)
     end
   end
 ```

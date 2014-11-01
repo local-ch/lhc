@@ -2,7 +2,7 @@ Response
 ===
 
 ```ruby
-  response.data #<OpenStruct> in case response body contains parsable JSON
+  response.data #<OpenStruct> in case response body contains parsable JSON.
   response.data.something.nested
 
   response.body #<String>
