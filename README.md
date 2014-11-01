@@ -32,6 +32,7 @@ Other methods are available using `LHC.request(options)`.
 ```
 
 → [Read more about the request object](docs/request.md)
+
 → [Read more about the response object](docs/response.md)
 
 ## Transfer data through the body
