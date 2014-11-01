@@ -3,7 +3,7 @@ Configuration
 
 ## Endpoints
 
-You can configure endpoints by name to later run http-requests using the configured endpoint.
+You can configure endpoints by name to later run http-requests using the configured endpoint by name.
 
 ```ruby
   url = 'http://datastore.lb-service/v2/feedbacks'
