@@ -49,7 +49,8 @@ class LHC::Endpoint
   # Find an injection either in the configuration
   # or in the provided params.
   def find_injection(match, params)
+    params ||= {}
     match = match.gsub(/^\:/, '').to_sym
-    LHC.config.injections[match] || params[match]
+    params[match] || LHC.config.injections[match]
   end
 end
