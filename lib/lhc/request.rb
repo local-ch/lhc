@@ -72,18 +72,11 @@ class LHC::Request
   def on_complete(response)
     self.response ||= LHC::Response.new(response, self)
     iprocessor.intercept(:after_response, self.response)
-    if self.response.code.to_s[/^(2\d\d+)/]
-      on_success
-    else
-      on_error
-    end
-  end
-
-  def on_success
+    on_error unless self.response.code.to_s[/^(2\d\d+)/]
   end
 
   def on_error
-    error = LHC::Error.find(response.code)
+    error = LHC::Error.find(response)
     fail error.new("#{response.code} #{response.body}", response)
   end
 end

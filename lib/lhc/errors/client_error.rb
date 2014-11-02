@@ -1,71 +1,71 @@
-class ClientError < LHC::Error
+class LHC::ClientError < LHC::Error
 end
 
-class BadRequest < ClientError
+class LHC::BadRequest < LHC::ClientError
 end
 
-class Unauthorized < ClientError
+class LHC::Unauthorized < LHC::ClientError
 end
 
-class PaymentRequired < ClientError
+class LHC::PaymentRequired < LHC::ClientError
 end
 
-class Forbidden < ClientError
+class LHC::Forbidden < LHC::ClientError
 end
 
-class Forbidden < ClientError
+class LHC::Forbidden < LHC::ClientError
 end
 
-class NotFound < ClientError
+class LHC::NotFound < LHC::ClientError
 end
 
-class MethodNotAllowed < ClientError
+class LHC::MethodNotAllowed < LHC::ClientError
 end
 
-class NotAcceptable < ClientError
+class LHC::NotAcceptable < LHC::ClientError
 end
 
-class ProxyAuthenticationRequired < ClientError
+class LHC::ProxyAuthenticationRequired < LHC::ClientError
 end
 
-class RequestTimeout < ClientError
+class LHC::RequestTimeout < LHC::ClientError
 end
 
-class Conflict < ClientError
+class LHC::Conflict < LHC::ClientError
 end
 
-class Gone < ClientError
+class LHC::Gone < LHC::ClientError
 end
 
-class LengthRequired < ClientError
+class LHC::LengthRequired < LHC::ClientError
 end
 
-class PreconditionFailed < ClientError
+class LHC::PreconditionFailed < LHC::ClientError
 end
 
-class RequestEntityTooLarge < ClientError
+class LHC::RequestEntityTooLarge < LHC::ClientError
 end
 
-class RequestUriToLong < ClientError
+class LHC::RequestUriToLong < LHC::ClientError
 end
 
-class UnsupportedMediaType < ClientError
+class LHC::UnsupportedMediaType < LHC::ClientError
 end
 
-class RequestedRangeNotSatisfiable < ClientError
+class LHC::RequestedRangeNotSatisfiable < LHC::ClientError
 end
 
-class ExpectationFailed < ClientError
+class LHC::ExpectationFailed < LHC::ClientError
 end
 
-class UnprocessableEntity < ClientError
+class LHC::UnprocessableEntity < LHC::ClientError
 end
 
-class Locked < ClientError
+class LHC::Locked < LHC::ClientError
 end
 
-class FailedDependency < ClientError
+class LHC::FailedDependency < LHC::ClientError
 end
 
-class UpgradeRequired < ClientError
+class LHC::UpgradeRequired < LHC::ClientError
 end

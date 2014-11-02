@@ -4,49 +4,50 @@ class LHC::Error < StandardError
 
   def self.map
     {
-      400 => BadRequest,
-      401 => Unauthorized,
-      402 => PaymentRequired,
-      403 => Forbidden,
-      403 => Forbidden,
-      404 => NotFound,
-      405 => MethodNotAllowed,
-      406 => NotAcceptable,
-      407 => ProxyAuthenticationRequired,
-      408 => RequestTimeout,
-      409 => Conflict,
-      410 => Gone,
-      411 => LengthRequired,
-      412 => PreconditionFailed,
-      413 => RequestEntityTooLarge,
-      414 => RequestUriToLong,
-      415 => UnsupportedMediaType,
-      416 => RequestedRangeNotSatisfiable,
-      417 => ExpectationFailed,
-      422 => UnprocessableEntity,
-      423 => Locked,
-      424 => FailedDependency,
-      426 => UpgradeRequired,
+      400 => LHC::BadRequest,
+      401 => LHC::Unauthorized,
+      402 => LHC::PaymentRequired,
+      403 => LHC::Forbidden,
+      403 => LHC::Forbidden,
+      404 => LHC::NotFound,
+      405 => LHC::MethodNotAllowed,
+      406 => LHC::NotAcceptable,
+      407 => LHC::ProxyAuthenticationRequired,
+      408 => LHC::RequestTimeout,
+      409 => LHC::Conflict,
+      410 => LHC::Gone,
+      411 => LHC::LengthRequired,
+      412 => LHC::PreconditionFailed,
+      413 => LHC::RequestEntityTooLarge,
+      414 => LHC::RequestUriToLong,
+      415 => LHC::UnsupportedMediaType,
+      416 => LHC::RequestedRangeNotSatisfiable,
+      417 => LHC::ExpectationFailed,
+      422 => LHC::UnprocessableEntity,
+      423 => LHC::Locked,
+      424 => LHC::FailedDependency,
+      426 => LHC::UpgradeRequired,
 
-      500 => InternalServerError,
-      501 => NotImplemented,
-      502 => BadGateway,
-      503 => ServiceUnavailable,
-      504 => GatewayTimeout,
-      505 => HttpVersionNotSupported,
-      507 => InsufficientStorage,
-      510 => NotExtended
+      500 => LHC::InternalServerError,
+      501 => LHC::NotImplemented,
+      502 => LHC::BadGateway,
+      503 => LHC::ServiceUnavailable,
+      504 => LHC::GatewayTimeout,
+      505 => LHC::HttpVersionNotSupported,
+      507 => LHC::InsufficientStorage,
+      510 => LHC::NotExtended
     }
   end
 
-  def self.find(status_code)
-    status_code = status_code.to_s[0..2].to_i
+  def self.find(response)
+    return LHC::Timeout if response.timeout?
+    status_code = response.code.to_s[0..2].to_i
     error = map[status_code]
-    error ||= UnknownError
+    error ||= LHC::UnknownError
     error
   end
 
-  def initialize(message, response = nil)
+  def initialize(message, response)
     super(message)
     self.response = response
   end
