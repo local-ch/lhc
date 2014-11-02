@@ -26,9 +26,9 @@ Interceptors
 
 `after_request(request)` is called after request was fired.
 
-`before_response(request)` is called before response arrives, so directly after `after_request` was called.
+`before_response(request)` is called before response is completely arrived.
 
-`after_response(response)` is called after the response arrives.
+`after_response(response)` is called after the response arrived.
 
 → [Read more about the request object](request.md)
 
@@ -36,7 +36,7 @@ Interceptors
 
 ## Global default interceptors
 
-Setup the list of global default interceptors by storing them in the list of default interceptors of the global interceptor processor.
+Setup the list of global default interceptors.
 The global default interceptors are processed in the order you provide them.
 
 ```ruby
@@ -57,7 +57,7 @@ You can override the global default interceptors on request level:
 ## Inject Response
 
 Inside an interceptor you are able to provide a response, rather then doing a real request.
-This is usualy used for beeing able to implement an interceptor for caching.
+This is usually used for implementing an interceptor for caching.
 
 ```ruby
 class CacheInterceptor < LHC::Interceptor

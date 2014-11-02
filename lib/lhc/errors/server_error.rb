@@ -1,26 +1,26 @@
-class ServerError < LHC::Error
+class LHC::ServerError < LHC::Error
 end
 
-class InternalServerError < ServerError
+class LHC::InternalServerError < LHC::ServerError
 end
 
-class NotImplemented < ServerError
+class LHC::NotImplemented < LHC::ServerError
 end
 
-class BadGateway < ServerError
+class LHC::BadGateway < LHC::ServerError
 end
 
-class ServiceUnavailable < ServerError
+class LHC::ServiceUnavailable < LHC::ServerError
 end
 
-class GatewayTimeout < ServerError
+class LHC::GatewayTimeout < LHC::ServerError
 end
 
-class HttpVersionNotSupported < ServerError
+class LHC::HttpVersionNotSupported < LHC::ServerError
 end
 
-class InsufficientStorage < ServerError
+class LHC::InsufficientStorage < LHC::ServerError
 end
 
-class NotExtended < ServerError
+class LHC::NotExtended < LHC::ServerError
 end

@@ -1,2 +1,2 @@
-class UnknownError < LHC::Error
+class LHC::UnknownError < LHC::Error
 end

@@ -76,6 +76,12 @@ This also works if you dont configure endpoints but just want to have it working
 
 If you miss to provide a parameter that is part of the pattern, an exception will occur.
 
+## Exception handling
+
+Anything but a 200 response code throws an exception.
+
+→ [Read more about exceptions](docs/exceptions.md)
+
 ## Interceptors
 
 ```ruby

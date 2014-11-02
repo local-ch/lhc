@@ -37,6 +37,10 @@ class LHC::Response
     (raw.time || 0) * 1000
   end
 
+  def timeout?
+    raw.timed_out?
+  end
+
   private
 
   attr_accessor :raw

@@ -3,7 +3,7 @@ Response
 
 ```ruby
   response.request #<LHC::Request> the associated request.
-  
+
   response.data #<OpenStruct> in case response body contains parsable JSON.
   response.data.something.nested
 

@@ -3,7 +3,7 @@ Configuration
 
 ## Endpoints
 
-You can configure endpoints by name to later run http-requests using the configured endpoint by name.
+You can configure endpoints for later use by name.
 
 ```ruby
   url = 'http://datastore.lb-service/v2/feedbacks'
@@ -12,7 +12,7 @@ You can configure endpoints by name to later run http-requests using the configu
   LHC.get(:feedbacks)
 ```
 
-Explicit request options are overriding configured options:
+Explicit request options are overriding configured options.
 
 ```ruby
   LHC.get(:feedbacks, params: { has_reviews: false }) # Overrides configured params
