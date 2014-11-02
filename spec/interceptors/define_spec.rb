@@ -19,6 +19,7 @@ describe LHC do
     end
 
     it 'overrides interceptors on request level' do
+      LHC.config.interceptors = [SomeInterceptor]
       expect_any_instance_of(AnotherInterceptor).to receive(:before_request)
       expect_any_instance_of(SomeInterceptor).not_to receive(:before_request)
       stub_request(:get, 'http://local.ch')
