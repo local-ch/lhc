@@ -9,7 +9,7 @@ class LHC::Request
 
   def initialize(options)
     self.options = options.deep_dup
-    merge_configured_endpoint!
+    use_configured_endpoint!
     generate_url_from_pattern!
     self.iprocessor = LHC::InterceptorProcessor.new(self)
     self.raw = create_request
@@ -52,9 +52,9 @@ class LHC::Request
     options
   end
 
-  # Get configured endpoint and merge them with request options.
+  # Get configured endpoint and use it for doing the request.
   # Explicit request options are overriding configured options.
-  def merge_configured_endpoint!
+  def use_configured_endpoint!
     return unless (endpoint = LHC.config.endpoints[options[:url]])
     endpoint.options.deep_merge!(options)
     options.deep_merge!(endpoint.options)
