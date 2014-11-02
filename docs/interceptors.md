@@ -59,8 +59,6 @@ You can override the global default interceptors on request level:
 Inside an interceptor you are able to provide a response, rather then doing a real request.
 This is usualy used for beeing able to implement an interceptor for caching.
 
-Take care that having more than one interceptor trying to return a response will cause an exception.
-
 ```ruby
 class CacheInterceptor < LHC::Interceptor
 
@@ -69,4 +67,16 @@ class CacheInterceptor < LHC::Interceptor
     return_response(cached_response) if cached_response
   end
 end
+```
+
+Take care that having more than one interceptor trying to return a response will cause an exception.
+You can access the request.response to identify if a response was already injected by another interceptor:
+
+```ruby
+  class RemoteCacheInterceptor < LHC::Interceptor
+
+    def before_request(request)
+      return_response(remote_cache) if request.response.nil?
+    end
+  end
 ```
