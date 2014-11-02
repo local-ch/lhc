@@ -78,7 +78,7 @@ If you miss to provide a parameter that is part of the pattern, an exception wil
 
 ## Exception handling
 
-Anything but a 200 response code throws an exception.
+Anything but a response code indicating success (2**) throws an exception.
 
 → [Read more about exceptions](docs/exceptions.md)
 

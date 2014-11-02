@@ -1,7 +1,7 @@
 Exceptions
 ===
 
-Anything but a 200 response code raises an exception.
+Anything but a response code indicating success (2**) raises an exception.
 
 ```ruby
 
