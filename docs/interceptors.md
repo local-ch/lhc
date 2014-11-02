@@ -70,7 +70,7 @@ end
 ```
 
 Take care that having more than one interceptor trying to return a response will cause an exception.
-You can access the request.response to identify if a response was already injected by another interceptor:
+You can access the request.response to identify if a response was already injected by another interceptor.
 
 ```ruby
   class RemoteCacheInterceptor < LHC::Interceptor
