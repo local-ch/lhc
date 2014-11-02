@@ -60,7 +60,7 @@ You can configure endpoints, injections and interceptors.
 ## URL-Patterns
 
 Instead of providing a concrete URL you can just provide the pattern of a URL containing placeholders.
-This is especially handy for configuring endpoints once and get generated urls when doing the requests automaticaly.
+This is especially handy for configuring endpoints once and get generated urls when doing the requests.
 
 ```ruby
   url = 'http://datastore.lb-service/v2/feedbacks'
