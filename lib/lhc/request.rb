@@ -10,7 +10,7 @@ class LHC::Request
   def initialize(options)
     self.options = options.deep_dup
     merge_configured_endpoint!
-    inject_schema_params!
+    generate_url_from_pattern!
     self.iprocessor = LHC::InterceptorProcessor.new(self)
     self.raw = create_request
     iprocessor.intercept(:before_request, self)
@@ -61,7 +61,9 @@ class LHC::Request
     options[:url] = endpoint.url
   end
 
-  def inject_schema_params!
+  # Generates URL from a URL pattern
+  # by injecting values either from params or config
+  def generate_url_from_pattern!
     endpoint = LHC::Endpoint.new(options[:url])
     options[:url] = endpoint.inject(options[:params])
     endpoint.remove_injected_params!(options[:params])
