@@ -63,19 +63,18 @@ Instead of providing a concrete URL you can just provide the pattern of a URL co
 This is especially handy for configuring endpoints once and get generated urls when doing the requests.
 
 ```ruby
-  url = 'http://datastore.lb-service/v2/feedbacks'
-  options = { params: { has_reviews: true } }
-  LHC.config.endpoint(:feedbacks, url, options)
-  LHC.get(:feedbacks)
+  url = 'http://datastore.lb-service/v2/feedbacks/:id'
+  LHC.config.endpoint(:find_feedback, url, options)
+  LHC.get(:find_feedbak, params:{ id: 123 })
 ```
 
 This also works if you dont configure endpoints but just want to have it working for explicit requests:
 
 ```ruby
-  LHC.get('http://datastore-stg.lb-service:8080/v2/feedbacks/:id', params:{id: 123})
+  LHC.get('http://datastore-stg.lb-service:8080/v2/feedbacks/:id', params:{ id: 123 })
 ```
 
-If you miss to provide an parameter that is part of the pattern, an exception will occur.
+If you miss to provide a parameter that is part of the pattern, an exception will occur.
 
 ## Interceptors
 
