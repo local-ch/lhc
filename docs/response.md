@@ -14,4 +14,6 @@ Response
   response.headers #<Hash>
 
   response.time #<Fixnum> Provides response time in ms.
+
+  response.timeout? #true|false
 ```
