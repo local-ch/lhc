@@ -23,5 +23,10 @@ describe LHC do
         LHC.config.injection(:datastore, 'http://datastore-stg.lb-service')
       }).to raise_error 'Injection already exists for that name'
     end
+
+    it 'enforces injection name to be a symbol' do
+      LHC.config.injection('datatore', 'http://datastore.lb-service')
+      expect(LHC.config.injections[:datatore]).to eq 'http://datastore.lb-service'
+    end
   end
 end

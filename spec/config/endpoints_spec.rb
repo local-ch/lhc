@@ -36,5 +36,10 @@ describe LHC do
         LHC.config.endpoint(:kpi_tracker, 'http://kpi-tracker.lb-service')
       }).to raise_error 'Endpoint already exists for that name'
     end
+
+    it 'enforces endpoint name to be a symbol' do
+      LHC.config.endpoint('datastore', 'http://datastore.lb-service')
+      expect(LHC.config.endpoints[:datastore].url).to eq 'http://datastore.lb-service'
+    end
   end
 end
