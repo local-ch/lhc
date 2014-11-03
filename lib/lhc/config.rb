@@ -9,6 +9,7 @@ class LHC::Config
   end
 
   def endpoint(name, url, options = {})
+    name = name.to_sym
     fail 'Endpoint already exists for that name' if @endpoints[name]
     @endpoints[name] = OpenStruct.new({
       url: url,
@@ -21,6 +22,7 @@ class LHC::Config
   end
 
   def injection(name, value)
+    name = name.to_sym
     fail 'Injection already exists for that name' if @injections[name]
     @injections[name] = value
   end
