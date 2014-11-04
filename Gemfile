@@ -11,6 +11,7 @@ gemspec
 # your gem to rubygems.org.
 
 gem 'rspec-rails', '>= 3.0.0'
+gem 'rails', '~> 4.1.1'
 gem 'pry'
 gem 'typhoeus', git: 'git@github.com:local-ch/typhoeus.git', branch: 'improved-timeouts'
 gem 'webmock', group: [:test]
