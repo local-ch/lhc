@@ -14,7 +14,9 @@ and raises exceptions for any response code that is not indicating success (2**)
 
   request.options #<Hash> the options used for creating the request.
 
-  request.merge_params(params) # used for adding params to the request (e.g. inside an interceptor)
+  request.params # access request params
+
+  request.headers # access request headers
 
   request.url #<String> URL that is used for doing the request
 

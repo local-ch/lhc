@@ -8,7 +8,7 @@ describe LHC do
       class TrackingIdInterceptor < LHC::Interceptor
 
         def before_request(request)
-          request.merge_params!(tid: 123)
+          request.params[:tid] = 123
         end
       end
       LHC.config.interceptors = [TrackingIdInterceptor]

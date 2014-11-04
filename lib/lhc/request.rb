@@ -17,18 +17,20 @@ class LHC::Request
     raw.run unless response
   end
 
-  def merge_params!(hash)
-    raw.options[:params] = options[:params] ||= {}
-    options[:params].merge!(hash)
-    raw.options[:params].merge!(hash)
-  end
-
   def url
     raw.base_url || options[:url]
   end
 
   def method
     (raw.options[:method] || options[:method] || :get).to_sym
+  end
+
+  def headers
+    raw.options.fetch(:headers, nil) || raw.options[:headers] = {}
+  end
+
+  def params
+    raw.options.fetch(:params, nil) || raw.options[:params] = {}
   end
 
   private
