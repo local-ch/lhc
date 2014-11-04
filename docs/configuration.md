@@ -18,14 +18,13 @@ Explicit request options are overriding configured options.
   LHC.get(:feedbacks, params: { has_reviews: false }) # Overrides configured params
 ```
 
-## Injections
+## Placeholders
 
-You can configure global injections, that are used when injecting values in url-patterns.
+You can configure global placeholder, that are used when generate url from url-patterns.
 
 ```ruby
-  url = ':datastore/feedbacks'
+  LHC.config.placeholder(:datastore, 'http://datastore.lb-service/v2')
   options = { params: { has_reviews: true } }
   LHC.config.endpoint(:feedbacks, url, options)
-  LHC.config.injection(:datastore, 'http://datastore.lb-service/v2')
   LHC.get(:feedbacks)
 ```

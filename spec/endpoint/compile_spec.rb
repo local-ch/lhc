@@ -2,23 +2,23 @@ require 'rails_helper'
 
 describe LHC::Endpoint do
 
-  context 'inject' do
+  context 'compule' do
 
-    it 'injects parameters directly' do
+    it 'uses parameters for interpolation' do
       endpoint = LHC::Endpoint.new(':datastore/v2/:campaign_id/feedbacks')
       expect(
-        endpoint.inject(datastore: 'http://datastore.lb-service', campaign_id: 'abc')
+        endpoint.compile(datastore: 'http://datastore.lb-service', campaign_id: 'abc')
       ).to eq "http://datastore.lb-service/v2/abc/feedbacks"
     end
 
-    it 'injects parameters using provided proc' do
+    it 'uses provied proc to find values' do
       endpoint = LHC::Endpoint.new(':datastore/v2')
       config = { datastore: 'http://datastore.lb-service' }
-      find_injection = ->(match){
+      find_value = ->(match){
         config[match.gsub(':', '').to_sym]
       }
       expect(
-        endpoint.inject(find_injection)
+        endpoint.compile(find_value)
       ).to eq "http://datastore.lb-service/v2"
     end
   end

@@ -10,7 +10,7 @@ class LHC::InterceptorProcessor
     self.interceptors = (options[:interceptors] || LHC.config.interceptors).map{ |i| i.new }
   end
 
-  # Forwards messages to interceptors and handles injected responses.
+  # Forwards messages to interceptors and handles provided responses.
   def intercept(name, target)
     interceptors.each do |interceptor|
       result = interceptor.send(name, target)

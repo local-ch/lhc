@@ -5,7 +5,7 @@ class LHC::Config
 
   def initialize
     @endpoints = {}
-    @injections = {}
+    @placeholders = {}
   end
 
   def endpoint(name, url, options = {})
@@ -21,14 +21,14 @@ class LHC::Config
     @endpoints.dup
   end
 
-  def injection(name, value)
+  def placeholder(name, value)
     name = name.to_sym
-    fail 'Injection already exists for that name' if @injections[name]
-    @injections[name] = value
+    fail 'Placeholder already exists for that name' if @placeholders[name]
+    @placeholders[name] = value
   end
 
-  def injections
-    @injections.dup
+  def placeholders
+    @placeholders.dup
   end
 
   def interceptors

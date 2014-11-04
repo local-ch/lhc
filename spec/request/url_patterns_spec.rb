@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe LHC::Request do
 
-  it 'injects params into url patterns when using configured endpoints' do
+  it 'compiles url in case of configured endpoints' do
     options = { params: {
       has_reviews: true
     }}
@@ -12,7 +12,7 @@ describe LHC::Request do
     LHC.get(:feedbacks, params:{campaign_id: 123})
   end
 
-  it 'injects params into url patterns when doing an explicit request' do
+  it 'compiles url when doing a request' do
     stub_request(:get, 'http://datastore-stg.lb-service:8080/v2/feedbacks/123')
     LHC.get('http://datastore-stg.lb-service:8080/v2/feedbacks/:id', params:{id: 123})
   end
