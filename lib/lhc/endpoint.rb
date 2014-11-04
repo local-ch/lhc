@@ -44,8 +44,6 @@ class LHC::Endpoint
     url.scan(INJECTION).sort
   end
 
-  private
-
   # Find an injection either in the configuration
   # or in the provided params.
   def find_injection(match, params)
