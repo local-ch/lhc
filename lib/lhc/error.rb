@@ -8,7 +8,6 @@ class LHC::Error < StandardError
       401 => LHC::Unauthorized,
       402 => LHC::PaymentRequired,
       403 => LHC::Forbidden,
-      403 => LHC::Forbidden,
       404 => LHC::NotFound,
       405 => LHC::MethodNotAllowed,
       406 => LHC::NotAcceptable,
