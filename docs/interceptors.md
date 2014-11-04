@@ -54,7 +54,7 @@ You can override the global default interceptors on request level:
   LHC.request({url: 'http://local.ch', retry: 2, interceptors: interceptors})
 ```
 
-## Inject Response
+## Provide Response
 
 Inside an interceptor you are able to provide a response, rather then doing a real request.
 This is usually used for implementing an interceptor for caching.
@@ -70,7 +70,7 @@ end
 ```
 
 Take care that having more than one interceptor trying to return a response will cause an exception.
-You can access the request.response to identify if a response was already injected by another interceptor.
+You can access the request.response to identify if a response was already provided by another interceptor.
 
 ```ruby
   class RemoteCacheInterceptor < LHC::Interceptor

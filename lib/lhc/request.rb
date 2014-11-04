@@ -64,11 +64,10 @@ class LHC::Request
   end
 
   # Generates URL from a URL pattern
-  # by injecting values either from params or config
   def generate_url_from_pattern!
     endpoint = LHC::Endpoint.new(options[:url])
-    options[:url] = endpoint.inject(options[:params])
-    endpoint.remove_injected_params!(options[:params])
+    options[:url] = endpoint.compile(options[:params])
+    endpoint.remove_interpolated_params!(options[:params])
   end
 
   def on_complete(response)

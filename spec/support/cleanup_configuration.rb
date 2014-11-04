@@ -2,7 +2,7 @@ class LHC::Config
 
   def _cleanup
     @endpoints = {}
-    @injections = {}
+    @placeholders = {}
     @interceptors = nil
   end
 end
