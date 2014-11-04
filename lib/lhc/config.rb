@@ -32,7 +32,7 @@ class LHC::Config
   end
 
   def interceptors
-    @interceptors || []
+    (@interceptors || []).dup
   end
 
   def interceptors=(interceptors)
