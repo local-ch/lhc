@@ -8,7 +8,11 @@ module LHC
     module ClassMethods
 
       def request(options)
-        LHC::Request.new(options).response
+        if options.is_a? Array
+          parallel_requests(options)
+        else
+          LHC::Request.new(options).response
+        end
       end
 
       [:get, :post, :put, :delete].each do |http_method|
@@ -19,8 +23,20 @@ module LHC
           ))
         end
       end
+
+      private
+
+      def parallel_requests(options)
+        hydra = Typhoeus::Hydra.hydra
+        requests = []
+        options.each do |options|
+          request = LHC::Request.new(options, false)
+          requests << request
+          hydra.queue request.raw
+        end
+        hydra.run
+        requests.map(&:response)
+      end
     end
-
   end
-
 end

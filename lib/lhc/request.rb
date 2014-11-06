@@ -5,16 +5,16 @@ require 'typhoeus'
 # and it communicates with interceptors.
 class LHC::Request
 
-  attr_accessor :response, :options
+  attr_accessor :response, :options, :raw
 
-  def initialize(options)
+  def initialize(options, self_executing = true)
     self.options = options.deep_dup
     use_configured_endpoint!
     generate_url_from_pattern!
     self.iprocessor = LHC::InterceptorProcessor.new(self)
     self.raw = create_request
     iprocessor.intercept(:before_request, self)
-    raw.run unless response
+    raw.run if !response && self_executing
   end
 
   def url
@@ -35,7 +35,7 @@ class LHC::Request
 
   private
 
-  attr_accessor :raw, :iprocessor
+  attr_accessor :iprocessor
 
   def create_request
     request = Typhoeus::Request.new(options[:url], typhoeusize(options))
