@@ -35,6 +35,18 @@ Other methods are available using `LHC.request(options)`.
 
 → [Read more about the response object](docs/response.md)
 
+## Parallel requests
+
+If you want to perform multiple requests in parallel you can pass an array to the `LHC.request`.
+You will get back an array of LHC::Response objects.
+
+```ruby
+  options = []
+  options << { url: 'http://datastore.lb-service/v2/feedbacks' }
+  options << { url: 'http://datastore.lb-service/v2/content-ads/123/feedbacks' }
+  responses = LHC.request(options)
+```
+
 ## Transfer data through the body
 
 Data that is transfered using the HTTP request body is transfered as you provide it.
