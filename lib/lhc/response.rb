@@ -41,6 +41,10 @@ class LHC::Response
     raw.timed_out?
   end
 
+  def success?
+    raw.success?
+  end
+
   private
 
   attr_accessor :raw
