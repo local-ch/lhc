@@ -77,7 +77,7 @@ This is especially handy for configuring endpoints once and get generated urls w
 ```ruby
   url = 'http://datastore.lb-service/v2/feedbacks/:id'
   LHC.config.endpoint(:find_feedback, url, options)
-  LHC.get(:find_feedbak, params:{ id: 123 })
+  LHC.get(:find_feedback, params:{ id: 123 })
 ```
 
 This also works if you dont configure endpoints but just want to have it working for explicit requests:
