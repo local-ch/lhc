@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe LHC::Endpoint do
 
-  context 'compule' do
+  context 'compile' do
 
     it 'uses parameters for interpolation' do
       endpoint = LHC::Endpoint.new(':datastore/v2/:campaign_id/feedbacks')
@@ -11,7 +11,7 @@ describe LHC::Endpoint do
       ).to eq "http://datastore.lb-service/v2/abc/feedbacks"
     end
 
-    it 'uses provied proc to find values' do
+    it 'uses provided proc to find values' do
       endpoint = LHC::Endpoint.new(':datastore/v2')
       config = { datastore: 'http://datastore.lb-service' }
       find_value = ->(match){
