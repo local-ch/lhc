@@ -1,9 +1,9 @@
 LHC
 ===
 
-LHC uses [typhoeus](https://github.com/typhoeus/typhoeus) for http requests.
+LHC uses [typhoeus](https://github.com/typhoeus/typhoeus) for http communication.
 
-Get a look at [LHS](https://github.com/local-ch/LHS), if you are searching for something more **high level** that can query webservices easily and provides easy data access.
+See [LHS](https://github.com/local-ch/LHS), if you are searching for something more **high level** that can query webservices easily and provides easy data access.
 
 ## Quick Start Guide
 
@@ -17,11 +17,11 @@ Get a look at [LHS](https://github.com/local-ch/LHS), if you are searching for s
 
 ## Basic methods
 
-Available HTTP methods are `get`, `post`, `put` & `delete`.
+Available are `get`, `post`, `put` & `delete`.
 
 Other methods are available using `LHC.request(options)`.
 
-## Make a request from scratch
+## A request from scratch
 
 ```ruby
   response = LHC.request(url: 'http://local.ch', method: :options)
@@ -37,7 +37,7 @@ Other methods are available using `LHC.request(options)`.
 
 ## Parallel requests
 
-If you want to perform multiple requests in parallel you can pass an array to the `LHC.request`.
+If you pass an array of requests to `LHC.request`, it will perform those requests in parallel.
 You will get back an array of LHC::Response objects.
 
 ```ruby
@@ -50,16 +50,18 @@ You will get back an array of LHC::Response objects.
 ## Transfer data through the body
 
 Data that is transfered using the HTTP request body is transfered as you provide it.
-
-If you want to send it as json, you should transfer it to json first.
+Also consider setting the http header for content-type.
 
 ```ruby
-  LHC.post('http://datastore.lb-service/v2/feedbacks', body: feedback.to_json)
+  LHC.post('http://datastore.lb-service/v2/feedbacks',
+    body: feedback.to_json,
+    headers: { 'Content-Type' => 'application/json' }
+  )
 ```
 
 ## Configuration
 
-You can configure global endpoints, placeholder and interceptors.
+You can configure global endpoints, placeholders and interceptors.
 
 ```ruby
   LHC.config.placeholder(:datastore, 'http://datastore.lb-service/v2')
@@ -69,24 +71,26 @@ You can configure global endpoints, placeholder and interceptors.
 
 → [Read more about configuration](docs/configuration.md)
 
-## URL-Patterns
+## URL-Templates
 
-Instead of providing a concrete URL you can just provide the pattern of a URL containing placeholders.
-This is especially handy for configuring endpoints once and get generated urls when doing the requests.
+Instead of using concrete urls you can also use url-templates that contain placeholders.
+This is especially handy for configuring an endpoint once and generate the url from the params when doing the request.
 
 ```ruby
   url = 'http://datastore.lb-service/v2/feedbacks/:id'
   LHC.config.endpoint(:find_feedback, url, options)
   LHC.get(:find_feedback, params:{ id: 123 })
+  # GET http://datastore.lb-service/v2/feedbacks/123
 ```
 
-This also works if you dont configure endpoints but just want to have it working for explicit requests:
+This also works in place without configuring an endpoint.
 
 ```ruby
-  LHC.get('http://datastore-stg.lb-service:8080/v2/feedbacks/:id', params:{ id: 123 })
+  LHC.get('http://datastore-stg.lb-service/v2/feedbacks/:id', params:{ id: 123 })
+  # GET http://datastore-stg.lb-service/v2/feedbacks/123
 ```
 
-If you miss to provide a parameter that is part of the pattern, an exception will occur.
+If you miss to provide a parameter that is part of the url-template, it will raise an exception.
 
 ## Exception handling
 
@@ -95,6 +99,8 @@ Anything but a response code indicating success (2**) throws an exception.
 → [Read more about exceptions](docs/exceptions.md)
 
 ## Interceptors
+
+To monitor and manipulate the http communication done with LHC, you can define interceptors.
 
 ```ruby
   class TrackingIdInterceptor < LHC::Interceptor

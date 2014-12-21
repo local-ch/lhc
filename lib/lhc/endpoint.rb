@@ -1,5 +1,5 @@
 # An endpoint is an url that leads to a backend resource.
-# The url can also be an url-pattern.
+# The url can also be an url-template.
 class LHC::Endpoint
 
   PLACEHOLDER = /\:[A-Z,a-z,_,-]+/
@@ -36,7 +36,7 @@ class LHC::Endpoint
     removed
   end
 
-  # Returns all placeholders found in the url-pattern.
+  # Returns all placeholders found in the url-template.
   # They are alphabetically sorted.
   def placeholders
     url.scan(PLACEHOLDER).sort

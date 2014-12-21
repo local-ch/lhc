@@ -17,10 +17,11 @@ LHC.get('local.ch')
 rescue => e
   e.response #<LHC:Response>
   e.response.code # 403
+  e.response.timeout? # false
 ```
 
-All errors that can occur during http-requests inherit from `LHC::Error`.
-They are divided into `LHC::ClientError`, `LHC::ServerError`, `LHC::Timeout` and `LHC::UnkownError` and mapped arcording to the response status code.
+All errors that are raise by LHC inherit from `LHC::Error`.
+They are divided into `LHC::ClientError`, `LHC::ServerError`, `LHC::Timeout` and `LHC::UnkownError` and mapped arcording to the following status code.
 
 ```ruby
 400 => LHC::BadRequest

@@ -24,11 +24,11 @@ Interceptors
 
 `before_request(request)` is called when the request is prepared and about to be executed.
 
-`after_request(request)` is called after request was fired.
+`after_request(request)` is called after request was started.
 
-`before_response(request)` is called before response is completely arrived.
+`before_response(request)` is called when response started to arrive.
 
-`after_response(response)` is called after the response arrived.
+`after_response(response)` is called after the response arrived completely.
 
 → [Read more about the request object](request.md)
 
@@ -36,12 +36,14 @@ Interceptors
 
 ## Global default interceptors
 
-Setup the list of global default interceptors.
+Set the list of global default interceptors.
 The global default interceptors are processed in the order you provide them.
 
 ```ruby
   LHC.config.interceptors = [CachingInterceptor, MonitorInterceptor, TrackingIdInterceptor]
 ```
+
+You can only set the list of global interceptors once and you can not alter it after you set it.
 
 ## Interceptors on request level
 
@@ -56,8 +58,8 @@ You can override the global default interceptors on request level:
 
 ## Provide Response
 
-Inside an interceptor you are able to provide a response, rather then doing a real request.
-This is usually used for implementing an interceptor for caching.
+Inside an interceptor, you are able to provide a response, rather then doing a real request.
+This is usefull for implementing an interceptor for caching.
 
 ```ruby
 class CacheInterceptor < LHC::Interceptor

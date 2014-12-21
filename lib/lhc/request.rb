@@ -10,7 +10,7 @@ class LHC::Request
   def initialize(options, self_executing = true)
     self.options = options.deep_dup
     use_configured_endpoint!
-    generate_url_from_pattern!
+    generate_url_from_template!
     self.iprocessor = LHC::InterceptorProcessor.new(self)
     self.raw = create_request
     iprocessor.intercept(:before_request, self)
@@ -63,8 +63,8 @@ class LHC::Request
     options[:url] = endpoint.url
   end
 
-  # Generates URL from a URL pattern
-  def generate_url_from_pattern!
+  # Generates URL from a URL template
+  def generate_url_from_template!
     endpoint = LHC::Endpoint.new(options[:url])
     options[:url] = endpoint.compile(options[:params])
     endpoint.remove_interpolated_params!(options[:params])
