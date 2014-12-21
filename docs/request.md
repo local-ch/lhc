@@ -4,7 +4,7 @@ Request
 The request class handles the http request,
 implements the interceptor pattern,
 loads configured endpoints,
-generates urls from url-patterns
+generates urls from url-templates
 and raises exceptions for any response code that is not indicating success (2**).
 
 → [Read more about exceptions](exceptions.md)
