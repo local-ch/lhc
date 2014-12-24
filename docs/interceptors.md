@@ -43,7 +43,7 @@ The global default interceptors are processed in the order you provide them.
   LHC.config.interceptors = [CachingInterceptor, MonitorInterceptor, TrackingIdInterceptor]
 ```
 
-You can only set the list of global interceptors once and you can not alter it after you set it.
+You can only set the list of global interceptors once and you cannot alter them later.
 
 ## Interceptors on request level
 
