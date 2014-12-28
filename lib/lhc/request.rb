@@ -73,10 +73,10 @@ class LHC::Request
   def on_complete(response)
     self.response ||= LHC::Response.new(response, self)
     iprocessor.intercept(:after_response, self.response)
-    on_error unless self.response.success?
+    throw_error unless self.response.success?
   end
 
-  def on_error
+  def throw_error
     error = LHC::Error.find(response)
     debug = []
     debug << "#{method} #{url}"
