@@ -16,3 +16,4 @@ fi
 
 bundle install --local --quiet || bundle install --quiet
 RAILS_ENV=test bundle exec rspec
+rvm --force gemset delete ${RUBY}@${GEMSET}
