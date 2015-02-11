@@ -5,6 +5,8 @@ require 'typhoeus'
 # and it communicates with interceptors.
 class LHC::Request
 
+  TYPHOEUS_OPTIONS = [:params, :method, :body, :headers]
+
   attr_accessor :response, :options, :raw
 
   def initialize(options, self_executing = true)
@@ -38,7 +40,7 @@ class LHC::Request
   attr_accessor :iprocessor
 
   def create_request
-    request = Typhoeus::Request.new(options[:url], typhoeusize(options))
+    request = Typhoeus::Request.new(options[:url], typhoeusize!(options))
     request.on_headers do
       iprocessor.intercept(:after_request, self)
       iprocessor.intercept(:before_response, self)
@@ -47,10 +49,14 @@ class LHC::Request
     request
   end
 
-  def typhoeusize(options)
-    options = options.deep_dup
-    options.delete :url
-    options.delete :interceptors
+  def typhoeusize!(options)
+    easy = Ethon::Easy.new
+    options.delete(:url)
+    options.each do |key, v|
+      next if TYPHOEUS_OPTIONS.include? key
+      method = "#{key}="
+      options.delete key unless easy.respond_to?(method)
+    end
     options
   end
 
