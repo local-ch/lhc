@@ -11,10 +11,7 @@ class LHC::Config
   def endpoint(name, url, options = {})
     name = name.to_sym
     fail 'Endpoint already exists for that name' if @endpoints[name]
-    @endpoints[name] = OpenStruct.new({
-      url: url,
-      options: options
-    })
+    @endpoints[name] = LHC::Endpoint.new(url, options)
   end
 
   def endpoints

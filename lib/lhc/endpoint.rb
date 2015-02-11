@@ -4,10 +4,11 @@ class LHC::Endpoint
 
   PLACEHOLDER = /\:[A-Z,a-z,_,-]+/
 
-  attr_accessor :url
+  attr_accessor :url, :options
 
-  def initialize(url)
+  def initialize(url, options = nil)
     self.url = url
+    self.options = options
   end
 
   def compile(params)
