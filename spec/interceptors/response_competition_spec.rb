@@ -13,7 +13,7 @@ describe LHC do
 
         def before_request(request)
           if @@cached
-            return_response Typhoeus::Response.new(response_body: 'Im served from local cache')
+            return LHC::Response.new(Typhoeus::Response.new(response_body: 'Im served from local cache'), nil)
           end
         end
       end
@@ -22,7 +22,7 @@ describe LHC do
 
         def before_request(request)
           if request.response.nil?
-            return_response Typhoeus::Response.new(response_body: 'Im served from remote cache')
+            return LHC::Response.new(Typhoeus::Response.new(response_body: 'Im served from remote cache'), nil)
           end
         end
       end

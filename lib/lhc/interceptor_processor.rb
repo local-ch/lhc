@@ -14,10 +14,10 @@ class LHC::InterceptorProcessor
   def intercept(name, target)
     interceptors.each do |interceptor|
       result = interceptor.send(name, target)
-      if result.is_a? LHC::ResponseToReturn
+      if result.is_a? LHC::Response
         fail 'Response already set from another interceptor' if @response
         request = target.is_a?(LHC::Request) ? target : target.request
-        @response = request.response = LHC::Response.new(result.response, request)
+        @response = request.response = result
       end
     end
   end

@@ -66,7 +66,7 @@ class CacheInterceptor < LHC::Interceptor
 
   def before_request(request)
     cached_response = Rails.cache.fetch(request.url)
-    return_response(cached_response) if cached_response
+    return LHC::Response.new(cached_response) if cached_response
   end
 end
 ```
@@ -78,7 +78,8 @@ You can access the request.response to identify if a response was already provid
   class RemoteCacheInterceptor < LHC::Interceptor
 
     def before_request(request)
-      return_response(remote_cache) if request.response.nil?
+      return unless request.response.nil?
+      return LHC::Response.new(remote_cache)
     end
   end
 ```
