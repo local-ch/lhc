@@ -15,8 +15,9 @@ class LHC::Request
     generate_url_from_template!
     self.iprocessor = LHC::InterceptorProcessor.new(self)
     self.raw = create_request
+    return unless self_executing
     iprocessor.intercept(:before_request, self)
-    raw.run if !response && self_executing
+    raw.run if !response
   end
 
   def url
@@ -40,7 +41,7 @@ class LHC::Request
   attr_accessor :iprocessor
 
   def create_request
-    request = Typhoeus::Request.new(options[:url], typhoeusize!(options))
+    request = Typhoeus::Request.new(options[:url], typhoeusize(options))
     request.on_headers do
       iprocessor.intercept(:after_request, self)
       iprocessor.intercept(:before_response, self)
@@ -49,7 +50,8 @@ class LHC::Request
     request
   end
 
-  def typhoeusize!(options)
+  def typhoeusize(options)
+    options = options.deep_dup
     easy = Ethon::Easy.new
     options.delete(:url)
     options.each do |key, v|
@@ -86,8 +88,8 @@ class LHC::Request
     error = LHC::Error.find(response)
     debug = []
     debug << "#{method} #{url}"
-    debug << "Params: #{@options}"
-    debug << "Options: #{@options}"
+    debug << "Params: #{options}"
+    debug << "Options: #{options}"
     debug << response.code
     debug << response.body
     fail error.new(debug.join("\n"), response)

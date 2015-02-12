@@ -6,8 +6,4 @@ class LHC::Interceptor
   def before_response(request); end
   def after_response(response); end
 
-  def return_response(response)
-    LHC::ResponseToReturn.new(response)
-  end
-
 end
