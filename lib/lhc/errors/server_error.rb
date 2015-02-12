@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + '/../error'
+
 class LHC::ServerError < LHC::Error
 end
 
