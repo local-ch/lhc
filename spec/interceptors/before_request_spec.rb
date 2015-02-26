@@ -6,12 +6,11 @@ describe LHC do
 
     before(:each) do
       class TrackingIdInterceptor < LHC::Interceptor
-
         def before_request(request)
           request.params[:tid] = 123
         end
       end
-      LHC.config.interceptors = [TrackingIdInterceptor]
+      LHC.configure { |c| c.interceptors = [TrackingIdInterceptor] }
     end
 
     it 'can modify requests before they are send' do

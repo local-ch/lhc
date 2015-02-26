@@ -6,7 +6,11 @@ module LHC
   def self.config
     LHC::Config.instance
   end
-end
 
+  def self.configure
+    LHC::Config.instance.reset
+    yield config
+  end
+end
 
 Gem.find_files('lhc/**/*.rb').sort.each { |path| require path }
