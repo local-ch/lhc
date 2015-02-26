@@ -9,8 +9,7 @@ describe LHC do
         def after_request(request)
         end
       end
-
-      LHC.config.interceptors = [SomeInterceptor]
+      LHC.configure { |c| c.interceptors = [SomeInterceptor] }
     end
 
     it 'can perform some actions after a request was fired' do

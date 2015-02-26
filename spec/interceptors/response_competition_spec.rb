@@ -7,7 +7,6 @@ describe LHC do
     before(:each) do
 
       class LocalCacheInterceptor < LHC::Interceptor
-
         @@cached = false
         cattr_accessor :cached
 
@@ -27,7 +26,7 @@ describe LHC do
         end
       end
 
-      LHC.config.interceptors = [LocalCacheInterceptor, RemoteCacheInterceptor]
+      LHC.configure { |c| c.interceptors = [LocalCacheInterceptor, RemoteCacheInterceptor] }
     end
 
     it 'can handle multiple interceptors that compete for returning the response' do

@@ -36,4 +36,10 @@ class LHC::Config
     fail 'Default interceptors already set and can only be set once' if @interceptors
     @interceptors = interceptors
   end
+
+  def reset
+    @endpoints = {}
+    @placeholders = {}
+    @interceptors = nil
+  end
 end

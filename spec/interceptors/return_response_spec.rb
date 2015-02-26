@@ -11,7 +11,7 @@ describe LHC do
           return LHC::Response.new(Typhoeus::Response.new(response_body: 'Im served from cache'), nil)
         end
       end
-      LHC.config.interceptors = [CacheInterceptor]
+      LHC.configure { |c| c.interceptors = [CacheInterceptor] }
     end
 
     it 'can return a response rather then doing a real request' do
