@@ -13,7 +13,11 @@ describe LHC do
       }
     end
 
-    before(:each) { LHC.config.endpoint(:kpi_tracker, url, options) }
+    before(:each) do
+      LHC.configure do |c|
+        c.endpoint(:kpi_tracker, url, options)
+      end
+    end
 
     it 'configures urls to be able to access them by name later' do
       expect(LHC.config.endpoints[:kpi_tracker].url).to eq url
@@ -38,7 +42,7 @@ describe LHC do
     end
 
     it 'enforces endpoint name to be a symbol' do
-      LHC.config.endpoint('datastore', 'http://datastore.lb-service')
+      LHC.configure { |c| c.endpoint('datastore', 'http://datastore.lb-service') }
       expect(LHC.config.endpoints[:datastore].url).to eq 'http://datastore.lb-service'
     end
   end

@@ -6,7 +6,6 @@ describe LHC do
 
     before(:each) do
       class Services
-
         def self.timing(path, time)
         end
       end
@@ -14,7 +13,6 @@ describe LHC do
 
     before(:each) do
       class StatsTimingInterceptor < LHC::Interceptor
-
         def after_response(response)
           uri = URI.parse(response.request.url)
           path = [
@@ -29,7 +27,7 @@ describe LHC do
           Services.timing(path.downcase, response.time)
         end
       end
-      LHC.config.interceptors = [StatsTimingInterceptor]
+      LHC.configure { |c| c.interceptors = [StatsTimingInterceptor] }
     end
 
     let(:url) { "http://datastore-stg.lb-service.sunrise.intra.local.ch/v2/feedbacks/-Sc4_pYNpqfsudzhtivfkA" }

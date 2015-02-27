@@ -7,7 +7,7 @@ describe LHC::Request do
       has_reviews: true
     }}
     url = 'http://datastore-stg.lb-service/v2/campaign/:campaign_id/feedbacks'
-    LHC.config.endpoint(:feedbacks, url, options)
+    LHC.configure { |c| c.endpoint(:feedbacks, url, options) }
     stub_request(:get, 'http://datastore-stg.lb-service/v2/campaign/123/feedbacks?has_reviews=true')
     LHC.get(:feedbacks, params:{campaign_id: 123})
   end
