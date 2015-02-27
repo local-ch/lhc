@@ -3,7 +3,7 @@ Configuration
 
 ## Configure LHC on initialisation
 
-If you want to configure LHC on initialisation (like in a Rails initializer, environment.rb or application.rb), you can run into the problem that certain configurations can only be set once.
+If you want to configure LHC on initialisation (like in a Rails initializer, environment.rb or application.rb), you could run into the problem that certain configurations can only be set once.
 You can use `LHC.configure` to prevent the initialisation problem.
 Take care that you only use `LHC.configure` once, because it is actually reseting previously made configurations and applies the new once.
 
