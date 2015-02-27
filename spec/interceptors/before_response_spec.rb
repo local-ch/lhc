@@ -6,11 +6,10 @@ describe LHC do
 
     before(:each) do
       class SomeInterceptor < LHC::Interceptor
-
         def before_response(request)
         end
       end
-      LHC.config.interceptors = [SomeInterceptor]
+      LHC.configure { |c| c.interceptors = [SomeInterceptor] }
     end
 
     it 'can perform some actions before a reponse is received' do

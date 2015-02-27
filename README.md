@@ -64,9 +64,11 @@ Also consider setting the http header for content-type.
 You can configure global endpoints, placeholders and interceptors.
 
 ```ruby
-  LHC.config.placeholder(:datastore, 'http://datastore.lb-service/v2')
-  LHC.config.endpoint(:feedbacks, ':datastore/feedbacks', params: { has_reviews: true })
-  LHC.config.interceptors = [CacheInterceptor]
+  LHC.configure do |c|
+    c.placeholder :datastore, 'http://datastore.lb-service/v2'
+    c.endpoint :feedbacks, ':datastore/feedbacks', params: { has_reviews: true }
+    c.interceptors = [CacheInterceptor]
+  end
 ```
 
 → [Read more about configuration](docs/configuration.md)
