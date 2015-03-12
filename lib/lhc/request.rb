@@ -86,12 +86,6 @@ class LHC::Request
 
   def throw_error
     error = LHC::Error.find(response)
-    debug = []
-    debug << "#{method} #{url}"
-    debug << "Params: #{options}"
-    debug << "Options: #{options}"
-    debug << response.code
-    debug << response.body
-    fail error.new(debug.join("\n"), response)
+    fail error.new(error, response)
   end
 end

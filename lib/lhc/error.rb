@@ -51,4 +51,13 @@ class LHC::Error < StandardError
     self.response = response
   end
 
+  def to_s
+    request = response.request
+    debug = []
+    debug << "#{request.method} #{request.url}"
+    debug << "Params: #{request.options}"
+    debug << "Response Code: #{response.code}"
+    debug << response.body
+    debug.join("\n")
+  end
 end
