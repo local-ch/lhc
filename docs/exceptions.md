@@ -18,6 +18,11 @@ rescue => e
   e.response #<LHC:Response>
   e.response.code # 403
   e.response.timeout? # false
+  Rails.logger.error e
+  # LHC::UnknownError: get http://local.cac
+  # Params: {:url=>"http://local.cac", :method=>:get}
+  # Response Code: 0
+  # <Response Body>
 ```
 
 All errors that are raise by LHC inherit from `LHC::Error`.
