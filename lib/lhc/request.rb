@@ -66,8 +66,7 @@ class LHC::Request
   # Explicit request options are overriding configured options.
   def use_configured_endpoint!
     return unless (endpoint = LHC.config.endpoints[options[:url]])
-    endpoint.options.deep_merge!(options)
-    options.deep_merge!(endpoint.options)
+    options.deep_merge!(endpoint.options.deep_merge(options))
     options[:url] = endpoint.url
   end
 

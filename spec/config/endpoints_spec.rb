@@ -45,5 +45,18 @@ describe LHC do
       LHC.configure { |c| c.endpoint('datastore', 'http://datastore.lb-service') }
       expect(LHC.config.endpoints[:datastore].url).to eq 'http://datastore.lb-service'
     end
+
+    it 'executes/evaluates options in case of procs and returns the result' do
+      def access_token
+        'Bearer 123456'
+      end
+      options = {
+        headers: -> { { 'Authentication' => access_token } }
+      }
+      LHC.configure { |c| c.endpoint('datastore', 'http://datastore.lb-service', options) }
+      expect(
+        LHC.config.endpoints[:datastore].options[:headers]['Authentication']
+      ).to eq 'Bearer 123456'
+    end
   end
 end
