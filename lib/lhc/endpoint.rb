@@ -37,6 +37,16 @@ class LHC::Endpoint
     removed
   end
 
+  # Accessor for options.
+  # Evaluates first level options in case of Procs/Lambdas
+  def options
+    options_copy = @options.dup
+    options_copy.each do |key, value|
+      options_copy[key] = value.call if value.is_a? Proc
+    end
+    options_copy
+  end
+
   # Returns all placeholders found in the url-template.
   # They are alphabetically sorted.
   def placeholders
