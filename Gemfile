@@ -1,4 +1,4 @@
-source "https://rubygems.org"
+source 'https://GemInAbox:e3XRBgVJRNUmwJ5y@gembox-vm-inx01.intra.local.ch/'
 
 # Declare your gem's dependencies in lhc.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
@@ -15,3 +15,7 @@ gem 'rails', '~> 4.1.1'
 gem 'pry'
 gem 'typhoeus', git: 'git@github.com:local-ch/typhoeus.git', branch: 'improved-timeouts'
 gem 'webmock', group: [:test]
+
+group :development do
+  gem 'geminabox'
+end
