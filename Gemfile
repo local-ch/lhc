@@ -10,12 +10,5 @@ gemspec
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 
-gem 'rspec-rails', '>= 3.0.0'
-gem 'rails', '~> 4.1.1'
+gem 'geminabox'
 gem 'pry'
-gem 'typhoeus', git: 'git@github.com:local-ch/typhoeus.git', branch: 'improved-timeouts'
-gem 'webmock', group: [:test]
-
-group :development do
-  gem 'geminabox'
-end
