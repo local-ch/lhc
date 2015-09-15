@@ -14,13 +14,15 @@ Gem::Specification.new do |s|
   s.description = 'Rails gem wrapping typhoeus and providing additional features (like interceptors)'
 
   s.files        = `git ls-files`.split("\n")
-  s.test_files   = `git ls-files -- spec/*`.split("\n")
+  s.test_files   = `git ls-files -- spec/*`.split("\n") +
+                   `git ls-files -- non_rails_spec/*`.split("\n")
   s.require_paths = ['lib']
 
   s.requirements << 'Ruby >= 1.9.2'
   s.required_ruby_version = '>= 1.9.2'
-  
+
   s.add_dependency 'typhoeus'
+  s.add_dependency 'activesupport'
 
   s.add_development_dependency 'rspec-rails', '>= 3.0.0'
   s.add_development_dependency 'rails', '~> 4.1.1'
