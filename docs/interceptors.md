@@ -22,7 +22,7 @@ Interceptors
 
 ## Basic Interceptors
 
-There are some basic interceptors available, that cover some usecases here:
+There are some interceptors available, that cover some basic usecases:
 [lhc-core-interceptors](https://github.com/local-ch/lhc-core-interceptors)
 
 ## Callbacks
