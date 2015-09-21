@@ -20,6 +20,11 @@ Interceptors
   LHC.request({url: 'http://local.ch', interceptors: []}) # no interceptor for this request
 ```
 
+## Basic Interceptors
+
+There are some basic interceptors available, that cover some usecases here:
+[lhc-core-interceptors](https://github.com/local-ch/lhc-core-interceptors)
+
 ## Callbacks
 
 `before_request(request)` is called when the request is prepared and about to be executed.
