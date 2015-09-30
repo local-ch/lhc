@@ -16,9 +16,8 @@ class LHC::Request
     generate_url_from_template!
     self.iprocessor = LHC::InterceptorProcessor.new(self)
     self.raw = create_request
-    return unless self_executing
     iprocessor.intercept(:before_request, self)
-    raw.run if !response
+    raw.run if self_executing && !response
   end
 
   def url
