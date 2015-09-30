@@ -66,4 +66,21 @@ class LHC::Endpoint
   def self.placeholders(template)
     template.scan(PLACEHOLDER).sort
   end
+
+  # Extracts the values from url and
+  # creates params according to template
+  def self.values_as_params(template, url)
+    params = {}
+    regexp = template
+    LHC::Endpoint.placeholders(template).each do |placeholder|
+      name = placeholder.gsub(":", '')
+      regexp = regexp.gsub(placeholder, "(?<#{name}>.*)")
+    end
+    matchdata = url.match(Regexp.new("^#{regexp}$"))
+    LHC::Endpoint.placeholders(template).each do |placeholder|
+      name = placeholder.gsub(':', '')
+      params[name.to_sym] = matchdata[name]
+    end
+    params
+  end
 end
