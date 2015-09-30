@@ -1,4 +1,5 @@
 require 'typhoeus'
+require 'active_support/core_ext/object/deep_dup'
 
 # The request is doing an http-request using typhoeus.
 # It provides functionalities to access and alter request data
