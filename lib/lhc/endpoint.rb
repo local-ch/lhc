@@ -40,7 +40,7 @@ class LHC::Endpoint
   # Returns all placeholders found in the url-template.
   # They are alphabetically sorted.
   def placeholders
-    url.scan(PLACEHOLDER).sort
+    LHC::Endpoint.placeholders(url)
   end
 
   # Find a value for a placeholder either in the configuration
@@ -49,5 +49,21 @@ class LHC::Endpoint
     params ||= {}
     match = match.gsub(/^\:/, '').to_sym
     params[match] || LHC.config.placeholders[match]
+  end
+
+  # Compares a concrete url with a template
+  # Returns true if concrete url is covered by the template
+  def self.match?(url, template)
+    regexp = template
+    LHC::Endpoint.placeholders(template).each do |placeholder|
+      regexp = regexp.gsub(placeholder, '.*')
+    end
+    url.match(Regexp.new("^#{regexp}$"))
+  end
+
+  # Returns all placeholders found in the url-template.
+  # They are alphabetically sorted.
+  def self.placeholders(template)
+    template.scan(PLACEHOLDER).sort
   end
 end
