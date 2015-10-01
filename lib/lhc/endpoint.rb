@@ -58,6 +58,7 @@ class LHC::Endpoint
     LHC::Endpoint.placeholders(template).each do |placeholder|
       regexp = regexp.gsub(placeholder, '.*')
     end
+    regexp = regexp.gsub('/', '(?<!/)/(?!/)')
     url.match(Regexp.new("^#{regexp}$"))
   end
 
