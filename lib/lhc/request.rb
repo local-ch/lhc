@@ -1,4 +1,5 @@
 require 'typhoeus'
+require 'uri'
 require 'active_support/core_ext/object/deep_dup'
 
 # The request is doing an http-request using typhoeus.
