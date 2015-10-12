@@ -52,7 +52,7 @@ class LHC::Request
   end
 
   def encode_url(url)
-    return url if url.blank?
+    return url if url.nil?
     URI.escape(url)
   end
 
