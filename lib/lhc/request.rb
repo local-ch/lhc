@@ -52,7 +52,7 @@ class LHC::Request
   end
 
   def encode_url(url)
-    URI::escape(url)
+    URI.encode(url)
   end
 
   def typhoeusize(options)
