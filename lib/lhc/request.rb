@@ -41,13 +41,17 @@ class LHC::Request
   attr_accessor :iprocessor
 
   def create_request
-    request = Typhoeus::Request.new(options[:url], typhoeusize(options))
+    request = Typhoeus::Request.new(encode_url(options[:url]), typhoeusize(options))
     request.on_headers do
       iprocessor.intercept(:after_request, self)
       iprocessor.intercept(:before_response, self)
     end
     request.on_complete { |response| on_complete(response) }
     request
+  end
+
+  def encode_url(url)
+    URI::escape(url)
   end
 
   def typhoeusize(options)
