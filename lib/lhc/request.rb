@@ -1,4 +1,5 @@
 require 'typhoeus'
+require 'uri'
 require 'active_support/core_ext/object/deep_dup'
 
 # The request is doing an http-request using typhoeus.
@@ -41,13 +42,18 @@ class LHC::Request
   attr_accessor :iprocessor
 
   def create_request
-    request = Typhoeus::Request.new(options[:url], typhoeusize(options))
+    request = Typhoeus::Request.new(encode_url(options[:url]), typhoeusize(options))
     request.on_headers do
       iprocessor.intercept(:after_request, self)
       iprocessor.intercept(:before_response, self)
     end
     request.on_complete { |response| on_complete(response) }
     request
+  end
+
+  def encode_url(url)
+    return url if url.nil?
+    URI.escape(url)
   end
 
   def typhoeusize(options)
