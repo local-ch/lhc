@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.2'
 
   s.add_dependency 'typhoeus'
-  s.add_dependency 'activesupport'
+  s.add_dependency 'activesupport', '~> 4.1'
 
   s.add_development_dependency 'rspec-rails', '>= 3.0.0'
   s.add_development_dependency 'rails', '~> 4.1.1'
