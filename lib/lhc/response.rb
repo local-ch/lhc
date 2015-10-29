@@ -32,6 +32,10 @@ class LHC::Response
     raw.headers
   end
 
+  def options
+    raw.options
+  end
+
   # Provides response time in ms.
   def time
     (raw.time || 0) * 1000
