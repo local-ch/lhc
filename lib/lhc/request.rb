@@ -12,7 +12,7 @@ class LHC::Request
   attr_accessor :response, :options, :raw
 
   def initialize(options, self_executing = true)
-    self.options = options.deep_dup
+    self.options = options.deep_dup || {}
     use_configured_endpoint!
     generate_url_from_template!
     self.iprocessor = LHC::InterceptorProcessor.new(self)
