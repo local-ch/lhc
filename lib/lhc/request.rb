@@ -71,9 +71,12 @@ class LHC::Request
   # Get configured endpoint and use it for doing the request.
   # Explicit request options are overriding configured options.
   def use_configured_endpoint!
-    return unless (endpoint = LHC.config.endpoints[options[:url]])
-    options.deep_merge!(endpoint.options.deep_merge(options))
-    options[:url] = endpoint.url
+    return unless (endpoint = LHC.config.endpoints[self.options[:url]])
+    # explicit options override endpoint options
+    new_options = endpoint.options.deep_merge(self.options)
+    # set new options
+    self.options = new_options
+    self.options[:url] = endpoint.url
   end
 
   # Generates URL from a URL template
