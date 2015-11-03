@@ -12,7 +12,7 @@ class LHC::Request
   attr_accessor :response, :options, :raw
 
   def initialize(options, self_executing = true)
-    self.options = options.deep_dup
+    self.options = options.deep_dup || {}
     use_configured_endpoint!
     generate_url_from_template!
     self.iprocessor = LHC::InterceptorProcessor.new(self)
@@ -71,10 +71,13 @@ class LHC::Request
   # Get configured endpoint and use it for doing the request.
   # Explicit request options are overriding configured options.
   def use_configured_endpoint!
-    return unless (endpoint = LHC.config.endpoints[options[:url]])
-    endpoint.options.deep_merge!(options)
-    options.deep_merge!(endpoint.options)
-    options[:url] = endpoint.url
+    endpoint = LHC.config.endpoints[self.options[:url]]
+    return unless endpoint
+    # explicit options override endpoint options
+    new_options = endpoint.options.deep_merge(self.options)
+    # set new options
+    self.options = new_options
+    self.options[:url] = endpoint.url
   end
 
   # Generates URL from a URL template

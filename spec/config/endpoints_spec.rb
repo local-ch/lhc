@@ -46,4 +46,19 @@ describe LHC do
       expect(LHC.config.endpoints[:datastore].url).to eq 'http://datastore.lb-service'
     end
   end
+
+  context 'configured enpoints with default params' do
+
+    before(:each) do
+      LHC.config.endpoint(:telemarketers, 'http://datastore.lb-service/v2/spamnumbers?order_by=-user_frequency&swiss_number=true&offset=0&limit=:limit', params: { limit: 200 })
+      stub_request(:get, 'http://datastore.lb-service/v2/spamnumbers?limit=200&offset=0&order_by=-user_frequency&swiss_number=true')
+        .to_return(status: 200)
+    end
+
+    it 'is possible to call them multiple times with default params' do
+      LHC.get(:telemarketers)
+      LHC.get(:telemarketers)
+      LHC.get(:telemarketers)
+    end
+  end
 end

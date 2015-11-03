@@ -22,6 +22,11 @@ class LHC::Endpoint
     end
   end
 
+  # Endpoint options are immutable
+  def options
+    @options.deep_dup
+  end
+
   # Removes keys from provided params hash
   # when they are used for interpolation.
   def remove_interpolated_params!(params)
