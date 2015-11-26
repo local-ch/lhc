@@ -1,0 +1,27 @@
+tests:
+
+  name: 'Tests'
+
+  run-on:
+    - type: branch
+      include-match: ^.*$
+  
+  context:
+    
+    _cider-ci_include:
+      - cider-ci/contexts/rspec.yml
+
+    task-defaults:
+
+      scripts:
+
+        bundle:
+          body: bundle install
+
+        ruby-version:
+          body: ruby --version
+
+        test:
+          start-when:
+            - script: bundle
+            - script: ruby-version
