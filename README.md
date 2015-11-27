@@ -8,7 +8,7 @@ See [LHS](https://github.com/local-ch/LHS), if you are searching for something m
 ## Quick Start Guide
 
 ```ruby
-  response = LHC.get('http://datastore.lb-service/v2/feedbacks')
+  response = LHC.get('http://datastore/v2/feedbacks')
   response.data.items[0]
   response.data.items[0].recommended
   response.body     # String
@@ -27,7 +27,7 @@ Other methods are available using `LHC.request(options)`.
   response = LHC.request(url: 'http://local.ch', method: :options)
   response.headers
 
-  response = LHC.request(url: 'http://datastore.lb-service/v2/feedbacks', method: :get)
+  response = LHC.request(url: 'http://datastore/v2/feedbacks', method: :get)
   response.data
 ```
 
@@ -42,8 +42,8 @@ You will get back an array of LHC::Response objects.
 
 ```ruby
   options = []
-  options << { url: 'http://datastore.lb-service/v2/feedbacks' }
-  options << { url: 'http://datastore.lb-service/v2/content-ads/123/feedbacks' }
+  options << { url: 'http://datastore/v2/feedbacks' }
+  options << { url: 'http://datastore/v2/content-ads/123/feedbacks' }
   responses = LHC.request(options)
 ```
 
@@ -53,7 +53,7 @@ Data that is transfered using the HTTP request body is transfered as you provide
 Also consider setting the http header for content-type.
 
 ```ruby
-  LHC.post('http://datastore.lb-service/v2/feedbacks',
+  LHC.post('http://datastore/v2/feedbacks',
     body: feedback.to_json,
     headers: { 'Content-Type' => 'application/json' }
   )
@@ -65,7 +65,7 @@ You can configure global endpoints, placeholders and interceptors.
 
 ```ruby
   LHC.configure do |c|
-    c.placeholder :datastore, 'http://datastore.lb-service/v2'
+    c.placeholder :datastore, 'http://datastore/v2'
     c.endpoint :feedbacks, ':datastore/feedbacks', params: { has_reviews: true }
     c.interceptors = [CacheInterceptor]
   end
@@ -79,17 +79,17 @@ Instead of using concrete urls you can also use url-templates that contain place
 This is especially handy for configuring an endpoint once and generate the url from the params when doing the request.
 
 ```ruby
-  url = 'http://datastore.lb-service/v2/feedbacks/:id'
+  url = 'http://datastore/v2/feedbacks/:id'
   LHC.config.endpoint(:find_feedback, url, options)
   LHC.get(:find_feedback, params:{ id: 123 })
-  # GET http://datastore.lb-service/v2/feedbacks/123
+  # GET http://datastore/v2/feedbacks/123
 ```
 
 This also works in place without configuring an endpoint.
 
 ```ruby
-  LHC.get('http://datastore-stg.lb-service/v2/feedbacks/:id', params:{ id: 123 })
-  # GET http://datastore-stg.lb-service/v2/feedbacks/123
+  LHC.get('http://datastore/v2/feedbacks/:id', params:{ id: 123 })
+  # GET http://datastore/v2/feedbacks/123
 ```
 
 If you miss to provide a parameter that is part of the url-template, it will raise an exception.

@@ -10,7 +10,7 @@ Take care that you only use `LHC.configure` once, because it is actually resetin
 ```ruby
 
   LHC.configure do |c|
-    c.placeholder :datastore, 'http://datastore.lb-service/v2'
+    c.placeholder :datastore, 'http://datastore/v2'
     c.endpoint :feedbacks, ':datastore/feedbacks'
     c.interceptors = [CachingInterceptor, MonitorInterceptor, TrackingIdInterceptor]
   end
@@ -22,7 +22,7 @@ Take care that you only use `LHC.configure` once, because it is actually resetin
 You can configure endpoints, for later use, by giving them a name, an url and some parameters (optional).
 
 ```ruby
-  url = 'http://datastore.lb-service/v2/feedbacks'
+  url = 'http://datastore/v2/feedbacks'
   options = { params: { has_reviews: true } }
   LHC.config.endpoint(:feedbacks, url, options)
   LHC.get(:feedbacks)
@@ -39,7 +39,7 @@ Explicit request options override configured options.
 You can configure global placeholders, that are used when generating urls from url-templates.
 
 ```ruby
-  LHC.config.placeholder(:datastore, 'http://datastore.lb-service/v2')
+  LHC.config.placeholder(:datastore, 'http://datastore/v2')
   options = { params: { has_reviews: true } }
   LHC.config.endpoint(:feedbacks, url, options)
   LHC.get(:feedbacks)

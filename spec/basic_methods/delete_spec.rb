@@ -13,21 +13,21 @@ describe LHC do
     end
 
     before(:each) do
-      stub_request(:delete, "http://datastore.lb-service/v2/feedbacks/12121")
+      stub_request(:delete, "http://datastore/v2/feedbacks/12121")
       .to_return(status: 200, body: feedback.to_json, headers: {'Content-Encoding' => 'UTF-8'})
     end
 
     it 'does a delete request when providing a complete url' do
-      LHC.delete('http://datastore.lb-service/v2/feedbacks/12121')
+      LHC.delete('http://datastore/v2/feedbacks/12121')
     end
 
     it 'it makes response data available in a rails way' do
-      response = LHC.delete('http://datastore.lb-service/v2/feedbacks/12121')
+      response = LHC.delete('http://datastore/v2/feedbacks/12121')
       expect(response.data.recommended).to eq true
     end
 
     it 'provides response headers' do
-      response = LHC.delete('http://datastore.lb-service/v2/feedbacks/12121')
+      response = LHC.delete('http://datastore/v2/feedbacks/12121')
       expect(response.headers).to be
     end
   end
