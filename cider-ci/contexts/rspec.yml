@@ -1,0 +1,19 @@
+subcontexts:
+
+  - name: 'All rspec tests'
+
+    task-defaults:
+
+      environment-variables:
+        RAILS_ENV: test
+
+      scripts:
+
+        test:
+
+          body: |
+            #!/usr/bin/env bash
+            bundle exec rspec $CIDER_CI_TASK_FILE
+
+    _cider-ci_generate-tasks:
+      include-match: spec/.*_spec.rb
