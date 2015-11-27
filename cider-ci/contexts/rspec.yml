@@ -1,0 +1,26 @@
+subcontexts:
+
+  - name: 'All rspec tests'
+
+    task-defaults:
+
+      ports:
+        CAPYBARA_PORT:
+          inet_address: "localhost"
+          min: 8000
+          max: 8999
+        PHANTOMJS_PORT:
+          inet_address: "localhost"
+          min: 44600
+          max: 44999
+
+      scripts:
+
+        test:
+
+          body: |
+            #!/usr/bin/env bash
+            bundle exec rspec $CIDER_CI_TASK_FILE
+
+    _cider-ci_generate-tasks:
+      include-match: spec/.*_spec.rb
