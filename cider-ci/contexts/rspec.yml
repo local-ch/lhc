@@ -4,6 +4,9 @@ subcontexts:
 
     task-defaults:
 
+      environment-variables:
+        RAILS_ENV: test
+
       scripts:
 
         test:
