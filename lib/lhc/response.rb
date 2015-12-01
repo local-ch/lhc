@@ -16,7 +16,12 @@ class LHC::Response
   # Access response data.
   # Cache parsing.
   def data
-    @data ||= JSON.parse(raw.body, object_class: OpenStruct)
+    @data ||= case format
+      when :json
+        JSON.parse(raw.body, object_class: OpenStruct)
+      else # default is json
+        JSON.parse(raw.body, object_class: OpenStruct)
+    end
     @data
   end
 
@@ -52,5 +57,11 @@ class LHC::Response
   private
 
   attr_accessor :raw
+
+  def format
+    headers = {}
+    headers = request.options.fetch(:headers, {}) if request && request.options
+    return :json if headers['Content-Type'] == 'application/json'
+  end
 
 end

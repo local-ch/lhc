@@ -21,6 +21,16 @@ Available are `get`, `post`, `put` & `delete`.
 
 Other methods are available using `LHC.request(options)`.
 
+## Formats: like json etc.
+
+You can use any of the basic methods in combination with a format like `json`:
+
+```ruby
+LHC.json.get(options)
+```
+
+Currently supported formats: `json`
+
 ## A request from scratch
 
 ```ruby
