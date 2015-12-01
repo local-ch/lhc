@@ -34,4 +34,17 @@ describe LHC do
       expect(response.headers).to be
     end
   end
+
+  context 'get json' do
+
+    before(:each) do
+      stub_request(:get, 'http://datastore/v2/feedbacks').with(headers: {'Content-Type' => 'application/json'})
+        .to_return(body: {some: 'json'}.to_json)
+    end
+
+    it 'requests json and parses response body' do
+      data = LHC.json.get('http://datastore/v2/feedbacks').data
+      expect(data.some).to eq 'json'
+    end
+  end
 end

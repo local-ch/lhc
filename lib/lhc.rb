@@ -2,6 +2,7 @@ Dir[File.dirname(__FILE__) + '/lhc/concerns/lhc/*.rb'].sort.each {|file| require
 
 module LHC
   include BasicMethods
+  include Formats
 
   def self.config
     LHC::Config.instance
