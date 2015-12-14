@@ -25,6 +25,10 @@ class LHC::Response
     @data
   end
 
+  def effective_url
+    raw.effective_url
+  end
+
   def body
     raw.body
   end
