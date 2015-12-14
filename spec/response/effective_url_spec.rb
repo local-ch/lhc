@@ -5,7 +5,7 @@ describe LHC::Response do
   context 'effective_url' do
 
     let(:effective_url) do
-      { 'effective_url' => 'https://local.ch' }
+      { 'effective_url' => 'https://www.local.ch' }
     end
 
     let(:raw_response) { OpenStruct.new({ effective_url: effective_url }) }
