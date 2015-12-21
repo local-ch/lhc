@@ -16,4 +16,9 @@ describe LHC::Request do
     stub_request(:get, 'http://datastore:8080/v2/feedbacks/123')
     LHC.get('http://datastore:8080/v2/feedbacks/:id', params:{id: 123})
   end
+
+  it 'considers body when compiling urls' do
+    stub_request(:post, "http://datastore:8080/v2/places/123")
+    LHC.json.post('http://datastore:8080/v2/places/:id', body: {id: 123}.to_json)
+  end
 end

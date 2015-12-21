@@ -83,7 +83,12 @@ class LHC::Request
   # Generates URL from a URL template
   def generate_url_from_template!
     endpoint = LHC::Endpoint.new(options[:url])
-    options[:url] = endpoint.compile(options[:params])
+    params = if options[:body] && options[:body].length && (options[:headers] || {}).fetch('Content-Type', nil) == 'application/json'
+      JSON.parse(options[:body]).merge(options[:params] || {}).deep_symbolize_keys
+    else
+      options[:params]
+    end
+    options[:url] = endpoint.compile(params)
     endpoint.remove_interpolated_params!(options[:params])
   end
 
