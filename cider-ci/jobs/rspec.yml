@@ -6,6 +6,9 @@ rspec:
       include-match: ^.*$
 
   context:
+    environment-variables:
+      RAILS_ENV: test
+
     task-defaults:
       ports:
         CAPYBARA_PORT:
