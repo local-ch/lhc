@@ -28,15 +28,25 @@ class LHC::Response
     @data
   end
 
-  delegate :effective_url, to: :raw
+  def effective_url
+    raw.effective_url
+  end
 
-  delegate :body, to: :raw
+  def body
+    raw.body
+  end
 
-  delegate :code, to: :raw
+  def code
+    raw.code
+  end
 
-  delegate :headers, to: :raw
+  def headers
+    raw.headers
+  end
 
-  delegate :options, to: :raw
+  def options
+    raw.options
+  end
 
   # Provides response time in ms.
   def time
@@ -47,7 +57,9 @@ class LHC::Response
     raw.timed_out?
   end
 
-  delegate :success?, to: :raw
+  def success?
+    raw.success?
+  end
 
   private
 
