@@ -1,9 +1,7 @@
 require 'rails_helper'
 
 describe LHC::Error do
-
   context 'response' do
-
     it 'throws timeout exception in case of a timeout' do
       stub_request(:any, 'local.ch').to_return(status: 403)
       begin

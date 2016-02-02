@@ -16,12 +16,15 @@ class LHC::Response
   # Access response data.
   # Cache parsing.
   def data
-    @data ||= case format
+    @data ||=
+      # rubocop:disable Style/IdenticalConditionalBranches
+      case format
       when :json
         JSON.parse(raw.body, object_class: OpenStruct)
       else # default is json
         JSON.parse(raw.body, object_class: OpenStruct)
-    end
+      end
+    # rubocop:enable Style/IdenticalConditionalBranches
     @data
   end
 

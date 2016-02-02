@@ -13,11 +13,12 @@ class LHC::Endpoint
 
   def compile(params)
     url.gsub(PLACEHOLDER) do |match|
-      replacement = if params.is_a? Proc
-        params.call(match)
-      else
-        find_value(match, params)
-      end
+      replacement =
+        if params.is_a? Proc
+          params.call(match)
+        else
+          find_value(match, params)
+        end
       replacement || fail("Compilation incomplete. Unable to find value for #{match.gsub(':', '')}.")
     end
   end
@@ -34,7 +35,8 @@ class LHC::Endpoint
     removed = {}
     url.scan(PLACEHOLDER) do |match|
       match = match.gsub(/^\:/, '')
-      if value = find_value(match, params)
+      value = find_value(match, params)
+      if value
         removed[match.to_sym] = value
         params.delete(match.to_sym)
       end

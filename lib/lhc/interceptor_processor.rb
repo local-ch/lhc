@@ -7,7 +7,7 @@ class LHC::InterceptorProcessor
   def initialize(target)
     options = target.options if target.is_a? LHC::Request
     options ||= target.request.options if target.is_a? LHC::Response
-    self.interceptors = (options[:interceptors] || LHC.config.interceptors).map{ |i| i.new }
+    self.interceptors = (options[:interceptors] || LHC.config.interceptors).map { |i| i.new }
   end
 
   # Forwards messages to interceptors and handles provided responses.

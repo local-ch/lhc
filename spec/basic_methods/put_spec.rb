@@ -1,9 +1,7 @@
 require 'rails_helper'
 
 describe LHC do
-
   context 'post' do
-
     let(:feedback) do
       {
         recommended: false,
@@ -20,28 +18,28 @@ describe LHC do
 
     before(:each) do
       stub_request(:put, "http://datastore/v2/feedbacks")
-      .with(body: change.to_json)
-      .to_return(status: 200, body: feedback.merge(change).to_json, headers: {'Content-Encoding' => 'UTF-8'})
+        .with(body: change.to_json)
+        .to_return(status: 200, body: feedback.merge(change).to_json, headers: { 'Content-Encoding' => 'UTF-8' })
     end
 
     it 'does a post request when providing a complete url' do
-      LHC.put('http://datastore/v2/feedbacks', body: change.to_json)
+      described_class.put('http://datastore/v2/feedbacks', body: change.to_json)
     end
 
     it 'does a post request when providing the name of a configured endpoint' do
       url = 'http://:datastore/v2/feedbacks'
       options = { params: { datastore: 'datastore' } }
-      LHC.configure { |c| c.endpoint(:feedbacks, url, options) }
-      LHC.put(:feedbacks, body: change.to_json)
+      described_class.configure { |c| c.endpoint(:feedbacks, url, options) }
+      described_class.put(:feedbacks, body: change.to_json)
     end
 
     it 'it makes response data available in a rails way' do
-      response = LHC.put('http://datastore/v2/feedbacks', body: change.to_json)
+      response = described_class.put('http://datastore/v2/feedbacks', body: change.to_json)
       expect(response.data.recommended).to eq false
     end
 
     it 'provides response headers' do
-      response = LHC.put('http://datastore/v2/feedbacks', body: change.to_json)
+      response = described_class.put('http://datastore/v2/feedbacks', body: change.to_json)
       expect(response.headers).to be
     end
   end

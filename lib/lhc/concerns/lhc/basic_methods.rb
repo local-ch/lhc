@@ -1,12 +1,10 @@
 require 'active_support'
 
 module LHC
-
   module BasicMethods
     extend ActiveSupport::Concern
 
     module ClassMethods
-
       def request(options)
         if options.is_a? Array
           parallel_requests(options)
@@ -18,8 +16,8 @@ module LHC
       [:get, :post, :put, :delete].each do |http_method|
         define_method(http_method) do |url, options = {}|
           request(options.merge(
-            url: url,
-            method: http_method
+                    url: url,
+                    method: http_method
           ))
         end
       end
@@ -29,8 +27,8 @@ module LHC
       def parallel_requests(options)
         hydra = Typhoeus::Hydra.hydra
         requests = []
-        options.each do |options|
-          request = LHC::Request.new(options, false)
+        options.each do |option|
+          request = LHC::Request.new(option, false)
           requests << request
           hydra.queue request.raw
         end

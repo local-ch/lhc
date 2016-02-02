@@ -60,7 +60,7 @@ class LHC::Request
     options = options.deep_dup
     easy = Ethon::Easy.new
     options.delete(:url)
-    options.each do |key, v|
+    options.each do |key, _v|
       next if TYPHOEUS_OPTIONS.include? key
       method = "#{key}="
       options.delete key unless easy.respond_to?(method)
@@ -71,23 +71,24 @@ class LHC::Request
   # Get configured endpoint and use it for doing the request.
   # Explicit request options are overriding configured options.
   def use_configured_endpoint!
-    endpoint = LHC.config.endpoints[self.options[:url]]
+    endpoint = LHC.config.endpoints[options[:url]]
     return unless endpoint
     # explicit options override endpoint options
-    new_options = endpoint.options.deep_merge(self.options)
+    new_options = endpoint.options.deep_merge(options)
     # set new options
     self.options = new_options
-    self.options[:url] = endpoint.url
+    options[:url] = endpoint.url
   end
 
   # Generates URL from a URL template
   def generate_url_from_template!
     endpoint = LHC::Endpoint.new(options[:url])
-    params = if options[:body] && options[:body].length && (options[:headers] || {}).fetch('Content-Type', nil) == 'application/json'
-      JSON.parse(options[:body]).merge(options[:params] || {}).deep_symbolize_keys
-    else
-      options[:params]
-    end
+    params =
+      if options[:body] && options[:body].length && (options[:headers] || {}).fetch('Content-Type', nil) == 'application/json'
+        JSON.parse(options[:body]).merge(options[:params] || {}).deep_symbolize_keys
+      else
+        options[:params]
+      end
     options[:url] = endpoint.compile(params)
     endpoint.remove_interpolated_params!(options[:params])
   end

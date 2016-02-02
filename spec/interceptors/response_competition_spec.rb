@@ -1,21 +1,20 @@
 require 'rails_helper'
 
 describe LHC do
-
   context 'interceptor response competition' do
-
     before(:each) do
-
+      # rubocop:disable Style/ClassVars
       class LocalCacheInterceptor < LHC::Interceptor
         @@cached = false
         cattr_accessor :cached
 
-        def before_request(request)
+        def before_request(_request)
           if @@cached
             return LHC::Response.new(Typhoeus::Response.new(response_body: 'Im served from local cache'), nil)
           end
         end
       end
+      # rubocop:enable Style/ClassVars
 
       class RemoteCacheInterceptor < LHC::Interceptor
 
@@ -26,14 +25,14 @@ describe LHC do
         end
       end
 
-      LHC.configure { |c| c.interceptors = [LocalCacheInterceptor, RemoteCacheInterceptor] }
+      described_class.configure { |c| c.interceptors = [LocalCacheInterceptor, RemoteCacheInterceptor] }
     end
 
     it 'can handle multiple interceptors that compete for returning the response' do
-      response = LHC.get('http://local.ch')
+      response = described_class.get('http://local.ch')
       expect(response.body).to eq 'Im served from remote cache'
       LocalCacheInterceptor.cached = true
-      response = LHC.get('http://local.ch')
+      response = described_class.get('http://local.ch')
       expect(response.body).to eq 'Im served from local cache'
     end
   end
