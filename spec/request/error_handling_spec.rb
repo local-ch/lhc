@@ -1,9 +1,7 @@
 require 'rails_helper'
 
 describe LHC::Request do
-
   context 'error handling' do
-
     def to_fail_with(error)
       raise_error(error)
     end

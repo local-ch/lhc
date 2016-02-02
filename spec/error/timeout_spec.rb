@@ -1,12 +1,10 @@
 require 'rails_helper'
 
 describe LHC::Error do
-
   context 'timeout' do
-
     it 'throws timeout exception in case of a timeout' do
       stub_request(:any, 'local.ch').to_timeout
-      expect(->{
+      expect(lambda {
         LHC.get('local.ch')
       }).to raise_error LHC::Timeout
     end

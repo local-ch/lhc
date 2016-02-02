@@ -16,34 +16,27 @@ class LHC::Response
   # Access response data.
   # Cache parsing.
   def data
-    @data ||= case format
+    @data ||=
+      # rubocop:disable Style/IdenticalConditionalBranches
+      case format
       when :json
         JSON.parse(raw.body, object_class: OpenStruct)
       else # default is json
         JSON.parse(raw.body, object_class: OpenStruct)
-    end
+      end
+    # rubocop:enable Style/IdenticalConditionalBranches
     @data
   end
 
-  def effective_url
-    raw.effective_url
-  end
+  delegate :effective_url, to: :raw
 
-  def body
-    raw.body
-  end
+  delegate :body, to: :raw
 
-  def code
-    raw.code
-  end
+  delegate :code, to: :raw
 
-  def headers
-    raw.headers
-  end
+  delegate :headers, to: :raw
 
-  def options
-    raw.options
-  end
+  delegate :options, to: :raw
 
   # Provides response time in ms.
   def time
@@ -54,9 +47,7 @@ class LHC::Response
     raw.timed_out?
   end
 
-  def success?
-    raw.success?
-  end
+  delegate :success?, to: :raw
 
   private
 

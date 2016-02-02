@@ -1,17 +1,15 @@
 require 'rails_helper'
 
 describe LHC::Response do
-
   context 'headers' do
-
     let(:headers) do
       { 'Content-Encoding' => 'UTF-8' }
     end
 
-    let(:raw_response) { OpenStruct.new({ headers: headers }) }
+    let(:raw_response) { OpenStruct.new(headers: headers) }
 
     it 'provides headers' do
-      response = LHC::Response.new(raw_response, nil)
+      response = described_class.new(raw_response, nil)
       expect(response.headers).to eq headers
     end
   end

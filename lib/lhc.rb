@@ -1,4 +1,4 @@
-Dir[File.dirname(__FILE__) + '/lhc/concerns/lhc/*.rb'].sort.each {|file| require file }
+Dir[File.dirname(__FILE__) + '/lhc/concerns/lhc/*.rb'].sort.each { |file| require file }
 
 module LHC
   include BasicMethods

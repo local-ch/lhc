@@ -1,12 +1,10 @@
 require 'rails_helper'
 
 describe LHC do
-
   context 'interceptor' do
-
     before(:each) do
       class Services
-        def self.timing(path, time)
+        def self.timing(_path, _time)
         end
       end
     end
@@ -27,7 +25,7 @@ describe LHC do
           Services.timing(path.downcase, response.time)
         end
       end
-      LHC.configure { |c| c.interceptors = [StatsTimingInterceptor] }
+      described_class.configure { |c| c.interceptors = [StatsTimingInterceptor] }
     end
 
     let(:url) { "http://local.ch/v2/feedbacks/-Sc4_pYNpqfsudzhtivfkA" }
@@ -35,7 +33,7 @@ describe LHC do
     it 'can take action after a response was received' do
       allow(Services).to receive(:timing).with('web.dummy.test.get.http.local.ch.200', 0)
       stub_request(:get, url)
-      LHC.get(url)
+      described_class.get(url)
       expect(Services).to have_received(:timing)
     end
   end
