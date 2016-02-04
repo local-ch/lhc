@@ -57,7 +57,7 @@ class LHC::Error < StandardError
     debug << "#{request.method} #{request.url}"
     debug << "Params: #{request.options}"
     debug << "Response Code: #{response.code}"
-    debug << response.body
+    debug << response.body.encode(Encoding::UTF_8)
     debug.join("\n")
   end
 end
