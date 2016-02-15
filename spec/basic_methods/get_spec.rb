@@ -12,23 +12,23 @@ describe LHC do
     end
 
     it 'does a get request when providing a complete url' do
-      described_class.get('http://datastore/v2/feedbacks', params: parameters)
+      LHC.get('http://datastore/v2/feedbacks', params: parameters)
     end
 
     it 'does a get request when providing the name of a configured endpoint' do
       url = 'http://:datastore/v2/feedbacks'
       options = { params: { datastore: 'datastore' } }
-      described_class.configure { |c| c.endpoint(:feedbacks, url, options) }
-      described_class.get(:feedbacks, params: parameters)
+      LHC.configure { |c| c.endpoint(:feedbacks, url, options) }
+      LHC.get(:feedbacks, params: parameters)
     end
 
     it 'it makes response data available in a rails way' do
-      response = described_class.get('http://datastore/v2/feedbacks', params: parameters)
+      response = LHC.get('http://datastore/v2/feedbacks', params: parameters)
       expect(response.data.total).to eq 99
     end
 
     it 'provides response headers' do
-      response = described_class.get('http://datastore/v2/feedbacks', params: parameters)
+      response = LHC.get('http://datastore/v2/feedbacks', params: parameters)
       expect(response.headers).to be
     end
   end
@@ -40,7 +40,7 @@ describe LHC do
     end
 
     it 'requests json and parses response body' do
-      data = described_class.json.get('http://datastore/v2/feedbacks').data
+      data = LHC.json.get('http://datastore/v2/feedbacks').data
       expect(data.some).to eq 'json'
     end
   end

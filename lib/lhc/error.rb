@@ -1,6 +1,6 @@
 class LHC::Error < StandardError
 
-  attr_accessor :response
+  attr_accessor :response, :_message
 
   def self.map
     {
@@ -48,6 +48,7 @@ class LHC::Error < StandardError
 
   def initialize(message, response)
     super(message)
+    self._message = message
     self.response = response
   end
 
@@ -58,6 +59,7 @@ class LHC::Error < StandardError
     debug << "Params: #{request.options}"
     debug << "Response Code: #{response.code}"
     debug << response.body
+    debug << _message
     debug.join("\n")
   end
 end

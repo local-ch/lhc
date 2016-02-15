@@ -47,4 +47,17 @@ describe LHC::Request do
       expect_status_code(510) { to_fail_with(LHC::NotExtended) }
     end
   end
+
+  context 'parsing error' do
+    
+    before(:each) do
+      stub_request(:get, 'http://datastore/v2/feedbacks').to_return(body: 'invalid json')
+    end
+
+    it 'requests json and parses response body' do
+      expect(->{
+        LHC.json.get('http://datastore/v2/feedbacks').data
+      }).to raise_error(LHC::ParserError)
+    end
+  end
 end

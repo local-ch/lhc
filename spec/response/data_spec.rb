@@ -9,7 +9,7 @@ describe LHC::Response do
     let(:raw_response) { OpenStruct.new(body: body.to_json) }
 
     it 'makes data from response body available' do
-      response = described_class.new(raw_response, nil)
+      response = LHC::Response.new(raw_response, nil)
       expect(response.data.some_key.nested).to eq value
     end
   end
