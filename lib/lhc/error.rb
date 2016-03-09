@@ -57,6 +57,7 @@ class LHC::Error < StandardError
     debug = []
     debug << "#{request.method} #{request.url}"
     debug << "Params: #{request.options}"
+    debug << "Headers: #{request.headers}"
     debug << "Response Code: #{response.code}"
     debug << response.body
     debug << _message
