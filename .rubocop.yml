@@ -8,3 +8,12 @@ Lint/IneffectiveAccessModifier:
 
 Rails:
   Enabled: false
+
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/DescribedClass:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false

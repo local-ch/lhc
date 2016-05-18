@@ -7,7 +7,7 @@ describe LHC::Request do
   end
   context 'request without rails' do
     it 'does have deep_merge dependency met' do
-      expect { described_class.new({}, false) }.to_not raise_error
+      expect { described_class.new({}, false) }.not_to raise_error
     end
   end
 end
