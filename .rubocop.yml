@@ -12,9 +12,6 @@ Rails:
 RSpec/AnyInstance:
   Enabled: false
 
-RSpec/NotToNo:
-  Enabled: false
-
 RSpec/DescribedClass:
   Enabled: false
 
