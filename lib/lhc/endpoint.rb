@@ -62,7 +62,9 @@ class LHC::Endpoint
   # Returns true if concrete url is covered by the template
   # Example: :datastore/contracts/:id == http://local.ch/contracts/1
   def self.match?(url, template)
-    regexp = template.gsub %r{((?<=^):[^\/]+|(?<=\/):[^\/]+)}, '([^\/]|\/\/)+'
+    placeholder_pattern = %r{((?<=^):[^\/]+|(?<=\/):[^\/]+)}
+    anything_but_a_single_slash = '([^\/]|\/\/)+'
+    regexp = template.gsub placeholder_pattern, anything_but_a_single_slash
     url.match "#{regexp}$"
   end
 
