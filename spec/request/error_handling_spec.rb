@@ -49,7 +49,6 @@ describe LHC::Request do
   end
 
   context 'parsing error' do
-    
     before(:each) do
       stub_request(:get, 'http://datastore/v2/feedbacks').to_return(body: 'invalid json')
     end
