@@ -60,13 +60,10 @@ class LHC::Endpoint
 
   # Compares a concrete url with a template
   # Returns true if concrete url is covered by the template
+  # Example: :datastore/contracts/:id == http://local.ch/contracts/1
   def self.match?(url, template)
-    regexp = template
-    LHC::Endpoint.placeholders(template).each do |placeholder|
-      regexp = regexp.gsub(placeholder, '.*')
-    end
-    regexp = regexp.gsub('/', '(?<!/)/(?!/)')
-    url.match(Regexp.new("^#{regexp}$"))
+    regexp = template.gsub %r{((?<=^):[^\/]+|(?<=\/):[^\/]+)}, '([^\/]|\/\/)+'
+    url.match "#{regexp}$"
   end
 
   # Returns all placeholders found in the url-template.
