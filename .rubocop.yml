@@ -15,9 +15,6 @@ RSpec/AnyInstance:
 RSpec/NotToNo:
   Enabled: false
 
-RSpec/NotToNo:
-  Enabled: false
-
 RSpec/DescribedClass:
   Enabled: false
 
