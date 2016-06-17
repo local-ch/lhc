@@ -4,6 +4,7 @@ class JsonFormat
   def self.request(options)
     options[:headers] ||= {}
     options[:headers]['Content-Type'] = 'application/json'
+    options[:headers]['Accept'] = 'application/json'
     options[:format] = new
     super(options)
   end
