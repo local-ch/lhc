@@ -82,7 +82,7 @@ class LHC::Endpoint
       name = placeholder.gsub(":", '')
       regexp = regexp.gsub(placeholder, "(?<#{name}>.*)")
     end
-    matchdata = url.match(Regexp.new("^#{regexp}$"))
+    matchdata = url.match(Regexp.new("#{regexp}$"))
     LHC::Endpoint.placeholders(template).each do |placeholder|
       name = placeholder.gsub(':', '')
       params[name.to_sym] = matchdata[name]
