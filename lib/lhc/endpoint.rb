@@ -2,8 +2,8 @@
 # The url can also be an url-template.
 class LHC::Endpoint
 
-  PLACEHOLDER = %r{(?<=^):[^\/]+|(?<=\/):[^\/]+}
-  ANYTHING_BUT_SINGLE_SLASH = '([^\/]|\/\/)+'.freeze
+  PLACEHOLDER = %r{(?<=^):[^\/\.]+|(?<=\/):[^\/\.]+}
+  ANYTHING_BUT_SINGLE_SLASH_AND_DOT = '([^\/\.]|\/\/)+'.freeze
 
   attr_accessor :url, :options
 
@@ -63,7 +63,7 @@ class LHC::Endpoint
   # Returns true if concrete url is covered by the template
   # Example: :datastore/contracts/:id == http://local.ch/contracts/1
   def self.match?(url, template)
-    regexp = template.gsub PLACEHOLDER, ANYTHING_BUT_SINGLE_SLASH
+    regexp = template.gsub PLACEHOLDER, ANYTHING_BUT_SINGLE_SLASH_AND_DOT
     url.match "#{regexp}$"
   end
 

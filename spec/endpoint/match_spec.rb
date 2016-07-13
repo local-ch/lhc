@@ -10,7 +10,8 @@ describe LHC::Endpoint do
           ':datastore/v2/places/:namespace/:id' => 'http://local.ch:8082/v2/places/switzerland/ZW9OJyrbt',
           ':datastore/addresses/:id' => 'http://local.ch/addresses/123',
           'http://local.ch/addresses/:id' => 'http://local.ch/addresses/123',
-          ':datastore/customers/:id/addresses' => 'http://local.ch:80/server/rest/v1/customers/123/addresses'
+          ':datastore/customers/:id/addresses' => 'http://local.ch:80/server/rest/v1/customers/123/addresses',
+          ':datastore/entries/:id.json' => 'http://local.ch/entries/123.json'
         }.each do |template, url|
           expect(
             described_class.match?(url, template)
@@ -24,7 +25,8 @@ describe LHC::Endpoint do
         {
           ':datastore/v2/places' => 'http://local.ch:8082/v2/places/ZW9OJyrbt4OZE9ueu80w-A',
           ':datastore/:campaign_id/feedbacks' => 'http://datastore.local.ch/feedbacks',
-          ':datastore/customers/:id' => 'http://local.ch:80/server/rest/v1/customers/123/addresses'
+          ':datastore/customers/:id' => 'http://local.ch:80/server/rest/v1/customers/123/addresses',
+          ':datastore/entries/:id' => 'http://local.ch/entries/123.json'
         }.each do |template, url|
           expect(
             described_class.match?(url, template)

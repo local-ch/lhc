@@ -19,5 +19,12 @@ describe LHC::Endpoint do
         endpoint.compile(find_value)
       ).to eq "http://datastore/v2"
     end
+
+    it 'compiles when templates contain dots' do
+      endpoint = described_class.new(':datastore/entries/:id.json')
+      expect(
+        endpoint.compile(datastore: 'http://datastore', id: 123)
+      ).to eq "http://datastore/entries/123.json"
+    end
   end
 end
