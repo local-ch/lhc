@@ -7,7 +7,7 @@ describe LHC::Response do
     let(:raw_response) { OpenStruct.new(effective_url: effective_url) }
 
     it 'provides effective_url' do
-      response = described_class.new(raw_response, nil)
+      response = LHC::Response.new(raw_response, nil)
       expect(response.effective_url).to eq effective_url
     end
   end

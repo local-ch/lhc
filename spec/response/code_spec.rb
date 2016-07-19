@@ -7,7 +7,7 @@ describe LHC::Response do
     let(:raw_response) { OpenStruct.new(code: code) }
 
     it 'provides response code' do
-      response = described_class.new(raw_response, nil)
+      response = LHC::Response.new(raw_response, nil)
       expect(response.code).to eq code
     end
   end

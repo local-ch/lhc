@@ -10,7 +10,7 @@ describe LHC do
     end
 
     it 'does a request returning a response' do
-      response = described_class.request(url: 'http://datastore/v2/feedbacks', params: { has_reviews: true }, method: :get)
+      response = LHC.request(url: 'http://datastore/v2/feedbacks', params: { has_reviews: true }, method: :get)
       expect(response.data.total).to eq total
     end
   end

@@ -9,7 +9,7 @@ describe LHC::Response do
     let(:raw_response) { OpenStruct.new(options: options) }
 
     it 'provides headers' do
-      response = described_class.new(raw_response, nil)
+      response = LHC::Response.new(raw_response, nil)
       expect(response.options).to eq options
     end
   end

@@ -3,11 +3,11 @@ require 'rails_helper'
 describe LHC do
   context 'default interceptors' do
     before(:each) do
-      described_class.configure {}
+      LHC.configure {}
     end
 
     it 'alwayses return a list for default interceptors' do
-      expect(described_class.config.interceptors).to eq []
+      expect(LHC.config.interceptors).to eq []
     end
   end
 end

@@ -25,14 +25,14 @@ describe LHC do
         end
       end
 
-      described_class.configure { |c| c.interceptors = [LocalCacheInterceptor, RemoteCacheInterceptor] }
+      LHC.configure { |c| c.interceptors = [LocalCacheInterceptor, RemoteCacheInterceptor] }
     end
 
     it 'can handle multiple interceptors that compete for returning the response' do
-      response = described_class.get('http://local.ch')
+      response = LHC.get('http://local.ch')
       expect(response.body).to eq 'Im served from remote cache'
       LocalCacheInterceptor.cached = true
-      response = described_class.get('http://local.ch')
+      response = LHC.get('http://local.ch')
       expect(response.body).to eq 'Im served from local cache'
     end
   end

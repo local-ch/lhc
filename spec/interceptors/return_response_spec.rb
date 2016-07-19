@@ -9,11 +9,11 @@ describe LHC do
           LHC::Response.new(Typhoeus::Response.new(response_body: 'Im served from cache'), nil)
         end
       end
-      described_class.configure { |c| c.interceptors = [CacheInterceptor] }
+      LHC.configure { |c| c.interceptors = [CacheInterceptor] }
     end
 
     it 'can return a response rather then doing a real request' do
-      response = described_class.get('http://local.ch')
+      response = LHC.get('http://local.ch')
       expect(response.body).to eq 'Im served from cache'
     end
 
@@ -28,7 +28,7 @@ describe LHC do
 
       it 'raises an exception when two interceptors try to return a response' do
         expect(lambda {
-          described_class.get('http://local.ch', interceptors: [CacheInterceptor, AnotherInterceptor])
+          LHC.get('http://local.ch', interceptors: [CacheInterceptor, AnotherInterceptor])
         }).to raise_error 'Response already set from another interceptor'
       end
     end

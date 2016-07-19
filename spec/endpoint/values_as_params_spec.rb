@@ -17,7 +17,7 @@ describe LHC::Endpoint do
           id: 'ZW9OJyrbt'
         }]
       ].each do |example|
-        params = described_class.values_as_params(example[0], example[1])
+        params = LHC::Endpoint.values_as_params(example[0], example[1])
         expect(params).to eq example[2]
       end
     end

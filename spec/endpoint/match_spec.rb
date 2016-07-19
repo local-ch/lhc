@@ -14,7 +14,7 @@ describe LHC::Endpoint do
           ':datastore/entries/:id.json' => 'http://local.ch/entries/123.json'
         }.each do |template, url|
           expect(
-            described_class.match?(url, template)
+            LHC::Endpoint.match?(url, template)
           ).to be, "#{url} should match #{template}!"
         end
       end
@@ -29,7 +29,7 @@ describe LHC::Endpoint do
           ':datastore/entries/:id' => 'http://local.ch/entries/123.json'
         }.each do |template, url|
           expect(
-            described_class.match?(url, template)
+            LHC::Endpoint.match?(url, template)
           ).not_to be, "#{url} should not match #{template}!"
         end
       end

@@ -8,12 +8,12 @@ describe LHC do
           request.params[:tid] = 123
         end
       end
-      described_class.configure { |c| c.interceptors = [TrackingIdInterceptor] }
+      LHC.configure { |c| c.interceptors = [TrackingIdInterceptor] }
     end
 
     it 'can modify requests before they are send' do
       stub_request(:get, "http://local.ch/?tid=123")
-      described_class.get('http://local.ch')
+      LHC.get('http://local.ch')
     end
   end
 end
