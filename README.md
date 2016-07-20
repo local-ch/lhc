@@ -124,3 +124,7 @@ To monitor and manipulate the http communication done with LHC, you can define i
 ```
 
 → [Read more about interceptors](docs/interceptors.md)
+
+## License
+
+[GNU Affero General Public License Version 3.](https://www.gnu.org/licenses/agpl-3.0.en.html)

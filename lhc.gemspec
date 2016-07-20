@@ -30,4 +30,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'geminabox'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'ciderizer'
+  
+  spec.license = 'GPL-3'
 end
