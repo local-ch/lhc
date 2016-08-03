@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.authors     = ['local.ch']
   s.email       = ['ws-operations@local.ch']
   s.homepage    = 'https://github.com/local-ch/lhc'
-  s.summary     = 'LocalHttpServices'
-  s.description = 'Rails gem for HTTP wrapping typhoeus and providing additional features (like interceptors)'
+  s.summary     = 'LocalHttpClient'
+  s.description = 'Rails gem for HTTP: Wraps typhoeus and provides additional features (like interceptors)'
 
   s.files        = `git ls-files`.split("\n")
   s.test_files   = `git ls-files -- spec/*`.split("\n") +
