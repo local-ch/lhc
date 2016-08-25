@@ -110,6 +110,20 @@ Anything but a response code indicating success (2**) throws an exception.
 
 → [Read more about exceptions](docs/exceptions.md)
 
+## Custom error handling
+
+You can provide custom error handlers to handle errors happening during the request.
+
+If a error handler is provided nothing is raised.
+
+If your error handler returns anything else but `nil` it replaces the response body.
+
+```
+handler = ->{ do_something; return {name: 'unknown'} }
+response = LHC.get('http://something', error_handler: handler)
+response.data.name # 'unknown'
+```
+
 ## Interceptors
 
 To monitor and manipulate the http communication done with LHC, you can define interceptors.
