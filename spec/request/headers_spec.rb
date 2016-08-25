@@ -5,6 +5,6 @@ describe LHC::Request do
     stub_request(:get, 'http://local.ch')
     response = LHC.get('http://local.ch')
     request = response.request
-    expect(request.headers.keys).to eq(['User-Agent'])
+    expect(request.headers.keys).to include 'User-Agent'
   end
 end
