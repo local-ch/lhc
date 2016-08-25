@@ -4,7 +4,7 @@ require 'typhoeus'
 # and provides functionality to access response data.
 class LHC::Response
 
-  attr_accessor :request
+  attr_accessor :request, :body_replacement
 
   # A response is initalized with the underlying raw response (typhoeus in our case)
   # and the associated request.
@@ -25,7 +25,7 @@ class LHC::Response
   end
 
   def body
-    raw.body
+    body_replacement || raw.body
   end
 
   def code
