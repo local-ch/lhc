@@ -9,10 +9,11 @@ class LHC::Request
 
   TYPHOEUS_OPTIONS = [:params, :method, :body, :headers, :follow_location]
 
-  attr_accessor :response, :options, :raw, :format
+  attr_accessor :response, :options, :raw, :format, :error_handler
 
   def initialize(options, self_executing = true)
     self.options = options.deep_dup || {}
+    self.error_handler = options.delete :error_handler
     use_configured_endpoint!
     generate_url_from_template!
     self.iprocessor = LHC::InterceptorProcessor.new(self)
@@ -97,10 +98,15 @@ class LHC::Request
   def on_complete(response)
     self.response ||= LHC::Response.new(response, self)
     iprocessor.intercept(:after_response, self.response)
-    throw_error unless self.response.success?
+    handle_error(self.response) unless self.response.success?
   end
 
-  def throw_error
+  def handle_error(response)
+    throw_error(response) unless error_handler
+    response.body_replacement = error_handler.call(response)
+  end
+
+  def throw_error(response)
     error = LHC::Error.find(response)
     fail error.new(error, response)
   end

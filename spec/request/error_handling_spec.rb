@@ -59,4 +59,27 @@ describe LHC::Request do
       }).to raise_error(LHC::ParserError)
     end
   end
+
+  context 'custom error handler' do
+    it 'handles errors with the provided handler and does not raise them' do
+      stub_request(:get, "http://something").to_return(status: 400)
+      handler = spy('handler')
+      LHC::Request.new(url: "http://something", error_handler: handler)
+      expect(handler).to have_received(:call)
+    end
+
+    it 'exchanges body with handlers return if the handler returns something' do
+      stub_request(:get, "http://something").to_return(status: 400)
+      handler = ->(_response) { { name: 'unknown' }.to_json }
+      request = LHC::Request.new(url: "http://something", error_handler: handler)
+      expect(request.response.data.name).to eq 'unknown'
+    end
+
+    it 'does not exchange body with handlers return if the handler returns nil' do
+      stub_request(:get, "http://something").to_return(status: 400, body: { message: 'an error occurred' }.to_json)
+      handler = ->(_response) { nil }
+      request = LHC::Request.new(url: "http://something", error_handler: handler)
+      expect(request.response.data.message).to eq 'an error occurred'
+    end
+  end
 end
