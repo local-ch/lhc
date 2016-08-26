@@ -57,6 +57,12 @@ You will get back an array of LHC::Response objects.
   responses = LHC.request(options)
 ```
 
+## Follow redirects
+
+```ruby
+LHC.get('http://local.ch', followlocation: true)
+```
+
 ## Transfer data through the body
 
 Data that is transfered using the HTTP request body is transfered as you provide it.
