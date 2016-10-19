@@ -16,7 +16,8 @@ class LHC::Response::Data
   end
 
   def [](key)
-    as_json.with_indifferent_access[key]
+    @hash ||= as_json.with_indifferent_access
+    @hash[key]
   end
 
   private
