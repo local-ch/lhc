@@ -13,11 +13,8 @@ class LHC::Response
     self.raw = raw
   end
 
-  # Access response data.
-  # Cache parsing.
   def data
-    @data ||= format.parse(self)
-    @data
+    @data ||= LHC::Response::Data.new(self)
   end
 
   def effective_url
@@ -53,13 +50,13 @@ class LHC::Response
     raw.success?
   end
 
-  private
-
-  attr_accessor :raw
-
   def format
     return JsonFormat.new if request.nil?
     request.format
   end
+
+  private
+
+  attr_accessor :raw
 
 end
