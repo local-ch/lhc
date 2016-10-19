@@ -45,6 +45,18 @@ Currently supported formats: `json`
 
 → [Read more about the response object](docs/response.md)
 
+## Accessing data
+
+The response data can be access with dot-notation and square-bracket notation. You can convert response data to open structs or json (if the response format is json).
+
+```ruby
+  response = LHC.request(url: 'http://datastore/entry/1')
+  response.data.as_open_struct #<OpenStruct name='local.ch'>
+  response.data.as_json # { name: 'local.ch' }
+  response.data.name # 'local.ch'
+  response.data[:name] # 'local.ch'
+```
+
 ## Parallel requests
 
 If you pass an array of requests to `LHC.request`, it will perform those requests in parallel.
