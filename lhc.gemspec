@@ -29,7 +29,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'webmock'
   s.add_development_dependency 'geminabox'
   s.add_development_dependency 'pry'
-  s.add_development_dependency 'ciderizer'
+  s.add_development_dependency 'rubocop'
+  s.add_development_dependency 'rubocop-rspec'
   
   s.license = 'GPL-3'
 end
