@@ -9,6 +9,7 @@ ports:
 environment_variables:
   RUBY:
     read_and_replace_with: .ruby-version
+  RAILS_ENV: 'test'
 
 scripts:
   rspec:
