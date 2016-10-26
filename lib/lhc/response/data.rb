@@ -5,7 +5,7 @@ class LHC::Response::Data < OpenStruct
   def initialize(response)
     @response = response
     set_dynamic_accessor_methods
-    @table = as_json
+    super(as_json)
   end
 
   def as_json
