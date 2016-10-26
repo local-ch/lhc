@@ -1,10 +1,11 @@
 # Response data is data provided through the response body
 # but made accssible in the ruby world
-class LHC::Response::Data
+class LHC::Response::Data < OpenStruct
 
   def initialize(response)
     @response = response
     set_dynamic_accessor_methods
+    super(as_json)
   end
 
   def as_json
