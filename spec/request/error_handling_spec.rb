@@ -63,7 +63,7 @@ describe LHC::Request do
   context 'custom error handler' do
     it 'handles errors with the provided handler and does not raise them' do
       stub_request(:get, "http://something").to_return(status: 400)
-      handler = double('handler')
+      handler = double('handler', call: ->{})
       LHC::Request.new(url: "http://something", error_handler: handler)
       expect(handler).to have_received(:call)
     end
