@@ -54,7 +54,7 @@ describe LHC::Request do
     end
 
     it 'requests json and parses response body' do
-      expect(->{
+      expect(-> {
         LHC.json.get('http://datastore/v2/feedbacks').data
       }).to raise_error(LHC::ParserError)
     end
@@ -63,7 +63,7 @@ describe LHC::Request do
   context 'custom error handler' do
     it 'handles errors with the provided handler and does not raise them' do
       stub_request(:get, "http://something").to_return(status: 400)
-      handler = spy('handler')
+      handler = double('handler')
       LHC::Request.new(url: "http://something", error_handler: handler)
       expect(handler).to have_received(:call)
     end
