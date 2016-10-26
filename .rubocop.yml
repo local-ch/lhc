@@ -15,5 +15,14 @@ RSpec/AnyInstance:
 RSpec/DescribedClass:
   Enabled: false
 
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/HookArgument:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
 Style/Lambda:
   Enabled: false
