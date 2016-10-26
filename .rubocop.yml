@@ -30,5 +30,8 @@ Style/Lambda:
 RSpec/NestedGroups:
   Enabled: false
 
+RSpec/VerifiedDoubles:
+  Enabled: false
+
 Style/RedundantReturn:
   Enabled: false
