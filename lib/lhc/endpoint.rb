@@ -20,7 +20,7 @@ class LHC::Endpoint
         else
           find_value(match, params)
         end
-      replacement || fail("Compilation incomplete. Unable to find value for #{match.gsub(':', '')}.")
+      replacement || raise("Compilation incomplete. Unable to find value for #{match.gsub(':', '')}.")
     end
   end
 

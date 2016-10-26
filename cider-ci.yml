@@ -1,4 +1,4 @@
 jobs:
-  _cider-ci_include:
+  include:
     - cider-ci/jobs/rubocop.yml
     - cider-ci/jobs/rspec.yml
