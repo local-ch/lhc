@@ -2,8 +2,8 @@
 # The url can also be an url-template.
 class LHC::Endpoint
 
-  PLACEHOLDER = %r{:[^\/\.:;\d\&]+}
-  ANYTHING_BUT_SINGLE_SLASH_AND_DOT = '([^\/\.]|\/\/)+'.freeze
+  PLACEHOLDER ||= %r{:[^\/\.:;\d\&]+}
+  ANYTHING_BUT_SINGLE_SLASH_AND_DOT ||= '([^\/\.]|\/\/)+'.freeze
 
   attr_accessor :url, :options
 
