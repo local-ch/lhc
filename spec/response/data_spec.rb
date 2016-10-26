@@ -25,5 +25,9 @@ describe LHC::Response do
     it 'can be converted to an open struct with the as_open_struct method' do
       expect(response.data.as_open_struct).to eq JSON.parse(response.body, object_class: OpenStruct)
     end
+
+    it 'returns nil when data is not available' do
+      expect(response.data.something).to be_nil
+    end
   end
 end
