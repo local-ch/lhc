@@ -26,3 +26,9 @@ RSpec/ExampleLength:
 
 Style/Lambda:
   Enabled: false
+
+RSpec/NestedGroups:
+  Enabled: false
+
+Style/RedundantReturn:
+  Enabled: false
