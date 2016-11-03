@@ -1,3 +1,4 @@
+require 'ostruct'
 # Response data is data provided through the response body
 # but made accssible in the ruby world
 class LHC::Response::Data < OpenStruct
