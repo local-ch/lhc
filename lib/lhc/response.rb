@@ -17,6 +17,10 @@ class LHC::Response
     @data ||= LHC::Response::Data.new(self)
   end
 
+  def [](key)
+    data[key]
+  end
+
   def effective_url
     raw.effective_url
   end

@@ -57,6 +57,12 @@ The response data can be access with dot-notation and square-bracket notation. Y
   response.data[:name] # 'local.ch'
 ```
 
+You can also access response data directly through the response object (with square bracket notation only):
+
+```ruby
+  LHC.json.get(url: 'http://datastore/entry/1')[:name]
+```
+
 ## Parallel requests
 
 If you pass an array of requests to `LHC.request`, it will perform those requests in parallel.
