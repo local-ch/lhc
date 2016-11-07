@@ -2,7 +2,6 @@ require 'rails_helper'
 
 describe LHC do
   context 'data accessor (hash with indifferent access)' do
-
     before(:each) do
       stub_request(:get, "http://local.ch/")
         .with(headers: { 'Accept' => 'application/json', 'Content-Type' => 'application/json' })
