@@ -67,7 +67,7 @@ class LHC::Error < StandardError
   private
 
   # fix strings that contain non-UTF8 encoding in a forceful way
-  # should none of the fix-attempts be successful, 
+  # should none of the fix-attempts be successful,
   # an empty string is returned instead
   def fix_invalid_encoding(string)
     return string unless string.is_a?(String)
