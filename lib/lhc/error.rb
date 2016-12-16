@@ -55,12 +55,43 @@ class LHC::Error < StandardError
   def to_s
     request = response.request
     debug = []
-    debug << "#{request.method} #{request.url}"
+    debug << [request.method, request.url].map { |str| fix_invalid_encoding(str) }.join(' ')
     debug << "Options: #{request.options}"
     debug << "Headers: #{request.headers}"
     debug << "Response Code: #{response.code}"
     debug << response.body
     debug << _message
-    debug.join("\n")
+    debug.map { |str| fix_invalid_encoding(str) }.join("\n")
+  end
+
+  private
+
+  # fix strings that contain non-UTF8 encoding in a forceful way
+  # should none of the fix-attempts be successful,
+  # an empty string is returned instead
+  def fix_invalid_encoding(string)
+    return string unless string.is_a?(String)
+    result = string.dup
+
+    # we assume it's ISO-8859-1 first
+    if !result.valid_encoding? || !utf8?(result)
+      result.encode!('UTF-8', 'ISO-8859-1', invalid: :replace, undef: :replace, replace: '')
+    end
+
+    # if it's still an issue, try with BINARY
+    if !result.valid_encoding? || !utf8?(result)
+      result.encode!('UTF-8', 'BINARY', invalid: :replace, undef: :replace, replace: '')
+    end
+
+    # if its STILL an issue, return an empty string :(
+    if !result.valid_encoding? || !utf8?(result)
+      result = ""
+    end
+
+    result
+  end
+
+  def utf8?(string)
+    string.encoding == Encoding::UTF_8
   end
 end
