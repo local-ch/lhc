@@ -75,9 +75,9 @@ You will get back an array of LHC::Response objects in the same order of the pas
   responses = LHC.request(options)
 ```
 
-```
+```ruby
 LHC.get([request1, request2, request3])
-returns [response1, response2, response3]
+# returns [response1, response2, response3]
 ```
 
 ## Follow redirects
