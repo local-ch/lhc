@@ -66,13 +66,18 @@ You can also access response data directly through the response object (with squ
 ## Parallel requests
 
 If you pass an array of requests to `LHC.request`, it will perform those requests in parallel.
-You will get back an array of LHC::Response objects.
+You will get back an array of LHC::Response objects in the same order of the passed requests.
 
 ```ruby
   options = []
   options << { url: 'http://datastore/v2/feedbacks' }
   options << { url: 'http://datastore/v2/content-ads/123/feedbacks' }
   responses = LHC.request(options)
+```
+
+```
+LHC.get([request1, request2, request3])
+returns [response1, response2, response3]
 ```
 
 ## Follow redirects
