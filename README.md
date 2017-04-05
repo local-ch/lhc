@@ -168,6 +168,12 @@ To monitor and manipulate the http communication done with LHC, you can define i
 
 → [Read more about interceptors](docs/interceptors.md)
 
+A set of core interceptors is part of LHC,
+like [Caching](/docs/interceptors/caching.md), [Monitoring](/docs/interceptors/monitoring.md), [Authentication](/docs/interceptors/authentication.md), [Rollbar](/docs/interceptors/rollbar.md).
+
+→ [Read more about core interceptors](docs/interceptors.md#core-interceptors)
+
+
 ## License
 
 [GNU Affero General Public License Version 3.](https://www.gnu.org/licenses/agpl-3.0.en.html)
