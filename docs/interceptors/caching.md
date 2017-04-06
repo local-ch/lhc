@@ -35,11 +35,11 @@ You can also enable caching when configuring an endpoint in LHS.
   LHC.get('http://local.ch', cache: true, cache_expires_in: 1.day, cache_race_condition_ttl: 15.seconds)
 ```
 
-`cache_expires_in` lets the cache expires every X seconds.
+`cache_expires_in` - lets the cache expires every X seconds.
 
-Set the key that is used for caching by using the `cache_key` option. Every key is prefixed with `LHC_CACHE: `.
+`cache_key` - Set the key that is used for caching by using the option. Every key is prefixed with `LHC_CACHE(v1): `.
 
-Setting `cache_race_condition_ttl` is very useful in situations where a cache entry is used very frequently and is under heavy load.
+`cache_race_condition_ttl` - very useful in situations where a cache entry is used very frequently and is under heavy load.
 If a cache expires and due to heavy load several different processes will try to read data natively and then they all will try to write to cache.
 To avoid that case the first process to find an expired cache entry will bump the cache expiration time by the value set in `cache_race_condition_ttl`.
 
