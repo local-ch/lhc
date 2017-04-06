@@ -1,9 +1,9 @@
 require 'rails_helper'
-require 'lhc/interceptors/railtie'
 
 describe LHC::Caching do
   before(:each) do
     LHC.config.interceptors = [LHC::Caching]
+    LHC::Caching.cache = Rails.cache
     Rails.cache.clear
   end
 
