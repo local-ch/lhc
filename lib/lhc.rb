@@ -15,8 +15,9 @@ module LHC
 end
 
 Gem.find_files('lhc/**/*.rb')
-  .reject{ |file| File.basename(file).include?('railtie.rb') }
   .sort
-  .each { |path| require path }
+  .each do |path| 
+    require path if (defined?(Rails) || !File.basename(path).include?('railtie.rb'))
+  end
 
 require 'lhc/railtie' if defined?(Rails)
