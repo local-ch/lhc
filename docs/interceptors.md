@@ -20,10 +20,10 @@ Interceptors
   LHC.request({url: 'http://local.ch', interceptors: []}) # no interceptor for this request
 ```
 
-## Basic Interceptors
+## Core Interceptors
 
-There are some interceptors available, that cover some basic usecases:
-[lhc-core-interceptors](https://github.com/local-ch/lhc-core-interceptors)
+There are some interceptors that are part of LHC already, that cover some basic usecases:
+like [Caching](/docs/interceptors/caching.md), [Monitoring](/docs/interceptors/monitoring.md), [Authentication](/docs/interceptors/authentication.md), [Rollbar](/docs/interceptors/rollbar.md).
 
 ## Callbacks
 

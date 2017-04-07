@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # An endpoint is an url that leads to a backend resource.
 # The url can also be an url-template.
 class LHC::Endpoint
@@ -20,7 +21,7 @@ class LHC::Endpoint
         else
           find_value(match, params)
         end
-      replacement || raise("Compilation incomplete. Unable to find value for #{match.gsub(':', '')}.")
+      replacement || fail("Compilation incomplete. Unable to find value for #{match.gsub(':', '')}.")
     end
   end
 

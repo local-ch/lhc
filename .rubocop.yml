@@ -3,6 +3,9 @@
 inherit_from:
   - ./.rubocop.localch.yml
 
+AllCops:
+  TargetRubyVersion: 2.3
+
 Lint/IneffectiveAccessModifier:
   Enabled: false
 

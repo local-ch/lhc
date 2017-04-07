@@ -16,6 +16,7 @@ AllCops:
     - 'config/unicorn.rb'
     - 'config/compass.rb'
     - 'Rakefile'
+    - 'spec/error/to_s_spec.rb' # this file contains invalid UTF8 character on purpose!
 
 Rails:
   Enabled: true

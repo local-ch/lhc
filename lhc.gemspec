@@ -18,18 +18,18 @@ Gem::Specification.new do |s|
                    `git ls-files -- non_rails_spec/*`.split("\n")
   s.require_paths = ['lib']
 
-  s.requirements << 'Ruby >= 1.9.2'
-  s.required_ruby_version = '>= 1.9.2'
+  s.requirements << 'Ruby >= 2.0.0'
+  s.required_ruby_version = '>= 2.0.0'
 
   s.add_dependency 'typhoeus'
-  s.add_dependency 'activesupport', '>= 4.1'
+  s.add_dependency 'activesupport', '>= 4.2'
 
   s.add_development_dependency 'rspec-rails', '>= 3.0.0'
-  s.add_development_dependency 'rails', '~> 4.1.1'
+  s.add_development_dependency 'rails', '~> 4.2'
   s.add_development_dependency 'webmock'
   s.add_development_dependency 'geminabox'
   s.add_development_dependency 'pry'
-  s.add_development_dependency 'rubocop'
+  s.add_development_dependency 'rubocop', '~> 0.36.0'
   s.add_development_dependency 'rubocop-rspec'
   
   s.license = 'GPL-3'
