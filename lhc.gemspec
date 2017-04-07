@@ -7,7 +7,7 @@ require "lhc/version"
 Gem::Specification.new do |s|
   s.name        = "lhc"
   s.version     = LHC::VERSION
-  s.authors     = ['local.ch']
+  s.authors     = ['https://github.com/local-ch/lhc/contributors']
   s.email       = ['ws-operations@local.ch']
   s.homepage    = 'https://github.com/local-ch/lhc'
   s.summary     = 'LocalHttpClient'
