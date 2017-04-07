@@ -19,5 +19,3 @@ Gem.find_files('lhc/**/*.rb')
   .each do |path|
     require path if defined?(Rails) || !File.basename(path).include?('railtie.rb')
   end
-
-require 'lhc/railtie' if defined?(Rails)
