@@ -108,6 +108,6 @@ class LHC::Request
 
   def throw_error(response)
     error = LHC::Error.find(response)
-    raise error.new(error, response)
+    fail error.new(error, response)
   end
 end
