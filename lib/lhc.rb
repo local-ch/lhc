@@ -17,11 +17,9 @@ end
 Gem.find_files('lhc/**/*.rb')
   .sort
   .each do |path|
-    if (
-        defined?(Rails) ||
+    if  defined?(Rails) ||
         !File.basename(path).include?('railtie.rb') ||
         path.match(%r{\/test\/.*_helper})
-    )
       require path
     end
   end
