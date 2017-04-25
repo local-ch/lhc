@@ -19,7 +19,8 @@ describe LHC::Caching do
           body: 'The Website',
           code: 200,
           headers: nil,
-          return_code: nil
+          return_code: nil,
+          mock: :webmock
         }, { expires_in: 5.minutes }
       )
       .and_call_original
@@ -28,6 +29,8 @@ describe LHC::Caching do
     expect(original_response.body).to eq cached_response.body
     expect(original_response.code).to eq cached_response.code
     expect(original_response.headers).to eq cached_response.headers
+    expect(original_response.options[:return_code]).to eq cached_response.options[:return_code]
+    expect(original_response.mock).to eq cached_response.mock
     assert_requested stub, times: 1
   end
 

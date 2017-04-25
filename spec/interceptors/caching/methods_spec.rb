@@ -27,7 +27,8 @@ describe LHC::Caching do
           body: 'The Website',
           code: 200,
           headers: nil,
-          return_code: nil
+          return_code: nil,
+          mock: :webmock
         }, { expires_in: 5.minutes }
       )
       .and_call_original
