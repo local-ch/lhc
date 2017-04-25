@@ -41,6 +41,10 @@ class LHC::Response
     raw.options
   end
 
+  def mock
+    raw.mock
+  end
+
   # Provides response time in ms.
   def time
     (raw.time || 0) * 1000

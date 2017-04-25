@@ -46,6 +46,8 @@ class LHC::Caching < LHC::Interceptor
     data[:headers] = response.headers ? Hash[response.headers] : response.headers
     # return_code is quite important as Typhoeus relies on it in order to determin 'success?'
     data[:return_code] = response.options[:return_code]
+    # in a test scenario typhoeus uses mocks and not return_code to determine 'success?'
+    data[:mock] = response.mock
     data
   end
 
