@@ -30,7 +30,7 @@ module LHC
         options.each do |option|
           request = LHC::Request.new(option, false)
           requests << request
-          hydra.queue request.raw
+          hydra.queue request.raw unless request.response.present?
         end
         hydra.run
         requests.map(&:response)

@@ -33,3 +33,5 @@ Gemfile.lock
 /vendor/assets/bower_components
 *.bowerrc
 bower.json
+
+spec/dummy/tmp/cache
