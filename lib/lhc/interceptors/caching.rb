@@ -14,6 +14,7 @@ class LHC::Caching < LHC::Interceptor
   def before_request(request)
     return unless cache
     return unless request.options[:cache]
+    return unless cached_method?(request.method, request.options[:cache_methods])
     cached_response_data = cache.fetch(key(request))
     return unless cached_response_data
     logger.info "Served from cache: #{key(request)}" if logger
@@ -23,6 +24,7 @@ class LHC::Caching < LHC::Interceptor
   def after_response(response)
     return unless cache
     request = response.request
+    return unless cached_method?(request.method, request.options[:cache_methods])
     return if !request.options[:cache] || !response.success?
     cache.write(key(request), to_cache(response), options(request.options))
   end
@@ -54,6 +56,12 @@ class LHC::Caching < LHC::Interceptor
       key += "?#{request.params.to_query}" unless request.params.blank?
     end
     "LHC_CACHE(v#{CACHE_VERSION}): #{key}"
+  end
+
+  # Checks if the provided method should be cached
+  # in regards of the provided options.
+  def cached_method?(method, cached_methods)
+    (cached_methods || [:get]).include?(method)
   end
 
   def options(input = {})
