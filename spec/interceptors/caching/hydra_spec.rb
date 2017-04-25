@@ -16,8 +16,8 @@ describe LHC::Caching do
   end
 
   it 'does not fetch requests served from cache when doing requests in parallel with hydra' do
-    LHC.request([{url: 'http://local.ch', cache: true}, {url: 'http://local.ch/weather', cache: true}])
-    LHC.request([{url: 'http://local.ch', cache: true}, {url: 'http://local.ch/weather', cache: true}])
+    LHC.request([{ url: 'http://local.ch', cache: true }, { url: 'http://local.ch/weather', cache: true }])
+    LHC.request([{ url: 'http://local.ch', cache: true }, { url: 'http://local.ch/weather', cache: true }])
     assert_requested first_request, times: 1
     assert_requested second_request, times: 1
   end
