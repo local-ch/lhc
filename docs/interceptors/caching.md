@@ -13,7 +13,6 @@ You can configure your own cache (default Rails.cache) and logger (default Rails
   LHC::Caching.logger = Logger.new(STDOUT)
 ```
 
-
 Caching is not enabled by default, although you added it to your basic set of interceptors.
 If you want to have requests served/stored and stored in/from cache, you have to enable it by request.
 
@@ -27,6 +26,12 @@ You can also enable caching when configuring an endpoint in LHS.
   class Feedbacks < LHS::Service
     endpoint ':datastore/v2/feedbacks', cache: true
   end
+```
+
+Only GET requests are cached by default. If you want to cache any other request method, just configure it:
+
+```ruby
+  LHC.get('http://local.ch', cache: true, cached_methods: [:post, :head])
 ```
 
 ## Options
