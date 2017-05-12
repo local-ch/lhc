@@ -11,7 +11,8 @@ describe LHC::Endpoint do
           ':datastore/addresses/:id' => 'http://local.ch/addresses/123',
           'http://local.ch/addresses/:id' => 'http://local.ch/addresses/123',
           ':datastore/customers/:id/addresses' => 'http://local.ch:80/server/rest/v1/customers/123/addresses',
-          ':datastore/entries/:id.json' => 'http://local.ch/entries/123.json'
+          ':datastore/entries/:id.json' => 'http://local.ch/entries/123.json',
+          ':datastore/places/:place_id/feedbacks' => 'http://local.ch/places/1/feedbacks?limit=10&offset=0'
         }.each do |template, url|
           expect(
             LHC::Endpoint.match?(url, template)
