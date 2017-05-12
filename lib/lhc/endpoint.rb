@@ -66,7 +66,7 @@ class LHC::Endpoint
   # Example: :datastore/contracts/:id == http://local.ch/contracts/1
   def self.match?(url, template)
     regexp = template.gsub PLACEHOLDER, ANYTHING_BUT_SINGLE_SLASH_AND_DOT
-    regexp = regexp + URL_PARAMETERS
+    regexp += URL_PARAMETERS
     url.match "#{regexp}$"
   end
 
@@ -85,7 +85,7 @@ class LHC::Endpoint
       name = placeholder.gsub(":", '')
       regexp = regexp.gsub(placeholder, "(?<#{name}>.*)")
     end
-    regexp = regexp + URL_PARAMETERS
+    regexp += URL_PARAMETERS
     matchdata = url.match(Regexp.new("^#{regexp}$"))
     LHC::Endpoint.placeholders(template).each do |placeholder|
       name = placeholder.gsub(':', '')
