@@ -1,12 +1,13 @@
 require 'rails_helper'
 
 describe LHC::Error do
-  def response(code)
-    LHC::Response.new(OpenStruct.new(code: code), nil)
+  def response(code, return_code = nil)
+    LHC::Response.new(OpenStruct.new(code: code, options: { return_code: return_code }), nil)
   end
 
   context 'find' do
     it 'finds error class by status code' do
+      expect(LHC::Error.find(response('0', :operation_timedout))).to eq LHC::Timeout
       expect(LHC::Error.find(response('400'))).to eq LHC::BadRequest
       expect(LHC::Error.find(response('401'))).to eq LHC::Unauthorized
       expect(LHC::Error.find(response('402'))).to eq LHC::PaymentRequired
