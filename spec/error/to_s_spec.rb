@@ -40,5 +40,36 @@ describe LHC::Error do
     end
     # the other cases cannot be tested (for example what happens if the headers contain invalid data)
     # because the mocking framework triggers the encoding error already
+
+    context 'some mocked ersponse' do
+      let(:request) do
+        double('request',
+               method: 'GET',
+               url: 'http://example.com/singularity',
+               headers: { 'REQUEST' => 'headers' },
+               options: { request: 'options' })
+      end
+
+      let(:response) do
+        double('response',request: request,
+                       code: 404,
+                       options: { return_code: 'returncode', otherooption: 123 },
+                       body: 'bodycontent')
+      end
+
+      subject { LHC::Error.new('The error message', response) }
+
+      it 'produces correct debug output' do
+        expect(subject.to_s.split("\n")).to eq(<<-MSG.strip_heredoc.split("\n"))
+         GET http://example.com/singularity
+         Options: {:request=>"options"}
+         Headers: {"REQUEST"=>"headers"}
+         Response Code: 404 (returncode)
+         Repsonse Options: {:return_code=>"returncode", :otherooption=>123}
+         bodycontent
+         The error message
+        MSG
+      end
+    end
   end
 end
