@@ -51,7 +51,7 @@ class LHC::Response
   end
 
   def timeout?
-    options[:return_code] == :operation_timedout
+    raw.timed_out?
   end
 
   def success?
