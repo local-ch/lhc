@@ -6,6 +6,8 @@ class LHC::Response
 
   attr_accessor :request, :body_replacement
 
+  delegate :effective_url, :code, :headers, :options, :mock, :success?, to: :raw
+
   # A response is initalized with the underlying raw response (typhoeus in our case)
   # and the associated request.
   def initialize(raw, request)
@@ -21,28 +23,8 @@ class LHC::Response
     data[key]
   end
 
-  def effective_url
-    raw.effective_url
-  end
-
   def body
     body_replacement || raw.body
-  end
-
-  def code
-    raw.code
-  end
-
-  def headers
-    raw.headers
-  end
-
-  def options
-    raw.options
-  end
-
-  def mock
-    raw.mock
   end
 
   # Provides response time in ms.
@@ -52,10 +34,6 @@ class LHC::Response
 
   def timeout?
     raw.timed_out?
-  end
-
-  def success?
-    raw.success?
   end
 
   def format
