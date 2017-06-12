@@ -14,6 +14,7 @@ describe LHC::Request do
     end
 
     it 'raises errors for anything but 2XX response codes' do
+      expect_status_code(0)   { to_fail_with(LHC::UnknownError) }
       expect_status_code(400) { to_fail_with(LHC::BadRequest) }
       expect_status_code(401) { to_fail_with(LHC::Unauthorized) }
       expect_status_code(402) { to_fail_with(LHC::PaymentRequired) }

@@ -40,5 +40,39 @@ describe LHC::Error do
     end
     # the other cases cannot be tested (for example what happens if the headers contain invalid data)
     # because the mocking framework triggers the encoding error already
+
+    context 'some mocked response' do
+      let(:request) do
+        double('request',
+               method: 'GET',
+               url: 'http://example.com/sessions',
+               headers: { 'Bearer Token' => "aaaaaaaa-bbbb-cccc-dddd-eeee"},
+               options: { followlocation: true,
+                          auth: { bearer: "aaaaaaaa-bbbb-cccc-dddd-eeee"},
+                          params: { limit: 20}, url: "http://example.com/sessions" })
+      end
+
+      let(:response) do
+        double('response',
+               request: request,
+               code: 500,
+               options: { return_code: :internal_error, response_headers: "" },
+               body: '{"status":500,"message":"undefined"}')
+      end
+
+      subject { LHC::Error.new('The error message', response) }
+
+      it 'produces correct debug output' do
+        expect(subject.to_s.split("\n")).to eq(<<-MSG.strip_heredoc.split("\n"))
+          GET http://example.com/sessions
+          Options: {:followlocation=>true, :auth=>{:bearer=>"aaaaaaaa-bbbb-cccc-dddd-eeee"}, :params=>{:limit=>20}, :url=>"http://example.com/sessions"}
+          Headers: {"Bearer Token"=>"aaaaaaaa-bbbb-cccc-dddd-eeee"}
+          Response Code: 500 (internal_error)
+          Repsonse Options: {:return_code=>:internal_error, :response_headers=>""}
+          {"status":500,"message":"undefined"}
+          The error message
+        MSG
+      end
+    end
   end
 end
