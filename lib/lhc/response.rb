@@ -1,4 +1,5 @@
 require 'typhoeus'
+require 'active_support/core_ext/module'
 
 # The response contains the raw response (typhoeus)
 # and provides functionality to access response data.
