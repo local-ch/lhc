@@ -5,7 +5,6 @@ module LHC
     extend ActiveSupport::Concern
 
     module ClassMethods
-      
       def config
         LHC::Config.instance
       end
