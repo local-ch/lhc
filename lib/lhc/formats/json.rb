@@ -1,5 +1,7 @@
 module LHC::Formats
   class JSON
+    include LHC::BasicMethodsConcern
+
     def self.request(options)
       options[:headers] ||= {}
       options[:headers]['Content-Type'] = 'application/json'
