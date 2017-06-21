@@ -1,10 +1,10 @@
 module LHC
-  module Formats
+  module FormatsConcern
     extend ActiveSupport::Concern
 
     module ClassMethods
       def json
-        JsonFormat
+        LHC::Formats::JSON
       end
     end
   end
