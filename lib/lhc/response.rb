@@ -4,6 +4,7 @@ require 'active_support/core_ext/module'
 # The response contains the raw response (typhoeus)
 # and provides functionality to access response data.
 class LHC::Response
+  autoload :Data, 'lhc/response/data'
 
   attr_accessor :request, :body_replacement
 
@@ -38,7 +39,7 @@ class LHC::Response
   end
 
   def format
-    return JsonFormat.new if request.nil?
+    return LHC::Formats::JSON.new if request.nil?
     request.format
   end
 

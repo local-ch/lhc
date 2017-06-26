@@ -1,5 +1,4 @@
 class LHC::Error < StandardError
-
   attr_accessor :response, :_message
 
   def self.map

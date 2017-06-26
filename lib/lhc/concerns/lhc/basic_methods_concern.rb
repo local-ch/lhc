@@ -1,7 +1,7 @@
 require 'active_support'
 
 module LHC
-  module BasicMethods
+  module BasicMethodsConcern
     extend ActiveSupport::Concern
 
     module ClassMethods

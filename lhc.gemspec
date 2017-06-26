@@ -14,8 +14,7 @@ Gem::Specification.new do |s|
   s.description = 'Rails gem for HTTP: Wraps typhoeus and provides additional features (like interceptors)'
 
   s.files        = `git ls-files`.split("\n")
-  s.test_files   = `git ls-files -- spec/*`.split("\n") +
-                   `git ls-files -- non_rails_spec/*`.split("\n")
+  s.test_files   = `git ls-files -- spec/*`.split("\n")
   s.require_paths = ['lib']
 
   s.requirements << 'Ruby >= 2.0.0'
