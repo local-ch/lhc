@@ -12,9 +12,10 @@ class LHC::Response
 
   # A response is initalized with the underlying raw response (typhoeus in our case)
   # and the associated request.
-  def initialize(raw, request)
+  def initialize(raw, request, from_cache = false)
     self.request = request
     self.raw = raw
+    self.from_cache = from_cache
   end
 
   def data
@@ -45,6 +46,6 @@ class LHC::Response
 
   private
 
-  attr_accessor :raw
+  attr_accessor :raw, :from_cache
 
 end

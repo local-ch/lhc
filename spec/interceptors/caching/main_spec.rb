@@ -59,4 +59,13 @@ describe LHC::Caching do
     expect(Rails.cache).to receive(:write).once
     LHC.get(:local)
   end
+
+ 
+  it 'marks response not from cache as not served from cache and from cache as served from cache' do
+    stub
+    LHC.config.endpoint(:local, 'http://local.ch', cache: true, cache_expires_in: 5.minutes)
+    original_response = LHC.get(:local)
+    cached_response = LHC.get(:local)
+    binding.pry
+  end
 end
