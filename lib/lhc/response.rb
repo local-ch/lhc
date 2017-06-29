@@ -6,7 +6,7 @@ require 'active_support/core_ext/module'
 class LHC::Response
   autoload :Data, 'lhc/response/data'
 
-  attr_accessor :request, :body_replacement
+  attr_accessor :request, :body_replacement, :from_cache
 
   delegate :effective_url, :code, :headers, :options, :mock, :success?, to: :raw
 
@@ -15,7 +15,7 @@ class LHC::Response
   def initialize(raw, request, from_cache = false)
     self.request = request
     self.raw = raw
-    self.from_cache = from_cache
+    @from_cache = from_cache
   end
 
   def data
@@ -46,6 +46,6 @@ class LHC::Response
 
   private
 
-  attr_accessor :raw, :from_cache
+  attr_accessor :raw
 
 end
