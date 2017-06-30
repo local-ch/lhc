@@ -7,8 +7,10 @@ class LHC::Response
   autoload :Data, 'lhc/response/data'
 
   attr_accessor :request, :body_replacement
+  attr_reader :from_cache
 
   delegate :effective_url, :code, :headers, :options, :mock, :success?, to: :raw
+  alias from_cache? from_cache
 
   # A response is initalized with the underlying raw response (typhoeus in our case)
   # and the associated request.
@@ -24,10 +26,6 @@ class LHC::Response
 
   def [](key)
     data[key]
-  end
-
-  def from_cache?
-    @from_cache
   end
 
   def body
