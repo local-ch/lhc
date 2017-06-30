@@ -6,13 +6,13 @@ require 'active_support/core_ext/module'
 class LHC::Response
   autoload :Data, 'lhc/response/data'
 
-  attr_accessor :request, :body_replacement, :from_cache
+  attr_accessor :request, :body_replacement
 
   delegate :effective_url, :code, :headers, :options, :mock, :success?, to: :raw
 
   # A response is initalized with the underlying raw response (typhoeus in our case)
   # and the associated request.
-  def initialize(raw, request, from_cache = false)
+  def initialize(raw, request, from_cache: false)
     self.request = request
     self.raw = raw
     @from_cache = from_cache
@@ -24,6 +24,10 @@ class LHC::Response
 
   def [](key)
     data[key]
+  end
+
+  def from_cache?
+    @from_cache
   end
 
   def body
