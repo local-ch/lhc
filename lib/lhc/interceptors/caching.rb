@@ -34,7 +34,9 @@ class LHC::Caching < LHC::Interceptor
   # converts json we read from the cache to an LHC::Response object
   def from_cache(request, data)
     raw = Typhoeus::Response.new(data)
-    request.response = LHC::Response.new(raw, request)
+    response = LHC::Response.new(raw, request, from_cache: true)
+    request.response = response
+    response
   end
 
   # converts a LHC::Response object to json, we store in the cache
