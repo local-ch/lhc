@@ -20,8 +20,6 @@ class LHC::Endpoint
 
   def parse_url_gracefully(url)
     URI.parse(url)
-  rescue Addressable::URI::InvalidURIError
-    url
   rescue URI::InvalidURIError
     url
   end
