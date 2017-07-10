@@ -14,16 +14,42 @@ class LHC::Endpoint
     self.options = options
   end
 
+  def uri
+    @uri ||= parse_url_gracefully(url)
+  end
+
+  def parse_url_gracefully(url)
+    URI.parse(url)
+  rescue URI::InvalidURIError
+    url
+  end
+
   def compile(params)
-    url.gsub(PLACEHOLDER) do |match|
-      replacement =
-        if params.is_a? Proc
-          params.call(match)
-        else
-          find_value(match, params)
-        end
-      replacement || fail("Compilation incomplete. Unable to find value for #{match.gsub(':', '')}.")
-    end
+    add_basic_auth(
+      without_basic_auth(url).gsub(PLACEHOLDER) do |match|
+        replacement =
+          if params.is_a? Proc
+            params.call(match)
+          else
+            find_value(match, params)
+          end
+        replacement || fail("Compilation incomplete. Unable to find value for #{match.gsub(':', '')}.")
+      end
+    )
+  end
+
+  def add_basic_auth(url)
+    return url if !uri || !uri.is_a?(URI) || (uri.user.blank? && uri.password.blank?)
+    new_uri = parse_url_gracefully(url)
+    new_uri.user = uri.user
+    new_uri.password = uri.password
+    new_uri.to_s
+  end
+
+  # Strips basic auth from the url
+  def without_basic_auth(url)
+    return url if !uri || !uri.is_a?(URI) || (uri.user.blank? && uri.password.blank?)
+    url.gsub("#{uri.user}:#{uri.password}@", '')
   end
 
   # Endpoint options are immutable
