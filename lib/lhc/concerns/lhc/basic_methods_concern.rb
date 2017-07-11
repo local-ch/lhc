@@ -1,4 +1,5 @@
 require 'active_support'
+require 'typhoeus'
 
 module LHC
   module BasicMethodsConcern
