@@ -1,4 +1,3 @@
-require 'typhoeus'
 require 'uri'
 require 'active_support/core_ext/object/deep_dup'
 

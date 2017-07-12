@@ -1,3 +1,5 @@
+require 'typhoeus'
+
 module LHC
   autoload :BasicMethodsConcern,
     'lhc/concerns/lhc/basic_methods_concern'
