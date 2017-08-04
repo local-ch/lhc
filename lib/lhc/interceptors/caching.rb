@@ -14,6 +14,7 @@ class LHC::Caching < LHC::Interceptor
   def before_request(request)
     return unless cache
     return unless request.options[:cache]
+    cleanup_cache if request.options[:preemptively_clean_filestore]
     return unless cached_method?(request.method, request.options[:cache_methods])
     cached_response_data = cache.fetch(key(request))
     return unless cached_response_data
@@ -30,6 +31,11 @@ class LHC::Caching < LHC::Interceptor
   end
 
   private
+
+  def cleanup_cache
+    return unless cache.is_a?(ActiveSupport::Cache::FileStore)
+    cache.cleanup
+  end
 
   # converts json we read from the cache to an LHC::Response object
   def from_cache(request, data)

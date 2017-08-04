@@ -69,4 +69,12 @@ describe LHC::Caching do
     expect(original_response.from_cache?).to eq false
     expect(cached_response.from_cache?).to eq true
   end
+
+  it 'cleans up expired entries' do
+    LHC.config.endpoint(:local, 'http://local.ch', cache: true, cache_key: 'STATICKEY', preemptively_clean_filestore: true)
+    expect(Rails.cache).to receive(:is_a?).with(ActiveSupport::Cache::FileStore).and_return(true)
+    expect(Rails.cache).to receive(:cleanup)
+    stub
+    LHC.get(:local)
+  end
 end
