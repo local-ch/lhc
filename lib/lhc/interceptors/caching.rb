@@ -59,7 +59,7 @@ class LHC::Caching < LHC::Interceptor
       key = "#{request.method.upcase} #{request.url}"
       key += "?#{request.params.to_query}" unless request.params.blank?
     end
-    "LHC_CACHE(v#{CACHE_VERSION}): #{key}"
+    "LHC_CACHE(v#{CACHE_VERSION}): #{key}".parameterize
   end
 
   # Checks if the provided method should be cached

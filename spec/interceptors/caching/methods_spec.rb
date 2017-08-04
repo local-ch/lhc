@@ -22,7 +22,7 @@ describe LHC::Caching do
   it 'also caches other methods, when explicitly enabled' do
     expect(Rails.cache).to receive(:write)
       .with(
-        "LHC_CACHE(v#{LHC::Caching::CACHE_VERSION}): POST http://local.ch",
+        "lhc_cache-v1-post-http-local-ch",
         {
           body: 'The Website',
           code: 200,
