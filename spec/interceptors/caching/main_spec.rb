@@ -14,7 +14,7 @@ describe LHC::Caching do
     LHC.config.endpoint(:local, 'http://local.ch', cache: true, cache_expires_in: 5.minutes)
     expect(Rails.cache).to receive(:write)
       .with(
-        "LHC_CACHE(v#{LHC::Caching::CACHE_VERSION}): GET http://local.ch",
+        "lhc_cache-v1-get-http-local-ch",
         {
           body: 'The Website',
           code: 200,
@@ -45,8 +45,9 @@ describe LHC::Caching do
 
   it 'lets you configure the cache key that will be used' do
     LHC.config.endpoint(:local, 'http://local.ch', cache: true, cache_key: 'STATICKEY')
-    expect(Rails.cache).to receive(:fetch).with("LHC_CACHE(v#{LHC::Caching::CACHE_VERSION}): STATICKEY").and_call_original
-    expect(Rails.cache).to receive(:write).with("LHC_CACHE(v#{LHC::Caching::CACHE_VERSION}): STATICKEY", anything, anything).and_call_original
+    expected_key = "lhc_cache-v1-statickey"
+    expect(Rails.cache).to receive(:fetch).with(expected_key).and_call_original
+    expect(Rails.cache).to receive(:write).with(expected_key, anything, anything).and_call_original
     stub
     LHC.get(:local)
   end
@@ -67,5 +68,13 @@ describe LHC::Caching do
     cached_response = LHC.get(:local)
     expect(original_response.from_cache?).to eq false
     expect(cached_response.from_cache?).to eq true
+  end
+
+  it 'cleans up expired entries' do
+    LHC.config.endpoint(:local, 'http://local.ch', cache: true, cache_key: 'STATICKEY', preemptively_clean_filestore: true)
+    expect(Rails.cache).to receive(:is_a?).with(ActiveSupport::Cache::FileStore).and_return(true)
+    expect(Rails.cache).to receive(:cleanup)
+    stub
+    LHC.get(:local)
   end
 end

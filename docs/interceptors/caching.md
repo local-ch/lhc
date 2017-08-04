@@ -37,7 +37,7 @@ Only GET requests are cached by default. If you want to cache any other request 
 ## Options
 
 ```ruby
-  LHC.get('http://local.ch', cache: true, cache_expires_in: 1.day, cache_race_condition_ttl: 15.seconds)
+  LHC.get('http://local.ch', cache: true, cache_expires_in: 1.day, cache_race_condition_ttl: 15.seconds, preemptively_clean_filestore: true)
 ```
 
 `cache_expires_in` - lets the cache expires every X seconds.
@@ -47,6 +47,9 @@ Only GET requests are cached by default. If you want to cache any other request 
 `cache_race_condition_ttl` - very useful in situations where a cache entry is used very frequently and is under heavy load.
 If a cache expires and due to heavy load several different processes will try to read data natively and then they all will try to write to cache.
 To avoid that case the first process to find an expired cache entry will bump the cache expiration time by the value set in `cache_race_condition_ttl`.
+
+`preemptively_clean_filestore` -  setting this option will prompt deletion of expired cache entries, if the cache backend is `ActiveSupport::Cache::FileStore`. This is useful
+for very shortlived caches, such as LHS' [Request Cycle Cache](https://github.com/local-ch/lhs#request-cycle-cache)
 
 ## Testing
 
