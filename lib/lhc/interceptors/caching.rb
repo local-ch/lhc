@@ -6,7 +6,7 @@ class LHC::Caching < LHC::Interceptor
   CACHE_VERSION = '1'
 
   # Options forwarded to the cache
-  FORWARDED_OPTIONS = [ :expires_in, :race_condition_ttl ]
+  FORWARDED_OPTIONS = [:expires_in, :race_condition_ttl]
 
   def before_request(request)
     return unless request.options[:cache]
@@ -69,7 +69,7 @@ class LHC::Caching < LHC::Interceptor
   end
 
   def options(input = {})
-    input.reduce({}) do |result,(key,value)|
+    input.each_with_object({}) do |(key, value), result|
       result[key] = value if key.in? FORWARDED_OPTIONS
       result
     end
