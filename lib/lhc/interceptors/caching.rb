@@ -28,7 +28,7 @@ class LHC::Caching < LHC::Interceptor
     return unless @cache
     request = response.request
     return unless cached_method?(request.method, @cache_options[:methods])
-    return if !request.options[:cache] || !response.success?
+    return if !@cache_options || !response.success?
     @cache.write(key(request), to_cache(response), options(@cache_options))
   end
 
@@ -57,7 +57,7 @@ class LHC::Caching < LHC::Interceptor
   end
 
   def key(request)
-    key = request.options[:cache_key]
+    key = @cache_options[:key]
     unless key
       key = "#{request.method.upcase} #{request.url}"
       key += "?#{request.params.to_query}" unless request.params.blank?
