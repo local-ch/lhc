@@ -3,7 +3,7 @@ require 'rails_helper'
 describe LHC::Caching do
   before(:each) do
     LHC.config.interceptors = [LHC::Caching]
-    LHC::Caching.cache = Rails.cache
+    LHC::Caching.default_cache = Rails.cache
     Rails.cache.clear
   end
 

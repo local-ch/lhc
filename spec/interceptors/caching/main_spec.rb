@@ -3,7 +3,7 @@ require 'rails_helper'
 describe LHC::Caching do
   before(:each) do
     LHC.config.interceptors = [LHC::Caching]
-    LHC::Caching.cache = Rails.cache
+    LHC::Caching.default_cache = Rails.cache
     Rails.cache.clear
   end
 
@@ -11,7 +11,7 @@ describe LHC::Caching do
 
   it 'serves a response from cache' do
     stub
-    LHC.config.endpoint(:local, 'http://local.ch', cache: true, cache_expires_in: 5.minutes)
+    LHC.config.endpoint(:local, 'http://local.ch', cache: { expires_in: 5.minutes })
     expect(Rails.cache).to receive(:write)
       .with(
         "LHC_CACHE(v#{LHC::Caching::CACHE_VERSION}): GET http://local.ch",

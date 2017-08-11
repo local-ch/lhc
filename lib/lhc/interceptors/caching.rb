@@ -1,32 +1,35 @@
+require 'pry-byebug'
 class LHC::Caching < LHC::Interceptor
   include ActiveSupport::Configurable
 
-  config_accessor :cache, :logger
+  config_accessor :default_cache, :logger
 
   CACHE_VERSION = '1'
 
   # Options forwarded to the cache
-  FORWARDED_OPTIONS = {
-    cache_expires_in: :expires_in,
-    cache_race_condition_ttl: :race_condition_ttl
-  }
+  FORWARDED_OPTIONS = [
+    :expires_in, :race_condition_ttl
+  ]
 
   def before_request(request)
-    return unless cache
     return unless request.options[:cache]
+    @cache_options = request.options[:cache]
+    @cache_options = {} if @cache_options == true
+    @cache = @cache_options.fetch(:use, default_cache)
+    return unless @cache
     return unless cached_method?(request.method, request.options[:cache_methods])
-    cached_response_data = cache.fetch(key(request))
+    cached_response_data = @cache.fetch(key(request))
     return unless cached_response_data
     logger.info "Served from cache: #{key(request)}" if logger
     from_cache(request, cached_response_data)
   end
 
   def after_response(response)
-    return unless cache
+    return unless @cache
     request = response.request
     return unless cached_method?(request.method, request.options[:cache_methods])
     return if !request.options[:cache] || !response.success?
-    cache.write(key(request), to_cache(response), options(request.options))
+    @cache.write(key(request), to_cache(response), options(@cache_options))
   end
 
   private
@@ -69,10 +72,9 @@ class LHC::Caching < LHC::Interceptor
   end
 
   def options(input = {})
-    options = {}
-    FORWARDED_OPTIONS.each do |k, v|
-      options[v] = input[k] if input.key?(k)
+    input.reduce({}) do |result,(key,value)|
+      result[key] = value if key.in? FORWARDED_OPTIONS
+      result
     end
-    options
   end
 end

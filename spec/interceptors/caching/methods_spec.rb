@@ -3,14 +3,14 @@ require 'rails_helper'
 describe LHC::Caching do
   before(:each) do
     LHC.config.interceptors = [LHC::Caching]
-    LHC::Caching.cache = Rails.cache
+    LHC::Caching.default_cache = Rails.cache
     Rails.cache.clear
   end
 
   let!(:stub) { stub_request(:post, 'http://local.ch').to_return(status: 200, body: 'The Website') }
 
   before(:each) do
-    LHC.config.endpoint(:local, 'http://local.ch', cache: true, cache_expires_in: 5.minutes)
+    LHC.config.endpoint(:local, 'http://local.ch', cache: { expires_in: 5.minutes })
   end
 
   it 'only caches GET requests by default' do
