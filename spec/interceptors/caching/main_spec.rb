@@ -62,7 +62,7 @@ describe LHC::Caching do
 
   it 'marks response not from cache as not served from cache and from cache as served from cache' do
     stub
-    LHC.config.endpoint(:local, 'http://local.ch', cache: { expires_in: 5.minutes })
+    LHC.config.endpoint(:local, 'http://local.ch', cache: true)
     original_response = LHC.get(:local)
     cached_response = LHC.get(:local)
     expect(original_response.from_cache?).to eq false
