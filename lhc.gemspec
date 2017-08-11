@@ -27,9 +27,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rails', '~> 4.2'
   s.add_development_dependency 'webmock'
   s.add_development_dependency 'geminabox'
-  s.add_development_dependency 'pry'
+  s.add_development_dependency 'pry-byebug'
   s.add_development_dependency 'rubocop', '~> 0.36.0'
   s.add_development_dependency 'rubocop-rspec'
-  
+
   s.license = 'GPL-3'
 end

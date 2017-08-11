@@ -31,22 +31,24 @@ You can also enable caching when configuring an endpoint in LHS.
 Only GET requests are cached by default. If you want to cache any other request method, just configure it:
 
 ```ruby
-  LHC.get('http://local.ch', cache: true, cached_methods: [:post, :head])
+  LHC.get('http://local.ch', cache: { methods: [:post, :head] })
 ```
 
 ## Options
 
 ```ruby
-  LHC.get('http://local.ch', cache: true, cache_expires_in: 1.day, cache_race_condition_ttl: 15.seconds)
+  LHC.get('http://local.ch', cache: { key: 'key' expires_in: 1.day, race_condition_ttl: 15.seconds, use: ActiveSupport::Cache::MemoryStore.new })
 ```
 
-`cache_expires_in` - lets the cache expires every X seconds.
+`expires_in` - lets the cache expires every X seconds.
 
-`cache_key` - Set the key that is used for caching by using the option. Every key is prefixed with `LHC_CACHE(v1): `.
+`key` - Set the key that is used for caching by using the option. Every key is prefixed with `LHC_CACHE(v1): `.
 
-`cache_race_condition_ttl` - very useful in situations where a cache entry is used very frequently and is under heavy load.
+`race_condition_ttl` - very useful in situations where a cache entry is used very frequently and is under heavy load.
 If a cache expires and due to heavy load several different processes will try to read data natively and then they all will try to write to cache.
 To avoid that case the first process to find an expired cache entry will bump the cache expiration time by the value set in `cache_race_condition_ttl`.
+
+`use` - Set an explicit cache to be used for this request. If this option is missing `LHC::Caching.cache` is used.
 
 ## Testing
 
