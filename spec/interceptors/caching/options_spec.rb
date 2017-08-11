@@ -74,5 +74,4 @@ describe LHC::Caching do
       LHC.get(:local)
     end
   end
-
 end
