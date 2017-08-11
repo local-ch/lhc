@@ -1,4 +1,3 @@
-require 'pry-byebug'
 class LHC::Caching < LHC::Interceptor
   include ActiveSupport::Configurable
 
