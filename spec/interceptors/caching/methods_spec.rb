@@ -32,8 +32,8 @@ describe LHC::Caching do
         }, { expires_in: 5.minutes }
       )
       .and_call_original
-    original_response = LHC.post(:local, cache_methods: [:post])
-    cached_response = LHC.post(:local, cache_methods: [:post])
+    original_response = LHC.post(:local, cache: { methods: [:post] })
+    cached_response = LHC.post(:local, cache: { methods: [:post] })
     expect(original_response.body).to eq cached_response.body
     expect(original_response.code).to eq cached_response.code
     expect(original_response.headers).to eq cached_response.headers

@@ -16,7 +16,8 @@ class LHC::Caching < LHC::Interceptor
     @cache_options = {} if @cache_options == true
     @cache = @cache_options.fetch(:use, cache)
     return unless @cache
-    return unless cached_method?(request.method, request.options[:cache_methods])
+    return unless cached_method?(request.method, @cache_options[:methods])
+
     cached_response_data = @cache.fetch(key(request))
     return unless cached_response_data
     logger.info "Served from cache: #{key(request)}" if logger
@@ -26,7 +27,7 @@ class LHC::Caching < LHC::Interceptor
   def after_response(response)
     return unless @cache
     request = response.request
-    return unless cached_method?(request.method, request.options[:cache_methods])
+    return unless cached_method?(request.method, @cache_options[:methods])
     return if !request.options[:cache] || !response.success?
     @cache.write(key(request), to_cache(response), options(@cache_options))
   end
