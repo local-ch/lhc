@@ -1,7 +1,7 @@
 class LHC::Caching < LHC::Interceptor
   include ActiveSupport::Configurable
 
-  config_accessor :default_cache, :logger
+  config_accessor :cache, :logger
 
   CACHE_VERSION = '1'
 
@@ -14,7 +14,7 @@ class LHC::Caching < LHC::Interceptor
     return unless request.options[:cache]
     @cache_options = request.options[:cache]
     @cache_options = {} if @cache_options == true
-    @cache = @cache_options.fetch(:use, default_cache)
+    @cache = @cache_options.fetch(:use, cache)
     return unless @cache
     return unless cached_method?(request.method, request.options[:cache_methods])
     cached_response_data = @cache.fetch(key(request))

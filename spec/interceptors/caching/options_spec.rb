@@ -12,28 +12,29 @@ class CacheMock
 end
 
 describe LHC::Caching do
+  let(:default_cache) { LHC::Caching.cache }
   before(:each) do
     stub_request(:get, 'http://local.ch').to_return(status: 200, body: 'The Website')
     LHC.config.interceptors = [LHC::Caching]
-    LHC::Caching.default_cache.clear
+    default_cache.clear
   end
 
   it 'does cache' do
-    expect(LHC::Caching.default_cache).to receive(:fetch)
-    expect(LHC::Caching.default_cache).to receive(:write)
+    expect(default_cache).to receive(:fetch)
+    expect(default_cache).to receive(:write)
     LHC.get('http://local.ch', cache: true)
   end
 
   it 'does not cache' do
-    expect(LHC::Caching.default_cache).not_to receive(:fetch)
-    expect(LHC::Caching.default_cache).not_to receive(:write)
+    expect(default_cache).not_to receive(:fetch)
+    expect(default_cache).not_to receive(:write)
     LHC.get('http://local.ch')
   end
 
   context 'options - directly via LHC.get' do
     it 'uses the default cache' do
-      expect(LHC::Caching.default_cache).to receive(:fetch)
-      expect(LHC::Caching.default_cache).to receive(:write)
+      expect(default_cache).to receive(:fetch)
+      expect(default_cache).to receive(:write)
       LHC.get('http://local.ch', cache: true)
     end
 
@@ -45,7 +46,7 @@ describe LHC::Caching do
 
     it 'cache options are properly forwarded to the cache' do
       cache_options = { expires_in: 5.minutes, race_condition_ttl: 15.seconds }
-      expect(LHC::Caching.default_cache).to receive(:write).with(anything, anything, cache_options)
+      expect(default_cache).to receive(:write).with(anything, anything, cache_options)
       LHC.get('http://local.ch', cache: cache_options)
     end
   end
@@ -53,8 +54,8 @@ describe LHC::Caching do
   context 'options - via endpoint configuration' do
     it 'uses the default cache' do
       LHC.config.endpoint(:local, 'http://local.ch', cache: true)
-      expect(LHC::Caching.default_cache).to receive(:fetch)
-      expect(LHC::Caching.default_cache).to receive(:write)
+      expect(default_cache).to receive(:fetch)
+      expect(default_cache).to receive(:write)
       LHC.get(:local)
     end
 
@@ -69,7 +70,7 @@ describe LHC::Caching do
     it 'cache options are properly forwarded to the cache' do
       cache_options = { expires_in: 5.minutes, race_condition_ttl: 15.seconds }
       LHC.config.endpoint(:local, 'http://local.ch', cache: cache_options)
-      expect(LHC::Caching.default_cache).to receive(:write).with(anything, anything, cache_options)
+      expect(default_cache).to receive(:write).with(anything, anything, cache_options)
       LHC.get(:local)
     end
   end
