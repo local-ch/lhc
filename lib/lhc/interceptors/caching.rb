@@ -1,7 +1,7 @@
 class LHC::Caching < LHC::Interceptor
   include ActiveSupport::Configurable
 
-  config_accessor :cache, :logger, :short_term_cache
+  config_accessor :cache, :logger
 
   CACHE_VERSION = '1'
 
@@ -12,22 +12,21 @@ class LHC::Caching < LHC::Interceptor
   }
 
   def before_request(request)
-    @selected_cache = request.options[:short_term_cache] ? short_term_cache : cache
-    return unless @selected_cache
+    return unless cache
     return unless request.options[:cache]
     return unless cached_method?(request.method, request.options[:cache_methods])
-    cached_response_data = @selected_cache.fetch(key(request))
+    cached_response_data = cache.fetch(key(request))
     return unless cached_response_data
     logger.info "Served from cache: #{key(request)}" if logger
     from_cache(request, cached_response_data)
   end
 
   def after_response(response)
-    return unless @selected_cache
+    return unless cache
     request = response.request
     return unless cached_method?(request.method, request.options[:cache_methods])
     return if !request.options[:cache] || !response.success?
-    @selected_cache.write(key(request), to_cache(response), options(request.options))
+    cache.write(key(request), to_cache(response), options(request.options))
   end
 
   private
