@@ -6,9 +6,7 @@ class LHC::Caching < LHC::Interceptor
   CACHE_VERSION = '1'
 
   # Options forwarded to the cache
-  FORWARDED_OPTIONS = [
-    :expires_in, :race_condition_ttl
-  ]
+  FORWARDED_OPTIONS = [ :expires_in, :race_condition_ttl ]
 
   def before_request(request)
     return unless request.options[:cache]
@@ -17,7 +15,6 @@ class LHC::Caching < LHC::Interceptor
     @cache = @cache_options.fetch(:use, cache)
     return unless @cache
     return unless cached_method?(request.method, @cache_options[:methods])
-
     cached_response_data = @cache.fetch(key(request))
     return unless cached_response_data
     logger.info "Served from cache: #{key(request)}" if logger
