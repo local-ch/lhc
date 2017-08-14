@@ -10,11 +10,12 @@ class LHC::Caching < LHC::Interceptor
 
   def before_request(request)
     return unless request.options[:cache]
-    @cache_options = request.options[:cache]
-    @cache_options = {} if @cache_options == true
-    @cache = @cache_options.fetch(:use, cache)
+    @options = request.options[:cache]
+    @options = {} if @options == true
+    map_deprecated_options(request.options)
+    @cache = @options.fetch(:use, cache)
     return unless @cache
-    return unless cached_method?(request.method, @cache_options[:methods])
+    return unless cached_method?(request.method, @options[:methods])
     cached_response_data = @cache.fetch(key(request))
     return unless cached_response_data
     logger.info "Served from cache: #{key(request)}" if logger
@@ -24,12 +25,25 @@ class LHC::Caching < LHC::Interceptor
   def after_response(response)
     return unless @cache
     request = response.request
-    return unless cached_method?(request.method, @cache_options[:methods])
-    return if !@cache_options || !response.success?
-    @cache.write(key(request), to_cache(response), options(@cache_options))
+    return unless cached_method?(request.method, @options[:methods])
+    return if !@options || !response.success?
+    @cache.write(key(request), to_cache(response), options(@options))
   end
 
   private
+
+  def map_deprecated_options(request_options)
+    old_keys = request_options.keys.select { |k|k =~ /cache_.*/ }
+    old_keys.each do |old_key|
+      new_key = old_key.to_s.gsub('cache_', '').to_sym
+      @options[new_key] = request_options[old_key]
+    end
+
+    unless old_keys.empty?
+      deprecation_warning = "Cache options have changed! #{old_keys.join(', ')} are deprecated and will be removed in future versions."
+      ActiveSupport::Deprecation.warn(deprecation_warning)
+    end
+  end
 
   # converts json we read from the cache to an LHC::Response object
   def from_cache(request, data)
@@ -54,7 +68,7 @@ class LHC::Caching < LHC::Interceptor
   end
 
   def key(request)
-    key = @cache_options[:key]
+    key = @options[:key]
     unless key
       key = "#{request.method.upcase} #{request.url}"
       key += "?#{request.params.to_query}" unless request.params.blank?

@@ -19,6 +19,13 @@ describe LHC::Caching do
     default_cache.clear
   end
 
+  it 'maps deprecated cache options' do
+    expected_options = { expires_in: 5.minutes, race_condition_ttl: 15.seconds }
+    expected_key = "LHC_CACHE(v1): key"
+    expect(default_cache).to receive(:write).with(expected_key, anything, expected_options)
+    LHC.get('http://local.ch', cache: true, cache_expires_in: 5.minutes, cache_key: 'key', cache_race_condition_ttl: 15.seconds)
+  end
+
   it 'does cache' do
     expect(default_cache).to receive(:fetch)
     expect(default_cache).to receive(:write)
