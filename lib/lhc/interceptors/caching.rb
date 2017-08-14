@@ -9,34 +9,44 @@ class LHC::Caching < LHC::Interceptor
   FORWARDED_OPTIONS = [:expires_in, :race_condition_ttl]
 
   def before_request(request)
-    return unless request.options[:cache]
-    @options = request.options[:cache]
-    @options = {} if @options == true
-    map_deprecated_options(request.options)
-    @cache = @options.fetch(:use, cache)
-    return unless @cache
-    return unless cached_method?(request.method, @options[:methods])
-    cached_response_data = @cache.fetch(key(request))
+    return unless caching_needed?(request)
+    options = options(request.options)
+    cache_in_use = options.fetch(:use, cache)
+    key = key(request, options[:key])
+    cached_response_data = cache_in_use.fetch(key)
     return unless cached_response_data
-    logger.info "Served from cache: #{key(request)}" if logger
+    logger.info "Served from cache: #{key}" if logger
     from_cache(request, cached_response_data)
   end
 
   def after_response(response)
-    return unless @cache
     request = response.request
-    return unless cached_method?(request.method, @options[:methods])
-    return if !@options || !response.success?
-    @cache.write(key(request), to_cache(response), options(@options))
+    return unless caching_needed?(request)
+    options = options(request.options)
+    cache_in_use = options.fetch(:use, cache)
+    return unless response.success?
+    cache_in_use.write(key(request, options[:key]), to_cache(response), cache_options(options))
   end
 
   private
 
-  def map_deprecated_options(request_options)
+  def caching_needed?(request)
+    return false unless request.options[:cache]
+    options = options(request.options)
+    options.fetch(:use, cache) && cached_method?(request.method, options[:methods])
+  end
+
+  def options(request_options)
+    options = request_options[:cache] == true ? {} : request_options[:cache].dup
+    map_deprecated_options!(request_options, options)
+    options
+  end
+
+  def map_deprecated_options!(request_options, options)
     old_keys = request_options.keys.select { |k| k =~ /^cache_.*/ }
     old_keys.each do |old_key|
       new_key = old_key.to_s.gsub(/^cache_/, '').to_sym
-      @options[new_key] = request_options[old_key]
+      options[new_key] = request_options[old_key]
     end
 
     unless old_keys.empty?
@@ -67,8 +77,7 @@ class LHC::Caching < LHC::Interceptor
     data
   end
 
-  def key(request)
-    key = @options[:key]
+  def key(request, key)
     unless key
       key = "#{request.method.upcase} #{request.url}"
       key += "?#{request.params.to_query}" unless request.params.blank?
@@ -82,7 +91,7 @@ class LHC::Caching < LHC::Interceptor
     (cached_methods || [:get]).include?(method)
   end
 
-  def options(input = {})
+  def cache_options(input = {})
     input.each_with_object({}) do |(key, value), result|
       result[key] = value if key.in? FORWARDED_OPTIONS
       result
