@@ -33,7 +33,7 @@ class LHC::Caching < LHC::Interceptor
   private
 
   def map_deprecated_options(request_options)
-    old_keys = request_options.keys.select { |k|k =~ /cache_.*/ }
+    old_keys = request_options.keys.select { |k| k =~ /cache_.*/ }
     old_keys.each do |old_key|
       new_key = old_key.to_s.gsub('cache_', '').to_sym
       @options[new_key] = request_options[old_key]
