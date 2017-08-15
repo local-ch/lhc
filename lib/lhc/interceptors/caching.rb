@@ -9,7 +9,7 @@ class LHC::Caching < LHC::Interceptor
   FORWARDED_OPTIONS = [:expires_in, :race_condition_ttl]
 
   def before_request(request)
-    return unless caching_needed?(request)
+    return unless cache?(request)
     options = options(request.options)
     cache_in_use = options.fetch(:use, cache)
     key = key(request, options[:key])
@@ -21,7 +21,7 @@ class LHC::Caching < LHC::Interceptor
 
   def after_response(response)
     request = response.request
-    return unless caching_needed?(request)
+    return unless cache?(request)
     options = options(request.options)
     cache_in_use = options.fetch(:use, cache)
     return unless response.success?
@@ -30,7 +30,7 @@ class LHC::Caching < LHC::Interceptor
 
   private
 
-  def caching_needed?(request)
+  def cache?(request)
     return false unless request.options[:cache]
     options = options(request.options)
     options.fetch(:use, cache) && cached_method?(request.method, options[:methods])
