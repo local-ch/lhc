@@ -11,7 +11,7 @@ describe LHC::Caching do
 
   it 'serves a response from cache' do
     stub
-    LHC.config.endpoint(:local, 'http://local.ch', cache: true, cache_expires_in: 5.minutes)
+    LHC.config.endpoint(:local, 'http://local.ch', cache: { expires_in: 5.minutes })
     expect(Rails.cache).to receive(:write)
       .with(
         "LHC_CACHE(v#{LHC::Caching::CACHE_VERSION}): GET http://local.ch",
@@ -44,7 +44,7 @@ describe LHC::Caching do
   end
 
   it 'lets you configure the cache key that will be used' do
-    LHC.config.endpoint(:local, 'http://local.ch', cache: true, cache_key: 'STATICKEY')
+    LHC.config.endpoint(:local, 'http://local.ch', cache: { key: 'STATICKEY' })
     expect(Rails.cache).to receive(:fetch).with("LHC_CACHE(v#{LHC::Caching::CACHE_VERSION}): STATICKEY").and_call_original
     expect(Rails.cache).to receive(:write).with("LHC_CACHE(v#{LHC::Caching::CACHE_VERSION}): STATICKEY", anything, anything).and_call_original
     stub
@@ -62,7 +62,7 @@ describe LHC::Caching do
 
   it 'marks response not from cache as not served from cache and from cache as served from cache' do
     stub
-    LHC.config.endpoint(:local, 'http://local.ch', cache: true, cache_expires_in: 5.minutes)
+    LHC.config.endpoint(:local, 'http://local.ch', cache: true)
     original_response = LHC.get(:local)
     cached_response = LHC.get(:local)
     expect(original_response.from_cache?).to eq false

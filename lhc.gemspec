@@ -30,6 +30,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rubocop', '~> 0.36.0'
   s.add_development_dependency 'rubocop-rspec'
-  
+
   s.license = 'GPL-3'
 end

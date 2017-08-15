@@ -3,7 +3,7 @@ require 'rails_helper'
 describe LHC::Caching do
   before(:each) do
     LHC.config.interceptors = [LHC::Caching]
-    LHC.config.endpoint(:local, 'http://local.ch', cache: true, cache_expires_in: 5.minutes)
+    LHC.config.endpoint(:local, 'http://local.ch', cache: true)
     Rails.cache.clear
     # leverage the Typhoeus internal mock attribute in order to get Typhoeus evaluate the return_code
     # lib/typhoeus/response/status.rb:48

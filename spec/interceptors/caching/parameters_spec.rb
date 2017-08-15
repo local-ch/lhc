@@ -8,7 +8,7 @@ describe LHC::Caching do
     end
 
     it 'considers parameters when writing/reading from cache' do
-      LHC.config.endpoint(:local, 'http://local.ch', cache: true, cache_expires_in: 5.minutes)
+      LHC.config.endpoint(:local, 'http://local.ch', cache: true)
       stub_request(:get, 'http://local.ch').to_return(status: 200, body: 'The Website')
       stub_request(:get, 'http://local.ch?location=zuerich').to_return(status: 200, body: 'The Website for Zuerich')
       expect(

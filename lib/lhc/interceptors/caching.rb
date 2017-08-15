@@ -6,30 +6,63 @@ class LHC::Caching < LHC::Interceptor
   CACHE_VERSION = '1'
 
   # Options forwarded to the cache
-  FORWARDED_OPTIONS = {
-    cache_expires_in: :expires_in,
-    cache_race_condition_ttl: :race_condition_ttl
-  }
+  FORWARDED_OPTIONS = [:expires_in, :race_condition_ttl]
 
   def before_request(request)
-    return unless cache
-    return unless request.options[:cache]
-    return unless cached_method?(request.method, request.options[:cache_methods])
-    cached_response_data = cache.fetch(key(request))
-    return unless cached_response_data
-    logger.info "Served from cache: #{key(request)}" if logger
-    from_cache(request, cached_response_data)
+    return unless cache?(request)
+    deprecation_warning(request.options)
+    options = options(request.options)
+    key = key(request, options[:key])
+    response_data = cache_for(options).fetch(key)
+    return unless response_data
+    logger.info "Served from cache: #{key}" if logger
+    from_cache(request, response_data)
   end
 
   def after_response(response)
-    return unless cache
+    return unless response.success?
     request = response.request
-    return unless cached_method?(request.method, request.options[:cache_methods])
-    return if !request.options[:cache] || !response.success?
-    cache.write(key(request), to_cache(response), options(request.options))
+    return unless cache?(request)
+    options = options(request.options)
+    cache_for(options).write(
+      key(request, options[:key]),
+      to_cache(response),
+      cache_options(options)
+    )
   end
 
   private
+
+  # return the cache for the given options
+  def cache_for(options)
+    options.fetch(:use, cache)
+  end
+
+  # do we even need to bother with this interceptor?
+  # based on the options, this method will
+  # return false if this interceptor cannot work
+  def cache?(request)
+    return false unless request.options[:cache]
+    options = options(request.options)
+    cache_for(options) &&
+      cached_method?(request.method, options[:methods])
+  end
+
+  # returns the request_options
+  # will map deprecated options to the new format
+  def options(request_options)
+    options = request_options[:cache] == true ? {} : request_options[:cache].dup
+    map_deprecated_options!(request_options, options)
+    options
+  end
+
+  # maps `cache_key` -> `key`, `cache_expires_in` -> `expires_in` and so on
+  def map_deprecated_options!(request_options, options)
+    deprecated_keys(request_options).each do |deprecated_key|
+      new_key = deprecated_key.to_s.gsub(/^cache_/, '').to_sym
+      options[new_key] = request_options[deprecated_key]
+    end
+  end
 
   # converts json we read from the cache to an LHC::Response object
   def from_cache(request, data)
@@ -53,8 +86,7 @@ class LHC::Caching < LHC::Interceptor
     data
   end
 
-  def key(request)
-    key = request.options[:cache_key]
+  def key(request, key)
     unless key
       key = "#{request.method.upcase} #{request.url}"
       key += "?#{request.params.to_query}" unless request.params.blank?
@@ -68,11 +100,26 @@ class LHC::Caching < LHC::Interceptor
     (cached_methods || [:get]).include?(method)
   end
 
-  def options(input = {})
-    options = {}
-    FORWARDED_OPTIONS.each do |k, v|
-      options[v] = input[k] if input.key?(k)
+  # extracts the options that should be forwarded to
+  # the cache
+  def cache_options(input = {})
+    input.each_with_object({}) do |(key, value), result|
+      result[key] = value if key.in? FORWARDED_OPTIONS
+      result
     end
-    options
+  end
+
+  # grabs the deprecated keys from the request options
+  def deprecated_keys(request_options)
+    request_options.keys.select { |k| k =~ /^cache_.*/ }.sort
+  end
+
+  # emits a deprecation warning if necessary
+  def deprecation_warning(request_options)
+    unless deprecated_keys(request_options).empty?
+      ActiveSupport::Deprecation.warn(
+        "Cache options have changed! #{deprecated_keys(request_options).join(', ')} are deprecated and will be removed in future versions."
+      )
+    end
   end
 end
