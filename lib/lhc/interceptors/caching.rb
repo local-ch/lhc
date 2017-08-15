@@ -11,24 +11,30 @@ class LHC::Caching < LHC::Interceptor
   def before_request(request)
     return unless cache?(request)
     options = options(request.options)
-    cache_in_use = options.fetch(:use, cache)
     key = key(request, options[:key])
-    cached_response_data = cache_in_use.fetch(key)
-    return unless cached_response_data
+    response_data = cache_for(options).fetch(key)
+    return unless response_data
     logger.info "Served from cache: #{key}" if logger
-    from_cache(request, cached_response_data)
+    from_cache(request, response_data)
   end
 
   def after_response(response)
+    return unless response.success?
     request = response.request
     return unless cache?(request)
     options = options(request.options)
-    cache_in_use = options.fetch(:use, cache)
-    return unless response.success?
-    cache_in_use.write(key(request, options[:key]), to_cache(response), cache_options(options))
+    cache_for(options).write(
+      key(request, options[:key]),
+      to_cache(response),
+      cache_options(options)
+    )
   end
 
   private
+
+  def cache_for(options)
+    options.fetch(:use, cache)
+  end
 
   def cache?(request)
     return false unless request.options[:cache]
