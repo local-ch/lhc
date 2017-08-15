@@ -156,12 +156,12 @@ response.data.name # 'unknown'
 ### Ignore certain errors
 
 As it's discouraged to rescue errors and then don't handle them (ruby styleguide),
-but you often want to continue working with `nil`, LHC provides the `ignore_errors` option.
+but you often want to continue working with `nil`, LHC provides the `ignored_errors` option.
 
 Errors listed in this option will not be raised and will leave the `response.body` and `response.data` to stay `nil`.
 
 ```ruby
-response = LHC.get('http://something', ignore_errors: [LHC::NotFound])
+response = LHC.get('http://something', ignored_errors: [LHC::NotFound])
 
 response.body # nil
 response.data # nil
