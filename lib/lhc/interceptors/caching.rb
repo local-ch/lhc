@@ -10,6 +10,7 @@ class LHC::Caching < LHC::Interceptor
 
   def before_request(request)
     return unless cache?(request)
+    deprecation_warning(request.options)
     options = options(request.options)
     key = key(request, options[:key])
     response_data = cache_for(options).fetch(key)
@@ -32,10 +33,14 @@ class LHC::Caching < LHC::Interceptor
 
   private
 
+  # return the cache for the given options
   def cache_for(options)
     options.fetch(:use, cache)
   end
 
+  # do we even need to bother with this interceptor?
+  # based on the options, this method will
+  # return false if this interceptor cannot work
   def cache?(request)
     return false unless request.options[:cache]
     options = options(request.options)
@@ -43,22 +48,19 @@ class LHC::Caching < LHC::Interceptor
       cached_method?(request.method, options[:methods])
   end
 
+  # returns the request_options
+  # will map deprecated options to the new format
   def options(request_options)
     options = request_options[:cache] == true ? {} : request_options[:cache].dup
     map_deprecated_options!(request_options, options)
     options
   end
 
+  # maps `cache_key` -> `key`, `cache_expires_in` -> `expires_in` and so on
   def map_deprecated_options!(request_options, options)
-    old_keys = request_options.keys.select { |k| k =~ /^cache_.*/ }
-    old_keys.each do |old_key|
-      new_key = old_key.to_s.gsub(/^cache_/, '').to_sym
-      options[new_key] = request_options[old_key]
-    end
-
-    unless old_keys.empty?
-      deprecation_warning = "Cache options have changed! #{old_keys.join(', ')} are deprecated and will be removed in future versions."
-      ActiveSupport::Deprecation.warn(deprecation_warning)
+    deprecated_keys(request_options).each do |deprecated_key|
+      new_key = deprecated_key.to_s.gsub(/^cache_/, '').to_sym
+      options[new_key] = request_options[deprecated_key]
     end
   end
 
@@ -98,10 +100,27 @@ class LHC::Caching < LHC::Interceptor
     (cached_methods || [:get]).include?(method)
   end
 
+  # extracts the options that should be forwarded to
+  # the cache
   def cache_options(input = {})
     input.each_with_object({}) do |(key, value), result|
       result[key] = value if key.in? FORWARDED_OPTIONS
       result
+    end
+  end
+
+
+  # grabs the deprecated keys from the request options
+  def deprecated_keys(request_options)
+    request_options.keys.select { |k| k =~ /^cache_.*/ }.sort
+  end
+
+  # emits a deprecation warning if necessary
+  def deprecation_warning(request_options)
+    unless deprecated_keys(request_options).empty?
+      ActiveSupport::Deprecation.warn(
+        "Cache options have changed! #{deprecated_keys(request_options).join(', ')} are deprecated and will be removed in future versions."
+      )
     end
   end
 end
