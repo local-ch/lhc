@@ -20,7 +20,7 @@ class LHC::Response
   end
 
   def data
-    @data ||= LHC::Response::Data.new(self)
+    @data ||= body.present? ? LHC::Response::Data.new(self) : nil
   end
 
   def [](key)
@@ -28,7 +28,7 @@ class LHC::Response
   end
 
   def body
-    body_replacement || raw.body
+    body_replacement || raw.body.presence
   end
 
   # Provides response time in ms.
