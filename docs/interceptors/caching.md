@@ -31,7 +31,7 @@ You can also enable caching when configuring an endpoint in LHS.
 Only GET requests are cached by default. If you want to cache any other request method, just configure it:
 
 ```ruby
-  LHC.get('http://local.ch', cache: { methods: [:post, :head] })
+  LHC.get('http://local.ch', cache: { methods: [:get] })
 ```
 
 ## Options
