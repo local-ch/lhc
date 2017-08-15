@@ -6,7 +6,7 @@ describe LHC::Request do
     before { stub_request(:get, 'http://local.ch').to_return(status: 404) }
 
     it 'does not raise an error' do
-      expect{ subject }.to_not raise_error
+      expect { subject }.not_to raise_error
     end
 
     it 'body is nil' do
@@ -19,7 +19,7 @@ describe LHC::Request do
 
     it 'does raise an error for 500' do
       stub_request(:get, 'http://local.ch').to_return(status: 500)
-      expect{ subject }.to raise_error LHC::InternalServerError
+      expect { subject }.to raise_error LHC::InternalServerError
     end
   end
 end
