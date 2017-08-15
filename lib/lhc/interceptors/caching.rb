@@ -109,7 +109,6 @@ class LHC::Caching < LHC::Interceptor
     end
   end
 
-
   # grabs the deprecated keys from the request options
   def deprecated_keys(request_options)
     request_options.keys.select { |k| k =~ /^cache_.*/ }.sort
