@@ -39,7 +39,8 @@ class LHC::Caching < LHC::Interceptor
   def cache?(request)
     return false unless request.options[:cache]
     options = options(request.options)
-    options.fetch(:use, cache) && cached_method?(request.method, options[:methods])
+    cache_for(options) &&
+      cached_method?(request.method, options[:methods])
   end
 
   def options(request_options)
