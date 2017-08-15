@@ -139,7 +139,7 @@ Anything but a response code indicating success (2**) throws an exception.
 
 → [Read more about exceptions](docs/exceptions.md)
 
-## Custom error handling
+### Custom error handling
 
 You can provide custom error handlers to handle errors happening during the request.
 
@@ -151,6 +151,20 @@ If your error handler returns anything else but `nil` it replaces the response b
 handler = ->{ do_something; return {name: 'unknown'} }
 response = LHC.get('http://something', error_handler: handler)
 response.data.name # 'unknown'
+```
+
+### Ignore certain errors
+
+As it's discouraged to rescue errors and then don't handle them (ruby styleguide),
+but you often want to continue working with `nil`, LHC provides the `ignore_errors` option.
+
+Errors listed in this option will not be raised and will leave the `response.body` and `response.data` to stay `nil`.
+
+```ruby
+response = LHC.get('http://something', ignore_errors: [LHC::NotFound])
+
+response.body # nil
+response.data # nil
 ```
 
 ## Interceptors

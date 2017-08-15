@@ -8,9 +8,10 @@ class LHC::Request
 
   TYPHOEUS_OPTIONS ||= [:params, :method, :body, :headers, :follow_location]
 
-  attr_accessor :response, :options, :raw, :format, :error_handler
+  attr_accessor :response, :options, :raw, :format, :error_handler, :errors_ignored
 
   def initialize(options, self_executing = true)
+    self.errors_ignored = options.fetch(:ignore_errors, [])
     self.options = options.deep_dup || {}
     self.error_handler = options.delete :error_handler
     use_configured_endpoint!
@@ -101,12 +102,16 @@ class LHC::Request
   end
 
   def handle_error(response)
+    return if errors_ignored.include?(error)
     throw_error(response) unless error_handler
     response.body_replacement = error_handler.call(response)
   end
 
+  def error
+    @error ||= LHC::Error.find(response)
+  end
+
   def throw_error(response)
-    error = LHC::Error.find(response)
     fail error.new(error, response)
   end
 end
