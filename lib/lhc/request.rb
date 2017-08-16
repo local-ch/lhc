@@ -108,7 +108,7 @@ class LHC::Request
   end
 
   def ignore_error?
-    (errors_ignored || []).detect do |ignored_error|
+    errors_ignored.detect do |ignored_error|
       error <= ignored_error
     end.present?
   end
