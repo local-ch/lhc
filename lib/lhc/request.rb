@@ -102,9 +102,15 @@ class LHC::Request
   end
 
   def handle_error(response)
-    return if errors_ignored.include?(error)
+    return if ignore_error?
     throw_error(response) unless error_handler
     response.body_replacement = error_handler.call(response)
+  end
+
+  def ignore_error?
+    errors_ignored.detect do |ignored_error|
+      error <= ignored_error
+    end.present?
   end
 
   def error
