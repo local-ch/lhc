@@ -1,5 +1,3 @@
-require 'ostruct'
-
 class LHC::Response::Data::Item < OpenStruct
   include LHC::Response::Data::Base
 

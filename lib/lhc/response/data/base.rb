@@ -6,7 +6,12 @@ module LHC::Response::Data::Base
   end
 
   def as_open_struct
-    @open_struct ||= (@data || response.format.as_open_struct(response))
+    @open_struct ||=
+      if @data
+        JSON.parse(@data.to_json, object_class: OpenStruct)
+      else
+        response.format.as_open_struct(response)
+      end
   end
 
   private

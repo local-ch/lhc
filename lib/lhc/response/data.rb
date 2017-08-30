@@ -5,13 +5,14 @@ class LHC::Response::Data
 
   include LHC::Response::Data::Base
 
-  def initialize(response)
+  def initialize(response, data: nil)
     @response = response
+    @data = data
 
     if as_json.is_a?(Hash)
-      @_data = LHC::Response::Data::Item.new(response)
+      @_data = LHC::Response::Data::Item.new(response, data: data)
     elsif as_json.is_a?(Array)
-      @_data = LHC::Response::Data::Collection.new(response)
+      @_data = LHC::Response::Data::Collection.new(response, data: data)
     end
   end
 
