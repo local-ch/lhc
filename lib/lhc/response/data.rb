@@ -19,4 +19,8 @@ class LHC::Response::Data
   def method_missing(method, *args, &block)
     @_data.send(method, *args, &block)
   end
+
+  def respond_to_missing?(method_name, include_private = false)
+    @_data.respond_to?(method_name, include_private) || super
+  end
 end
