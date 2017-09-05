@@ -2,24 +2,29 @@ require 'rails_helper'
 
 describe LHC::Request do
   context 'ignoring LHC::NotFound' do
-    subject { LHC.get('http://local.ch', ignored_errors: [LHC::NotFound]) }
+    let(:response) { LHC.get('http://local.ch', ignored_errors: [LHC::NotFound]) }
     before { stub_request(:get, 'http://local.ch').to_return(status: 404) }
 
     it 'does not raise an error' do
-      expect { subject }.not_to raise_error
+      expect { response }.not_to raise_error
     end
 
     it 'body is nil' do
-      expect(subject.body).to eq nil
+      expect(response.body).to eq nil
     end
 
     it 'data is nil' do
-      expect(subject.data).to eq nil
+      expect(response.data).to eq nil
     end
 
     it 'does raise an error for 500' do
       stub_request(:get, 'http://local.ch').to_return(status: 500)
-      expect { subject }.to raise_error LHC::InternalServerError
+      expect { response }.to raise_error LHC::InternalServerError
+    end
+
+    it 'provides the information if the error was ignored' do
+      expect(response.error_ignored?).to eq true
+      expect(response.request.error_ignored?).to eq true
     end
   end
 
