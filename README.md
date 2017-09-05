@@ -165,6 +165,8 @@ response = LHC.get('http://something', ignored_errors: [LHC::NotFound])
 
 response.body # nil
 response.data # nil
+response.error_ignored? # true
+response.request.error_ignored? # true
 ```
 
 ## Interceptors

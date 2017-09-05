@@ -39,6 +39,10 @@ class LHC::Request
     raw.options.fetch(:params, nil) || raw.options[:params] = {}
   end
 
+  def error_ignored?
+    ignore_error?
+  end
+
   private
 
   attr_accessor :iprocessor
@@ -108,9 +112,11 @@ class LHC::Request
   end
 
   def ignore_error?
-    errors_ignored.detect do |ignored_error|
-      error <= ignored_error
-    end.present?
+    @ignore_error ||= begin
+      errors_ignored.detect do |ignored_error|
+        error <= ignored_error
+      end.present?
+    end
   end
 
   def error

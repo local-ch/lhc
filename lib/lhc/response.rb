@@ -9,6 +9,7 @@ class LHC::Response
   attr_reader :from_cache
 
   delegate :effective_url, :code, :headers, :options, :mock, :success?, to: :raw
+  delegate :error_ignored?, to: :request
   alias from_cache? from_cache
 
   # A response is initalized with the underlying raw response (typhoeus in our case)
