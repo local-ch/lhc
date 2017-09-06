@@ -1,36 +1,26 @@
-require 'ostruct'
-# Response data is data provided through the response body
-# but made accssible in the ruby world
-class LHC::Response::Data < OpenStruct
+class LHC::Response::Data
+  autoload :Base, 'lhc/response/data/base'
+  autoload :Item, 'lhc/response/data/item'
+  autoload :Collection, 'lhc/response/data/collection'
 
-  def initialize(response)
+  include LHC::Response::Data::Base
+
+  def initialize(response, data: nil)
     @response = response
-    set_dynamic_accessor_methods
-    super(as_json)
-  end
+    @data = data
 
-  def as_json
-    response.format.as_json(response)
-  end
-
-  def as_open_struct
-    response.format.as_open_struct(response)
-  end
-
-  def [](key)
-    @hash ||= as_json.with_indifferent_access
-    @hash[key]
-  end
-
-  private
-
-  attr_reader :response
-
-  def set_dynamic_accessor_methods
-    as_json.keys.each do |key|
-      define_singleton_method key do |*args|
-        as_open_struct.send key, *args
-      end
+    if as_json.is_a?(Hash)
+      @base = LHC::Response::Data::Item.new(response, data: data)
+    elsif as_json.is_a?(Array)
+      @base = LHC::Response::Data::Collection.new(response, data: data)
     end
+  end
+
+  def method_missing(method, *args, &block)
+    @base.send(method, *args, &block)
+  end
+
+  def respond_to_missing?(method_name, include_private = false)
+    @base.respond_to?(method_name, include_private) || super
   end
 end
