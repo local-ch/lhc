@@ -34,6 +34,13 @@ Only GET requests are cached by default. If you want to cache any other request 
   LHC.get('http://local.ch', cache: { methods: [:get] })
 ```
 
+Responses served from cache are marked as served from cache:
+
+```ruby
+  response = LHC.get('http://local.ch', cache: true)
+  response.from_cache? # true
+```
+
 ## Options
 
 ```ruby
