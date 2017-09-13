@@ -67,7 +67,7 @@ Inside an interceptor, you are able to provide a response, rather then doing a r
 This is usefull for implementing an interceptor for caching.
 
 ```ruby
-class CacheInterceptor < LHC::Interceptor
+class LHC::Cache < LHC::Interceptor
 
   def before_request(request)
     cached_response = Rails.cache.fetch(request.url)

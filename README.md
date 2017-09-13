@@ -106,7 +106,7 @@ You can configure global endpoints, placeholders and interceptors.
   LHC.configure do |c|
     c.placeholder :datastore, 'http://datastore/v2'
     c.endpoint :feedbacks, ':datastore/feedbacks', params: { has_reviews: true }
-    c.interceptors = [CacheInterceptor]
+    c.interceptors = [LHC::Caching]
   end
 ```
 
