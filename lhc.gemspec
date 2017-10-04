@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rubocop', '~> 0.36.0'
   s.add_development_dependency 'rubocop-rspec'
+  s.add_development_dependency 'prometheus-client', '~> 0.7.1'
 
   s.license = 'GPL-3'
 end

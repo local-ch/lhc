@@ -6,9 +6,14 @@ describe LHC::Response do
 
     let(:raw_response) { OpenStruct.new(time: time) }
 
-    it 'provides response time in milliseconds' do
+    it 'provides response time in seconds' do
       response = LHC::Response.new(raw_response, nil)
       expect(response.time).to eq time * 1000
+    end
+
+    it 'provides response time in seconds' do
+      response = LHC::Response.new(raw_response, nil)
+      expect(response.time_ms).to eq time
     end
   end
 end
