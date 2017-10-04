@@ -185,7 +185,12 @@ To monitor and manipulate the http communication done with LHC, you can define i
 → [Read more about interceptors](docs/interceptors.md)
 
 A set of core interceptors is part of LHC,
-like [Caching](/docs/interceptors/caching.md), [Monitoring](/docs/interceptors/monitoring.md), [Authentication](/docs/interceptors/authentication.md), [Rollbar](/docs/interceptors/rollbar.md).
+like 
+[Caching](/docs/interceptors/caching.md),
+[Monitoring](/docs/interceptors/monitoring.md),
+[Authentication](/docs/interceptors/authentication.md),
+[Rollbar](/docs/interceptors/rollbar.md),
+[Prometheus](/docs/interceptors/prometheus.md).
 
 → [Read more about core interceptors](docs/interceptors.md#core-interceptors)
 

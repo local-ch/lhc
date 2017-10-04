@@ -16,6 +16,8 @@ module LHC
     'lhc/interceptors/auth'
   autoload :Caching,
     'lhc/interceptors/caching'
+  autoload :Prometheus,
+    'lhc/interceptors/prometheus'
   autoload :Config,
     'lhc/config'
   autoload :Endpoint,

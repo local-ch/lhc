@@ -32,9 +32,14 @@ class LHC::Response
     body_replacement || raw.body.presence
   end
 
-  # Provides response time in ms.
+  # Provides response time in seconds
   def time
-    (raw.time || 0) * 1000
+    time_ms * 1000
+  end
+
+  # Provides response time in milliseconds
+  def time_ms
+    raw.time || 0
   end
 
   def timeout?
