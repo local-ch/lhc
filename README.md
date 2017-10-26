@@ -76,7 +76,7 @@ You will get back an array of LHC::Response objects in the same order of the pas
 ```
 
 ```ruby
-LHC.get([request1, request2, request3])
+LHC.request([request1, request2, request3])
 # returns [response1, response2, response3]
 ```
 
@@ -185,7 +185,7 @@ To monitor and manipulate the http communication done with LHC, you can define i
 → [Read more about interceptors](docs/interceptors.md)
 
 A set of core interceptors is part of LHC,
-like 
+like
 [Caching](/docs/interceptors/caching.md),
 [Monitoring](/docs/interceptors/monitoring.md),
 [Authentication](/docs/interceptors/authentication.md),
