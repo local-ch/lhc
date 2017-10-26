@@ -148,7 +148,7 @@ If a error handler is provided nothing is raised.
 If your error handler returns anything else but `nil` it replaces the response body.
 
 ```ruby
-handler = ->{ do_something; return {name: 'unknown'} }
+handler = ->(response){ do_something_with_repsonse; return {name: 'unknown'} }
 response = LHC.get('http://something', error_handler: handler)
 response.data.name # 'unknown'
 ```
