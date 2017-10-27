@@ -112,6 +112,8 @@ module LHC
     'lhc/response'
   autoload :Rollbar,
     'lhc/interceptors/rollbar'
+  autoload :ZipkinDistributedTracing,
+    'lhc/interceptors/zipkin_distributed_tracing'
 
   require 'lhc/railtie' if defined?(Rails)
 end
