@@ -38,3 +38,6 @@ RSpec/VerifiedDoubles:
 
 Style/RedundantReturn:
   Enabled: false
+
+RSpec/InstanceVariable:
+  Enabled: false

@@ -20,7 +20,7 @@ class LHC::Request
     self.raw = create_request
     self.format = options.delete('format') || LHC::Formats::JSON.new
     iprocessor.intercept(:before_request, self)
-    raw.run if self_executing && !response
+    run! if self_executing && !response
   end
 
   def url
@@ -41,6 +41,10 @@ class LHC::Request
 
   def error_ignored?
     ignore_error?
+  end
+
+  def run!
+    raw.run
   end
 
   private
@@ -100,7 +104,7 @@ class LHC::Request
   end
 
   def on_complete(response)
-    self.response ||= LHC::Response.new(response, self)
+    self.response = LHC::Response.new(response, self)
     iprocessor.intercept(:after_response, self.response)
     handle_error(self.response) unless self.response.success?
   end

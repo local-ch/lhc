@@ -18,6 +18,8 @@ module LHC
     'lhc/interceptors/caching'
   autoload :Prometheus,
     'lhc/interceptors/prometheus'
+  autoload :Retry,
+    'lhc/interceptors/retry'
   autoload :Config,
     'lhc/config'
   autoload :Endpoint,
