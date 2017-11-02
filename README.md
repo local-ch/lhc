@@ -189,6 +189,7 @@ like
 [Caching](/docs/interceptors/caching.md),
 [Monitoring](/docs/interceptors/monitoring.md),
 [Authentication](/docs/interceptors/authentication.md),
+[Retry](/docs/interceptors/retry.md),
 [Rollbar](/docs/interceptors/rollbar.md),
 [Prometheus](/docs/interceptors/prometheus.md).
 
