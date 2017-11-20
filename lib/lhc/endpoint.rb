@@ -1,3 +1,4 @@
+require 'uri'
 # frozen_string_literal: true
 # An endpoint is an url that leads to a backend resource.
 # The url can also be an url-template.
