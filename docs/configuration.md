@@ -11,7 +11,7 @@ Take care that you only use `LHC.configure` once, because it is actually resetin
 
   LHC.configure do |c|
     c.placeholder :datastore, 'http://datastore/v2'
-    c.endpoint :feedbacks, ':datastore/feedbacks'
+    c.endpoint :feedbacks, '{+datastore}/feedbacks'
     c.interceptors = [CachingInterceptor, MonitorInterceptor, TrackingIdInterceptor]
   end
 
@@ -41,7 +41,7 @@ You can configure global placeholders, that are used when generating urls from u
 ```ruby
   LHC.config.placeholder(:datastore, 'http://datastore/v2')
   options = { params: { has_reviews: true } }
-  LHC.config.endpoint(:feedbacks, url, options)
+  LHC.config.endpoint(:feedbacks, '{+datastore}/feedbacks', options)
   LHC.get(:feedbacks)
 ```
 
