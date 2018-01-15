@@ -55,7 +55,16 @@ class LHC::Endpoint
     match_data = match_data(url)
     return false if match_data.nil?
 
-    match_data.values.all? { |value| valid_value?(value) }
+    first = match_data.values.first
+    last = match_data.values.last
+    url_format = File.extname(url)
+
+    # eliminate false positives in form:
+    # http://host/feedbacks matches {+service}/{entry_id}/feedbacks (service: http:/, entry_id: host)
+    first.match(%{https?:/$}).nil? &&
+      # eliminates false positives in form:
+      # http://host/entries/123.json matches {+service}/entries/{id} (service: http://host, id: 123.json)
+      (url_format.blank? || !last.ends_with?(url_format))
   end
 
   # Extracts the values from url and
@@ -95,12 +104,6 @@ class LHC::Endpoint
   end
 
   private
-
-  # Ensure there are no false positives in the template matching
-  def valid_value?(value)
-    value.match(%{https?:/$}).nil? &&
-      value.match(/.*\.json/).nil?
-  end
 
   def match_data(url)
     parsed = URI.parse(url)
