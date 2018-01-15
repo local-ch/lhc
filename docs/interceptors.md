@@ -64,7 +64,7 @@ You can override the global default interceptors on request level:
 ## Provide Response
 
 Inside an interceptor, you are able to provide a response, rather then doing a real request.
-This is usefull for implementing an interceptor for caching.
+This is useful for implementing an interceptor for caching.
 
 ```ruby
 class LHC::Cache < LHC::Interceptor
