@@ -15,7 +15,7 @@ class LHC::Endpoint
   end
 
   def compile(params)
-    context = LHC.config.placeholders
+    context = LHC.config.placeholders.deep_dup
     context.merge!(params) if params.is_a?(Hash)
     expanded = uri.partial_expand(context)
 
@@ -51,7 +51,8 @@ class LHC::Endpoint
   # Returns true if concrete url is covered by the template
   # Example: {+datastore}/contracts/{id} == http://local.ch/contracts/1
   def match?(url)
-    match_data = uri.match(url)
+    return true if url == uri.pattern
+    match_data = match_data(url)
     return false if match_data.nil?
 
     match_data.values.all? { |value| valid_value?(value) }
@@ -60,17 +61,24 @@ class LHC::Endpoint
   # Extracts the values from url and
   # creates params according to template
   def values_as_params(url)
-    match_data = uri.match(url)
+    match_data = match_data(url)
+    return if match_data.nil?
     Hash[match_data.variables.map(&:to_sym).zip(match_data.values)]
+  end
+
+  # Checks if the name has a match in the current context
+  def find_value(name, mapping)
+    context = LHC.config.placeholders.deep_dup
+    context.merge!(mapping)
+
+    context[name]
   end
 
   # Compares a concrete url with a template
   # Returns true if concrete url is covered by the template
   # Example: {+datastore}/contracts/{id} == http://local.ch/contracts/1
   def self.match?(url, template)
-    parsed = URI.parse(url)
-    parsed.query = parsed.fragment = nil
-    new(template).match?(parsed)
+    new(template).match?(url)
   end
 
   # Returns all placeholders found in the url-template.
@@ -92,5 +100,14 @@ class LHC::Endpoint
   def valid_value?(value)
     value.match(%{https?:/$}).nil? &&
       value.match(/.*\.json/).nil?
+  end
+
+  def match_data(url)
+    parsed = URI.parse(url)
+    parsed.query = parsed.fragment = nil
+
+    uri.match(parsed)
+  rescue URI::InvalidURIError
+    nil
   end
 end
