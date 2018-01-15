@@ -84,6 +84,6 @@ class LHC::Endpoint
   # Ensure there are no false positives in the template matching
   def valid_value?(value)
     value.match(%{https?:/$}).nil? &&
-    value.match(/.*\.json/).nil?
+      value.match(/.*\.json/).nil?
   end
 end
