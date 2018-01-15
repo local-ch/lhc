@@ -41,10 +41,15 @@ class LHC::Endpoint
     removed
   end
 
+  # Returns all placeholders found in the url-template.
+  # They are alphabetically sorted.
   def placeholders
     uri.variables.sort.map(&:to_sym)
   end
 
+  # Compares a concrete url with a template
+  # Returns true if concrete url is covered by the template
+  # Example: {+datastore}/contracts/{id} == http://local.ch/contracts/1
   def match?(url)
     match_data = uri.match(url)
     return false if match_data.nil?
@@ -52,6 +57,8 @@ class LHC::Endpoint
     match_data.values.all? { |value| valid_value?(value) }
   end
 
+  # Extracts the values from url and
+  # creates params according to template
   def values_as_params(url)
     match_data = uri.match(url)
     Hash[match_data.variables.map(&:to_sym).zip(match_data.values)]
@@ -59,7 +66,7 @@ class LHC::Endpoint
 
   # Compares a concrete url with a template
   # Returns true if concrete url is covered by the template
-  # Example: :datastore/contracts/:id == http://local.ch/contracts/1
+  # Example: {+datastore}/contracts/{id} == http://local.ch/contracts/1
   def self.match?(url, template)
     parsed = URI.parse(url)
     parsed.query = parsed.fragment = nil
