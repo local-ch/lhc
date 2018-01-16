@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe LHC do
   context 'configured endpoints' do
-    let(:url) { 'http://analytics/track/:entity_id/w/:type' }
+    let(:url) { 'http://analytics/track/{entity_id}/w/{type}' }
 
     let(:options) do
       {

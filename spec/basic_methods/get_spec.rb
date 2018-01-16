@@ -16,7 +16,7 @@ describe LHC do
     end
 
     it 'does a get request when providing the name of a configured endpoint' do
-      url = 'http://:datastore/v2/feedbacks'
+      url = 'http://{+datastore}/v2/feedbacks'
       options = { params: { datastore: 'datastore' } }
       LHC.configure { |c| c.endpoint(:feedbacks, url, options) }
       LHC.get(:feedbacks, params: parameters)

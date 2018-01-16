@@ -13,6 +13,6 @@ Logs basic request/response information to prometheus.
   LHC.get('http://local.ch')
 ```
 
-- Creates a promethues counter that receives additional meta information for: `:code`, `:success` and `:timeout`.
+- Creates a prometheus counter that receives additional meta information for: `:code`, `:success` and `:timeout`.
 
-- Creates a promethues histogram for response times in milliseconds.
+- Creates a prometheus histogram for response times in milliseconds.
