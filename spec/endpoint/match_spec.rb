@@ -11,7 +11,9 @@ describe LHC::Endpoint do
         'http://local.ch/addresses/{id}' => 'http://local.ch/addresses/123',
         '{+datastore}/customers/{id}/addresses' => 'http://local.ch:80/server/rest/v1/customers/123/addresses',
         '{+datastore}/entries/{id}.json' => 'http://local.ch/entries/123.json',
-        '{+datastore}/places/{place_id}/feedbacks' => 'http://local.ch/places/1/feedbacks?limit=10&offset=0'
+        '{+datastore}/places/{place_id}/feedbacks' => 'http://local.ch/places/1/feedbacks?limit=10&offset=0',
+        'http://local.ch/places/1/feedbacks' => 'http://local.ch/places/1/feedbacks?lang=en',
+        'http://local.ch/places/1/feedbacks.json' => 'http://local.ch/places/1/feedbacks.json?lang=en'
       }.each do |template, url|
         it "#{url} matches #{template}" do
           expect(LHC::Endpoint.match?(url, template)).to be
