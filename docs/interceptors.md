@@ -27,6 +27,8 @@ like [Caching](/docs/interceptors/caching.md), [Monitoring](/docs/interceptors/m
 
 ## Callbacks
 
+`before_raw_request(request)` is called before the raw typhoeus request is prepared/created.
+
 `before_request(request)` is called when the request is prepared and about to be executed.
 
 `after_request(request)` is called after request was started.

@@ -28,12 +28,7 @@ class LHC::Endpoint
   def compile(params)
     add_basic_auth(
       without_basic_auth(url).gsub(PLACEHOLDER) do |match|
-        replacement =
-          if params.is_a? Proc
-            params.call(match)
-          else
-            find_value(match, params)
-          end
+        replacement = find_value(match, params)
         replacement || fail("Compilation incomplete. Unable to find value for #{match.gsub(':', '')}.")
       end
     )

@@ -21,6 +21,8 @@ module LHC
     'lhc/interceptors/prometheus'
   autoload :Retry,
     'lhc/interceptors/retry'
+  autoload :DefaultTimeout,
+    'lhc/interceptors/default_timeout'
   autoload :Config,
     'lhc/config'
   autoload :Endpoint,
