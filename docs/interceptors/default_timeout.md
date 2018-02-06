@@ -12,6 +12,6 @@ Applies default timeout values to all requests made in an application, that uses
 ## Overwrite defaults
 
 ```ruby
-LHC::Timeout.timeout = 5 # seconds
-LHC::Timeout.connecttimeout = 2 # second
+LHC::DefaultTimeout.timeout = 5 # seconds
+LHC::DefaultTimeout.connecttimeout = 2 # second
 ```
