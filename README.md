@@ -105,7 +105,7 @@ You can configure global endpoints, placeholders and interceptors.
 ```ruby
   LHC.configure do |c|
     c.placeholder :datastore, 'http://datastore/v2'
-    c.endpoint :feedbacks, ':datastore/feedbacks', params: { has_reviews: true }
+    c.endpoint :feedbacks, '{+datastore}/feedbacks', params: { has_reviews: true }
     c.interceptors = [LHC::Caching]
   end
 ```
@@ -131,9 +131,10 @@ LHC provides a [timeout interceptor](docs/interceptors/default_timeout.md) that 
 
 Instead of using concrete urls you can also use url-templates that contain placeholders.
 This is especially handy for configuring an endpoint once and generate the url from the params when doing the request.
+Since version `7.0` url templates follow the [RFC 6750](https://tools.ietf.org/html/rfc6570).
 
 ```ruby
-  url = 'http://datastore/v2/feedbacks/:id'
+  url = 'http://datastore/v2/feedbacks/{id}'
   LHC.config.endpoint(:find_feedback, url, options)
   LHC.get(:find_feedback, params:{ id: 123 })
   # GET http://datastore/v2/feedbacks/123
@@ -142,7 +143,7 @@ This is especially handy for configuring an endpoint once and generate the url f
 This also works in place without configuring an endpoint.
 
 ```ruby
-  LHC.get('http://datastore/v2/feedbacks/:id', params:{ id: 123 })
+  LHC.get('http://datastore/v2/feedbacks/{id}', params:{ id: 123 })
   # GET http://datastore/v2/feedbacks/123
 ```
 
@@ -170,7 +171,7 @@ response.data.name # 'unknown'
 
 ### Ignore certain errors
 
-As it's discouraged to rescue errors and then don't handle them (ruby styleguide),
+As it's discouraged to rescue errors and then don't handle them (ruby styleguide)[https://github.com/bbatsov/ruby-style-guide#dont-hide-exceptions],
 but you often want to continue working with `nil`, LHC provides the `ignored_errors` option.
 
 Errors listed in this option will not be raised and will leave the `response.body` and `response.data` to stay `nil`.

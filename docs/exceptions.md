@@ -26,7 +26,7 @@ rescue => e
 ```
 
 All errors that are raise by LHC inherit from `LHC::Error`.
-They are divided into `LHC::ClientError`, `LHC::ServerError`, `LHC::Timeout` and `LHC::UnkownError` and mapped arcording to the following status code.
+They are divided into `LHC::ClientError`, `LHC::ServerError`, `LHC::Timeout` and `LHC::UnkownError` and mapped according to the following status code.
 
 ```ruby
 400 => LHC::BadRequest

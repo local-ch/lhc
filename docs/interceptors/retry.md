@@ -1,6 +1,6 @@
 # Retry Interceptor
 
-If you enable the retry interceptor, you can have lhc retry requests for you:
+If you enable the retry interceptor, you can have LHC retry requests for you:
 
 ```ruby
   LHC.config.interceptors = [LHC::Retry]

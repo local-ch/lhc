@@ -5,13 +5,13 @@ describe LHC do
     it 'uses values for placeholders defined globally' do
       LHC.configure { |c| c.placeholder(:datastore, 'http://datastore/v2') }
       stub_request(:get, "http://datastore/v2/feedbacks")
-      LHC.get(':datastore/feedbacks')
+      LHC.get('{+datastore}/feedbacks')
     end
 
     it 'uses explicit values first' do
       LHC.configure { |c| c.placeholder(:campaign_id, '123') }
       stub_request(:get, 'http://datastore/v2/campaign/456/feedbacks')
-      url = 'http://datastore/v2/campaign/:campaign_id/feedbacks'
+      url = 'http://datastore/v2/campaign/{campaign_id}/feedbacks'
       LHC.get(url, params: { campaign_id: '456' })
     end
 
