@@ -112,7 +112,7 @@ You can configure global endpoints, placeholders and interceptors.
 
 → [Read more about configuration](docs/configuration.md)
 
-## Timeouts
+## Timeout
 
 Working and configuring timeouts is important, to ensure your app stays alive when services you depend on start to get really slow...
 
@@ -125,7 +125,7 @@ LHC forwards two timeout options, that it is forwarding to typhoeus, which is fo
 LHC.get('http://local.ch', timeout: 5, connecttimeout: 1)
 ```
 
-LHC provides a [timeout interceptor](docs/interceptors/default_timeout.md) that let you apply default timeout values to all the requests that you are performig in your application:
+LHC provides a [timeout interceptor](docs/interceptors/default_timeout.md) that let you apply default timeout values to all the requests that you are performig in your application.
 
 ## URL-Templates
 
