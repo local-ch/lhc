@@ -118,14 +118,14 @@ Working and configuring timeouts is important, to ensure your app stays alive wh
 
 LHC forwards two timeout options directly to typhoeus:
 
-`timeout` (in seconds) - Pass a long as parameter containing timeout - the maximum time in seconds that you allow the libcurl transfer operation to take. Normally, name lookups can take a considerable time and limiting operations to less than a few minutes risk aborting perfectly normal operations. This option may cause libcurl to use the SIGALRM signal to timeout system calls.
-`connecttimeout` (in seconds) - Pass a long. It should contain the maximum time in seconds that you allow the connection phase to the server to take. This only limits the connection phase, it has no impact once it has connected. Set to zero to switch to the default built-in connection timeout - 300 seconds. 
+`timeout` (in seconds) - The maximum time in seconds that you allow the libcurl transfer operation to take. Normally, name lookups can take a considerable time and limiting operations to less than a few seconds risk aborting perfectly normal operations. This option may cause libcurl to use the SIGALRM signal to timeout system calls.
+`connecttimeout` (in seconds) - It should contain the maximum time in seconds that you allow the connection phase to the server to take. This only limits the connection phase, it has no impact once it has connected. Set to zero to switch to the default built-in connection timeout - 300 seconds. 
 
 ```ruby
 LHC.get('http://local.ch', timeout: 5, connecttimeout: 1)
 ```
 
-LHC provides a [timeout interceptor](docs/interceptors/default_timeout.md) that let you apply default timeout values to all the requests that you are performig in your application.
+LHC provides a [timeout interceptor](docs/interceptors/default_timeout.md) that lets you apply default timeout values to all the requests that you are performig in your application.
 
 ## URL-Templates
 
