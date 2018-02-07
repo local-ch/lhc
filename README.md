@@ -98,6 +98,25 @@ Also consider setting the http header for content-type.
   )
 ```
 
+## Encoding
+
+LHC by default, encodes urls:
+
+```ruby
+LHC.get('http://local.ch?q=some space')
+# http://local.ch?q=some%20space
+
+LHC.get('http://local.ch', params: { q: 'some space' })
+# http://local.ch?q=some%20space
+```
+
+which can be disabled:
+
+```ruby
+LHC.get('http://local.ch?q=some space', url_encoding: false)
+# http://local.ch?q=some space
+```
+
 ## Configuration
 
 You can configure global endpoints, placeholders and interceptors.

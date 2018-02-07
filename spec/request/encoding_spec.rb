@@ -17,5 +17,10 @@ describe LHC::Request do
       stub_request(:get, 'http://local.ch/api/search?name=My%20name%20is%20rabbit')
       LHC.get(url, params: { name: 'My name is rabbit' })
     end
+
+    it 'does not encode if encoding is skipped' do
+      stub_request(:get, 'http://local.ch/api/search?name=My name is rabbit')
+      LHC.get(url, params: { name: 'My name is rabbit' }, url_encoding: false)
+    end
   end
 end
