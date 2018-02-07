@@ -17,6 +17,7 @@ class LHC::Request
     use_configured_endpoint!
     generate_url_from_template!
     self.iprocessor = LHC::InterceptorProcessor.new(self)
+    iprocessor.intercept(:before_raw_request, self)
     self.raw = create_request
     self.format = options.delete('format') || LHC::Formats::JSON.new
     iprocessor.intercept(:before_request, self)
