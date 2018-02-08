@@ -107,7 +107,7 @@ DO
 LHC.get('http://local.ch', params: { q: 'Restaurant' })
 ```
 
-DONT
+DON'T
 ```ruby
 LHC.get('http://local.ch?q=Restaurant')
 ```
@@ -130,8 +130,6 @@ which can be disabled:
 LHC.get('http://local.ch?q=some space', url_encoding: false)
 # http://local.ch?q=some space
 ```
-
-Whatever, try to prevent passing parameters yourself
 
 ## Configuration
 
