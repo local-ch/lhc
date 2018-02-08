@@ -52,8 +52,13 @@ class LHC::Request
 
   attr_accessor :iprocessor
 
+  def optionally_encoded_url(options)
+    return options[:url] unless options.fetch(:url_encoding, true)
+    encode_url(options[:url])
+  end
+
   def create_request
-    request = Typhoeus::Request.new(encode_url(options[:url]), typhoeusize(options))
+    request = Typhoeus::Request.new(optionally_encoded_url(options), typhoeusize(options))
     request.on_headers do
       iprocessor.intercept(:after_request, self)
       iprocessor.intercept(:before_response, self)

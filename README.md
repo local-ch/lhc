@@ -98,6 +98,39 @@ Also consider setting the http header for content-type.
   )
 ```
 
+## Parameter
+
+When using LHC, try to pass params via `params` option. It's not recommended to build a url and attach the parameter yourself:
+
+DO
+```ruby
+LHC.get('http://local.ch', params: { q: 'Restaurant' })
+```
+
+DON'T
+```ruby
+LHC.get('http://local.ch?q=Restaurant')
+```
+
+## Encoding
+
+LHC, by default, encodes urls:
+
+```ruby
+LHC.get('http://local.ch?q=some space')
+# http://local.ch?q=some%20space
+
+LHC.get('http://local.ch', params: { q: 'some space' })
+# http://local.ch?q=some%20space
+```
+
+which can be disabled:
+
+```ruby
+LHC.get('http://local.ch?q=some space', url_encoding: false)
+# http://local.ch?q=some space
+```
+
 ## Configuration
 
 You can configure global endpoints, placeholders and interceptors.
