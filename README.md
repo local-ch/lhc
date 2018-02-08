@@ -112,6 +112,22 @@ DON'T
 LHC.get('http://local.ch?q=Restaurant')
 ```
 
+### Array Parameter Encoding
+
+LHC can encode array parameters in URLs in two ways. The default is `:rack` which generates URL parameters compatible with Rack and Rails.
+
+```ruby
+LHC.get('http://local.ch', params: { q: [1, 2] })
+# http://local.ch?q[]=1&q[]=2
+```
+
+Some Java-based apps expect their arrays in the `:multi` format:
+
+```ruby
+LHC.get('http://local.ch', params: { q: [1, 2] }, params_encoding: :multi)
+# http://local.ch?q=1&q=2
+```
+
 ## Encoding
 
 LHC, by default, encodes urls:
@@ -129,22 +145,6 @@ which can be disabled:
 ```ruby
 LHC.get('http://local.ch?q=some space', url_encoding: false)
 # http://local.ch?q=some space
-```
-
-### Array Parameter Encoding
-
-LHC can encode array parameters in URLs in two ways. The default is `:rack` which generates URL parameters compatible with Rack and Rails.
-
-```ruby
-LHC.get('http://local.ch', params: { q: [1, 2] })
-# http://local.ch?q[]=1&q[]=2
-```
-
-Some Java-based apps expect their arrays in the `:multi` format:
-
-```ruby
-LHC.get('http://local.ch', params: { q: [1, 2] }, params_encoding: :multi)
-# http://local.ch?q=1&q=2
 ```
 
 ## Configuration
