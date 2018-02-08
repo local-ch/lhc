@@ -53,7 +53,7 @@ class LHC::Request
   attr_accessor :iprocessor
 
   def optionally_encoded_url(options)
-    options[:url] unless options.fetch(:url_encoding, true)
+    return options[:url] unless options.fetch(:url_encoding, true)
     encode_url(options[:url])
   end
 
