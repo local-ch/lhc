@@ -6,7 +6,7 @@ require 'active_support/core_ext/object/deep_dup'
 # and it communicates with interceptors.
 class LHC::Request
 
-  TYPHOEUS_OPTIONS ||= [:params, :method, :body, :headers, :follow_location]
+  TYPHOEUS_OPTIONS ||= [:params, :method, :body, :headers, :follow_location, :params_encoding]
 
   attr_accessor :response, :options, :raw, :format, :error_handler, :errors_ignored
 
