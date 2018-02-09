@@ -10,4 +10,11 @@ class LHC::Interceptor
 
   def after_response(response); end
 
+  # Prevent Interceptors from beeing duplicated!
+  # Their classes have flag-character.
+  # When duplicated you can't check for their class name anymore:
+  # e.g. options.deep_dup[:interceptors].include?(LHC::Caching) # false
+  def self.dup
+    self
+  end
 end
