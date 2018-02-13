@@ -12,7 +12,7 @@ describe LHC::DefaultTimeout do
   it 'applies default timeouts to all requests made' do
     stub
     expect_any_instance_of(Ethon::Easy).to receive(:http_request)
-      .with(anything, anything, hash_including(timeout: 15, connecttimeout: 1)).and_call_original
+      .with(anything, anything, hash_including(timeout: 15, connecttimeout: 2)).and_call_original
     LHC.get('http://local.ch')
   end
 
