@@ -3,7 +3,7 @@ class LHC::DefaultTimeout < LHC::Interceptor
 
   config_accessor :timeout, :connecttimeout
 
-  CONNECTTIMEOUT = 1 # second
+  CONNECTTIMEOUT = 2 # second
   TIMEOUT = 15 # seconds
 
   def before_raw_request(request)
