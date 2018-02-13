@@ -7,7 +7,7 @@ Applies default timeout values to all requests made in an application, that uses
 ```
 
 `timeout` default: 15 seconds
-`connecttimeout` default: 2 second
+`connecttimeout` default: 2 seconds
 
 ## Overwrite defaults
 
