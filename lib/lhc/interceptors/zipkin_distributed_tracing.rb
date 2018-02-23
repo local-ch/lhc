@@ -17,8 +17,8 @@ class LHC::ZipkinDistributedTracing < LHC::Interceptor
     if span = response.request.interceptor_environment[:zipkin_span]
       record_response_tags(span, response)
     end
-    span.record(Trace::Annotation::CLIENT_RECV, local_endpoint)
-    Trace.tracer.end_span(span)
+    span.record(::Trace::Annotation::CLIENT_RECV, local_endpoint)
+    ::Trace.tracer.end_span(span)
   end
   private
 
@@ -35,14 +35,13 @@ class LHC::ZipkinDistributedTracing < LHC::Interceptor
   end
 
   def trace!(request, trace_id)
-    url_string = request.raw.url
-    url = URI(url_string)
+    url = URI(request.raw.url)
     service_name = url.host
-    span = Trace.tracer.start_span(trace_id, request.method.to_s.downcase)
+    span = ::Trace.tracer.start_span(trace_id, "#{url.path}")
     # annotate with method (GET/POST/etc.) and uri path
-    span.record_tag(Trace::BinaryAnnotation::PATH, url.path, Trace::BinaryAnnotation::Type::STRING, local_endpoint)
-    span.record_tag(Trace::BinaryAnnotation::SERVER_ADDRESS, SERVER_ADDRESS_SPECIAL_VALUE, Trace::BinaryAnnotation::Type::BOOL, remote_endpoint(url, service_name))
-    span.record(Trace::Annotation::CLIENT_SEND, local_endpoint)
+    span.record_tag(::Trace::BinaryAnnotation::PATH, url.path, ::Trace::BinaryAnnotation::Type::STRING, local_endpoint)
+    span.record_tag(::Trace::BinaryAnnotation::SERVER_ADDRESS, SERVER_ADDRESS_SPECIAL_VALUE, ::Trace::BinaryAnnotation::Type::BOOL, remote_endpoint(url, service_name))
+    span.record(::Trace::Annotation::CLIENT_SEND, local_endpoint)
     # store the span in the datum hash so it can be used in the response_call
     request.interceptor_environment[:zipkin_span] = span
   rescue ArgumentError, URI::Error => e
@@ -50,19 +49,19 @@ class LHC::ZipkinDistributedTracing < LHC::Interceptor
   end
 
   def local_endpoint
-    Trace.default_endpoint # The rack middleware set this up for us.
+    ::Trace.default_endpoint # The rack middleware set this up for us.
   end
 
   def remote_endpoint(url, service_name)
-    Trace::Endpoint.remote_endpoint(url, service_name, local_endpoint.ip_format) # The endpoint we are calling.
+    ::Trace::Endpoint.remote_endpoint(url, service_name, local_endpoint.ip_format) # The endpoint we are calling.
   end
 
   def record_response_tags(span, response)
     status = response.code.to_s
-    span.record_tag(Trace::BinaryAnnotation::STATUS, status, Trace::BinaryAnnotation::Type::STRING, local_endpoint)
+    span.record_tag(::Trace::BinaryAnnotation::STATUS, status, ::Trace::BinaryAnnotation::Type::STRING, local_endpoint)
     if !response.success?
-      span.record_tag(Trace::BinaryAnnotation::ERROR, status,
-        Trace::BinaryAnnotation::Type::STRING, local_endpoint)
+      span.record_tag(::Trace::BinaryAnnotation::ERROR, status,
+        ::Trace::BinaryAnnotation::Type::STRING, local_endpoint)
     end
   end
 end
