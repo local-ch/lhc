@@ -26,7 +26,6 @@ describe LHC::Request do
       LHC.configure { |c| c.interceptors = [TestInterceptor] }
     end
 
-    # rubocop:disable RSpec/InstanceVariable
     it 'calls interceptors also for parallel requests' do
       stub_parallel_requests
       @called = 0
@@ -35,6 +34,5 @@ describe LHC::Request do
       LHC.request(request_options)
       expect(@called).to eq 2
     end
-    # rubocop:enable RSpec/InstanceVariable
   end
 end

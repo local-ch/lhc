@@ -1,4 +1,5 @@
 require 'typhoeus'
+require 'active_support/core_ext/object/blank'
 
 module LHC
   autoload :BasicMethodsConcern,
@@ -18,6 +19,10 @@ module LHC
     'lhc/interceptors/caching'
   autoload :Prometheus,
     'lhc/interceptors/prometheus'
+  autoload :Retry,
+    'lhc/interceptors/retry'
+  autoload :DefaultTimeout,
+    'lhc/interceptors/default_timeout'
   autoload :Config,
     'lhc/config'
   autoload :Endpoint,

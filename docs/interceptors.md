@@ -27,6 +27,8 @@ like [Caching](/docs/interceptors/caching.md), [Monitoring](/docs/interceptors/m
 
 ## Callbacks
 
+`before_raw_request(request)` is called before the raw typhoeus request is prepared/created.
+
 `before_request(request)` is called when the request is prepared and about to be executed.
 
 `after_request(request)` is called after request was started.
@@ -64,7 +66,7 @@ You can override the global default interceptors on request level:
 ## Provide Response
 
 Inside an interceptor, you are able to provide a response, rather then doing a real request.
-This is usefull for implementing an interceptor for caching.
+This is useful for implementing an interceptor for caching.
 
 ```ruby
 class LHC::Cache < LHC::Interceptor

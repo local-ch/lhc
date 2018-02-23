@@ -6,7 +6,7 @@ require 'active_support/core_ext/object/deep_dup'
 # and it communicates with interceptors.
 class LHC::Request
 
-  TYPHOEUS_OPTIONS ||= [:params, :method, :body, :headers, :follow_location]
+  TYPHOEUS_OPTIONS ||= [:params, :method, :body, :headers, :follow_location, :params_encoding]
 
   attr_accessor :response, :options, :raw, :format, :error_handler, :errors_ignored, :interceptor_environment
 
@@ -17,11 +17,12 @@ class LHC::Request
     use_configured_endpoint!
     generate_url_from_template!
     self.iprocessor = LHC::InterceptorProcessor.new(self)
+    iprocessor.intercept(:before_raw_request, self)
     self.raw = create_request
     self.format = options.delete('format') || LHC::Formats::JSON.new
     self.interceptor_environment ||= {}
     iprocessor.intercept(:before_request, self)
-    raw.run if self_executing && !response
+    run! if self_executing && !response
   end
 
   def url
@@ -44,12 +45,21 @@ class LHC::Request
     ignore_error?
   end
 
+  def run!
+    raw.run
+  end
+
   private
 
   attr_accessor :iprocessor
 
+  def optionally_encoded_url(options)
+    return options[:url] unless options.fetch(:url_encoding, true)
+    encode_url(options[:url])
+  end
+
   def create_request
-    request = Typhoeus::Request.new(encode_url(options[:url]), typhoeusize(options))
+    request = Typhoeus::Request.new(optionally_encoded_url(options), typhoeusize(options))
     request.on_headers do
       iprocessor.intercept(:after_request, self)
       iprocessor.intercept(:before_response, self)
@@ -101,7 +111,7 @@ class LHC::Request
   end
 
   def on_complete(response)
-    self.response ||= LHC::Response.new(response, self)
+    self.response = LHC::Response.new(response, self)
     iprocessor.intercept(:after_response, self.response)
     handle_error(self.response) unless self.response.success?
   end

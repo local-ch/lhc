@@ -1,3 +1,3 @@
 module LHC
-  VERSION ||= "6.6.0.zipkin.pre.03"
+  VERSION ||= '7.3.2'
 end

@@ -24,7 +24,7 @@ You can also enable caching when configuring an endpoint in LHS.
 
 ```ruby
   class Feedbacks < LHS::Service
-    endpoint ':datastore/v2/feedbacks', cache: true
+    endpoint '{+datastore}/v2/feedbacks', cache: true
   end
 ```
 
