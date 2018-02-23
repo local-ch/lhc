@@ -46,7 +46,7 @@ class LHC::ZipkinDistributedTracing < LHC::Interceptor
     # store the span in the datum hash so it can be used in the response_call
     request.interceptor_environment[:zipkin_span] = span
   # rubocop:disable Lint/HandleExceptions
-  rescue ArgumentError, URI::Error => _
+  rescue ArgumentError, URI::Error
     # Ignore URI errors, don't trace if there is no URI
   end
   # rubocop:enable Lint/HandleExceptions
