@@ -2,7 +2,6 @@ class LHC::ZipkinDistributedTracing < LHC::Interceptor
 
   def before_request(request)
     return unless zipkin_defined?
-
     trace_id = ZipkinTracer::TraceGenerator.new.next_trace_id
     ZipkinTracer::TraceContainer.with_trace_id(trace_id) do
       b3_headers.each do |method, header|
@@ -14,7 +13,6 @@ class LHC::ZipkinDistributedTracing < LHC::Interceptor
 
   def after_response(response)
     return unless zipkin_defined?
-
     span = response.request.interceptor_environment[:zipkin_span]
     if span
       record_response_tags(span, response)
