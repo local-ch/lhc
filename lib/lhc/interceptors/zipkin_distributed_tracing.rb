@@ -67,8 +67,7 @@ class LHC::ZipkinDistributedTracing < LHC::Interceptor
     status = response.code.to_s
     span.record_tag(::Trace::BinaryAnnotation::STATUS, status, ::Trace::BinaryAnnotation::Type::STRING, local_endpoint)
     if !response.success?
-      span.record_tag(::Trace::BinaryAnnotation::ERROR, status,
-        ::Trace::BinaryAnnotation::Type::STRING, local_endpoint)
+      span.record_tag(::Trace::BinaryAnnotation::ERROR, status, ::Trace::BinaryAnnotation::Type::STRING, local_endpoint)
     end
   end
 
