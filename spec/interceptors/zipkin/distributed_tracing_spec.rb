@@ -10,7 +10,6 @@ describe LHC::ZipkinDistributedTracing do
 
   context 'with zipkin tracer integration' do
     before(:all) do
-      # defined in lhc/test/zipkin_mock.rb
       ::ZipkinTracer::TraceContainer.setup_mock(
         trace_id: 'trace_id',
         parent_id: 'parent_id',
