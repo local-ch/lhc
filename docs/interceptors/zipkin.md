@@ -13,7 +13,7 @@ The following configuration is happening in the application that wants to run th
 1. Add `gem 'zipkin-tracer'` to your Gemfile.
 2. Add the necessary Rack middleware and configuration
 
-```
+```ruby
 config.middleware.use ZipkinTracer::RackHandler, {
   service_name: 'service-name', # name your service will be known as in zipkin
   service_port: 80, # the port information that is sent along the trace
