@@ -241,7 +241,7 @@ To monitor and manipulate the http communication done with LHC, you can define i
 ```ruby
   class TrackingIdInterceptor < LHC::Interceptor
 
-    def before_request(request)
+    def before_request
       request.params[:tid] = 123
     end
   end
