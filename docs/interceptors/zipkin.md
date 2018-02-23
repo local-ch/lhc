@@ -17,7 +17,7 @@ The following configuration is happening in the application that wants to run th
 config.middleware.use ZipkinTracer::RackHandler, {
   service_name: 'service-name', # name your service will be known as in zipkin
   service_port: 80, # the port information that is sent along the trace
-  json_api_host: 'http://zipkin-collector.preprod-local.ch', # the zipkin endpoint
+  json_api_host: 'http://zipkin-collector', # the zipkin endpoint
   sample_rate: 1 # sample rate, where 1 = 100% of all requests, and 0.1 is 10% of all requests
 }
 ```
