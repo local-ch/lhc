@@ -4,7 +4,7 @@ describe LHC do
   context 'interceptor' do
     before(:each) do
       class TrackingIdInterceptor < LHC::Interceptor
-        def before_request(request)
+        def before_request
           request.params[:tid] = 123
         end
       end

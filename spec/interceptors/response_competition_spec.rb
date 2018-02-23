@@ -8,7 +8,7 @@ describe LHC do
         @@cached = false
         cattr_accessor :cached
 
-        def before_request(_request)
+        def before_request
           if @@cached
             return LHC::Response.new(Typhoeus::Response.new(response_body: 'Im served from local cache'), nil)
           end
@@ -18,7 +18,7 @@ describe LHC do
 
       class RemoteCacheInterceptor < LHC::Interceptor
 
-        def before_request(request)
+        def before_request
           if request.response.nil?
             return LHC::Response.new(Typhoeus::Response.new(response_body: 'Im served from remote cache'), nil)
           end

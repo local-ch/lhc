@@ -6,7 +6,7 @@ describe LHC::Caching do
       expect do
         response = Typhoeus::Response.new(headers: { 'Accept' => 'application/json' })
         Marshal.dump(
-          LHC::Caching.new.send(:to_cache, response)
+          LHC::Caching.new(response).send(:to_cache, response)
         )
       end.not_to raise_error
     end

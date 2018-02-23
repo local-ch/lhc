@@ -1,6 +1,6 @@
 class LHC::Auth < LHC::Interceptor
 
-  def before_request(request)
+  def before_request
     options = request.options[:auth] || {}
     authenticate!(request, options)
   end

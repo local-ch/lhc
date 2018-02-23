@@ -16,11 +16,11 @@ class LHC::Request
     self.error_handler = options.delete :error_handler
     use_configured_endpoint!
     generate_url_from_template!
-    self.iprocessor = LHC::InterceptorProcessor.new(self)
-    iprocessor.intercept(:before_raw_request, self)
+    self.interceptors = LHC::Interceptors.new(self)
+    interceptors.intercept(:before_raw_request)
     self.raw = create_request
     self.format = options.delete('format') || LHC::Formats::JSON.new
-    iprocessor.intercept(:before_request, self)
+    interceptors.intercept(:before_request)
     run! if self_executing && !response
   end
 
@@ -50,7 +50,7 @@ class LHC::Request
 
   private
 
-  attr_accessor :iprocessor
+  attr_accessor :interceptors
 
   def optionally_encoded_url(options)
     return options[:url] unless options.fetch(:url_encoding, true)
@@ -60,8 +60,8 @@ class LHC::Request
   def create_request
     request = Typhoeus::Request.new(optionally_encoded_url(options), typhoeusize(options))
     request.on_headers do
-      iprocessor.intercept(:after_request, self)
-      iprocessor.intercept(:before_response, self)
+      interceptors.intercept(:after_request)
+      interceptors.intercept(:before_response)
     end
     request.on_complete { |response| on_complete(response) }
     request
@@ -111,7 +111,7 @@ class LHC::Request
 
   def on_complete(response)
     self.response = LHC::Response.new(response, self)
-    iprocessor.intercept(:after_response, self.response)
+    interceptors.intercept(:after_response)
     handle_error(self.response) unless self.response.success?
   end
 

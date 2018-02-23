@@ -6,7 +6,7 @@ class LHC::DefaultTimeout < LHC::Interceptor
   CONNECTTIMEOUT = 2 # seconds
   TIMEOUT = 15 # seconds
 
-  def before_raw_request(request)
+  def before_raw_request
     request_options = (request.options || {})
     request_options[:timeout] ||= timeout || TIMEOUT
     request_options[:connecttimeout] ||= connecttimeout || CONNECTTIMEOUT
