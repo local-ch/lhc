@@ -11,7 +11,7 @@ Add the zipkin interceptor to your basic set of LHC interceptors.
 The following configuration is happening in the application that wants to run this interceptor:
 
 1. Add `gem 'zipkin-tracer'` to your Gemfile.
-2. Add the necessary Rack middleware and configuration in the <environment>.rb file(s)
+2. Add the necessary Rack middleware and configuration
 
 ```
 config.middleware.use ZipkinTracer::RackHandler, {
