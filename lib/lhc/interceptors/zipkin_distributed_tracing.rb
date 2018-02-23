@@ -1,9 +1,8 @@
-require 'uri'
-
 class LHC::ZipkinDistributedTracing < LHC::Interceptor
 
   def before_request(request)
-    return unless defined?(ZipkinTracer::TraceContainer) && ZipkinTracer::TraceContainer.current && defined?(Trace)
+    return unless zipkin_defined?
+
     trace_id = ZipkinTracer::TraceGenerator.new.next_trace_id
     ZipkinTracer::TraceContainer.with_trace_id(trace_id) do
       b3_headers.each do |method, header|
@@ -14,12 +13,16 @@ class LHC::ZipkinDistributedTracing < LHC::Interceptor
   end
 
   def after_response(response)
-    if span = response.request.interceptor_environment[:zipkin_span]
+    return unless zipkin_defined?
+
+    span = response.request.interceptor_environment[:zipkin_span]
+    if span
       record_response_tags(span, response)
     end
     span.record(::Trace::Annotation::CLIENT_RECV, local_endpoint)
     ::Trace.tracer.end_span(span)
   end
+
   private
 
   SERVER_ADDRESS_SPECIAL_VALUE = '1'.freeze
@@ -37,23 +40,27 @@ class LHC::ZipkinDistributedTracing < LHC::Interceptor
   def trace!(request, trace_id)
     url = URI(request.raw.url)
     service_name = url.host
-    span = ::Trace.tracer.start_span(trace_id, "#{url.path}")
+    span = ::Trace.tracer.start_span(trace_id, url.path)
     # annotate with method (GET/POST/etc.) and uri path
     span.record_tag(::Trace::BinaryAnnotation::PATH, url.path, ::Trace::BinaryAnnotation::Type::STRING, local_endpoint)
     span.record_tag(::Trace::BinaryAnnotation::SERVER_ADDRESS, SERVER_ADDRESS_SPECIAL_VALUE, ::Trace::BinaryAnnotation::Type::BOOL, remote_endpoint(url, service_name))
     span.record(::Trace::Annotation::CLIENT_SEND, local_endpoint)
     # store the span in the datum hash so it can be used in the response_call
     request.interceptor_environment[:zipkin_span] = span
-  rescue ArgumentError, URI::Error => e
+  # rubocop:disable Lint/HandleExceptions
+  rescue ArgumentError, URI::Error => _
     # Ignore URI errors, don't trace if there is no URI
   end
+  # rubocop:enable Lint/HandleExceptions
 
   def local_endpoint
-    ::Trace.default_endpoint # The rack middleware set this up for us.
+    # The rack middleware set this up for us.
+    ::Trace.default_endpoint
   end
 
   def remote_endpoint(url, service_name)
-    ::Trace::Endpoint.remote_endpoint(url, service_name, local_endpoint.ip_format) # The endpoint we are calling.
+    # The endpoint we are calling.
+    ::Trace::Endpoint.remote_endpoint(url, service_name, local_endpoint.ip_format)
   end
 
   def record_response_tags(span, response)
@@ -63,5 +70,9 @@ class LHC::ZipkinDistributedTracing < LHC::Interceptor
       span.record_tag(::Trace::BinaryAnnotation::ERROR, status,
         ::Trace::BinaryAnnotation::Type::STRING, local_endpoint)
     end
+  end
+
+  def zipkin_defined?
+    defined?(ZipkinTracer::TraceContainer) && ZipkinTracer::TraceContainer.current && defined?(Trace)
   end
 end

@@ -32,18 +32,23 @@ module ZipkinTracer
     def trace_id
       'trace_id'
     end
+
     def parent_id
       'parent_id'
     end
+
     def span_id
       'span_id'
     end
+
     def sampled
       'sampled'
     end
+
     def flags
       'flags'
     end
+
     def sampled?
       true
     end
@@ -52,6 +57,7 @@ module ZipkinTracer
   class Span
     def record_tag(*)
     end
+
     def record(*)
     end
   end
@@ -61,6 +67,7 @@ module Trace
   def self.default_endpoint
     Endpoint.new
   end
+
   def self.tracer
     Tracer.new
   end
@@ -79,22 +86,26 @@ module Trace
     CLIENT_SEND = 'client_send'.freeze
     CLIENT_RECV = 'client_recv'.freeze
   end
+
   class BinaryAnnotation
     PATH = 'path'.freeze
     SERVER_ADDRESS = 'server_address'.freeze
     STATUS = 'status'.freeze
     ERROR = 'error'.freeze
+
     class Type
       STRING = 'string'.freeze
       BOOL = 'bool'.freeze
     end
   end
+
   class Endpoint
     class << self
       def remote_endpoint(*)
-        new()
+        new
       end
     end
+
     def ip_format
       'ipv4'
     end
