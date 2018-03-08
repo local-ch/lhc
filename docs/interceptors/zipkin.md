@@ -1,11 +1,11 @@
-# Zipkin Distrubted Tracing
+# Zipkin
 
 Zipkin is a distributed tracing system. It helps gather timing data needed to troubleshoot latency problems in microservice architectures [Zipkin Distributed Tracing](https://zipkin.io/).
 
 Add the zipkin interceptor to your basic set of LHC interceptors.
 
 ```ruby
-  LHC.config.interceptors = [LHC::ZipkinDistributedTracing]
+  LHC.config.interceptors = [LHC::Zipkin]
 ```
 
 The following configuration is happening in the application that wants to run this interceptor:

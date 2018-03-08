@@ -1,4 +1,4 @@
-class LHC::ZipkinDistributedTracing < LHC::Interceptor
+class LHC::Zipkin < LHC::Interceptor
 
   def before_request(request)
     return unless zipkin_defined?

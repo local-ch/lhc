@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'lhc/test/zipkin_mock.rb'
 
-describe LHC::ZipkinDistributedTracing do
+describe LHC::Zipkin do
   before(:each) do
     LHC.config.interceptors = [described_class]
     LHC.config.endpoint(:local, 'http://local.ch')
