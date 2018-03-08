@@ -1,7 +1,7 @@
 class LHC::Zipkin < LHC::Interceptor
 
   def before_request(request)
-    return unless zipkin_defined?
+    return unless dependencies?
     trace_id = ZipkinTracer::TraceGenerator.new.next_trace_id
     ZipkinTracer::TraceContainer.with_trace_id(trace_id) do
       b3_headers.each do |method, header|
@@ -12,7 +12,7 @@ class LHC::Zipkin < LHC::Interceptor
   end
 
   def after_response(response)
-    return unless zipkin_defined?
+    return unless dependencies?
     span = response.request.interceptor_environment[:zipkin_span]
     if span
       record_response_tags(span, response)
@@ -69,7 +69,11 @@ class LHC::Zipkin < LHC::Interceptor
     end
   end
 
-  def zipkin_defined?
-    defined?(ZipkinTracer::TraceContainer) && ZipkinTracer::TraceContainer.current && defined?(Trace)
+  def dependencies?
+    (
+      defined?(ZipkinTracer::TraceContainer) &&
+      ZipkinTracer::TraceContainer.current &&
+      defined?(Trace)
+    ) || warn'[WARNING] Zipkin interceptor is enabled but dependencies are not found. See: https://github.com/local-ch/lhc/blob/master/docs/interceptors/zipkin.md')
   end
 end
