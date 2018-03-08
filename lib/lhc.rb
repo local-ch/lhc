@@ -1,5 +1,6 @@
 require 'typhoeus'
 require 'active_support/core_ext/object/blank'
+require 'active_support/core_ext/hash/keys'
 
 module LHC
   autoload :BasicMethodsConcern,
