@@ -4,7 +4,7 @@ describe LHC do
   context 'interceptor' do
     before(:each) do
       class SomeInterceptor < LHC::Interceptor
-        def after_request(request); end
+        def after_request; end
       end
       LHC.configure { |c| c.interceptors = [SomeInterceptor] }
     end

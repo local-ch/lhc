@@ -5,7 +5,7 @@ class LHC::Retry < LHC::Interceptor
     attr_accessor :max
   end
 
-  def after_response(response)
+  def after_response
     response.request.options[:retries] ||= 0
     return unless retry?(response.request)
     response.request.options[:retries] += 1

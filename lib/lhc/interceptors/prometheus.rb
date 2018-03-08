@@ -15,14 +15,15 @@ class LHC::Prometheus < LHC::Interceptor
     [LHC::Prometheus.namespace, 'lhc_times'].join('_').to_sym
   end
 
-  def initialize
+  def initialize(request)
+    super(request)
     return if LHC::Prometheus.registered || LHC::Prometheus.client.blank?
     LHC::Prometheus.client.registry.counter(LHC::Prometheus.request_key, 'Counter of all LHC requests.')
     LHC::Prometheus.client.registry.histogram(LHC::Prometheus.times_key, 'Times for all LHC requests.')
     LHC::Prometheus.registered = true
   end
 
-  def after_response(response)
+  def after_response
     return if !LHC::Prometheus.registered || LHC::Prometheus.client.blank?
     LHC::Prometheus.client.registry
       .get(LHC::Prometheus.request_key)

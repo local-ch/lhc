@@ -9,18 +9,18 @@ class LHC::Monitoring < LHC::Interceptor
 
   config_accessor :statsd
 
-  def before_request(request)
+  def before_request
     return unless statsd
     LHC::Monitoring.statsd.count("#{key(request)}.before_request", 1)
   end
 
-  def after_request(request)
+  def after_request
     return unless statsd
     LHC::Monitoring.statsd.count("#{key(request)}.count", 1)
     LHC::Monitoring.statsd.count("#{key(request)}.after_request", 1)
   end
 
-  def after_response(response)
+  def after_response
     return unless statsd
     key = key(response)
     LHC::Monitoring.statsd.timing("#{key}.time", response.time) if response.success?
