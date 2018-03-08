@@ -74,6 +74,6 @@ class LHC::Zipkin < LHC::Interceptor
       defined?(ZipkinTracer::TraceContainer) &&
       ZipkinTracer::TraceContainer.current &&
       defined?(Trace)
-    ) || warn'[WARNING] Zipkin interceptor is enabled but dependencies are not found. See: https://github.com/local-ch/lhc/blob/master/docs/interceptors/zipkin.md')
+    ) || warn('[WARNING] Zipkin interceptor is enabled but dependencies are not found. See: https://github.com/local-ch/lhc/blob/master/docs/interceptors/zipkin.md')
   end
 end
