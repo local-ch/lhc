@@ -6,7 +6,7 @@ Interceptors
 ```ruby
   class TrackingIdInterceptor < LHC::Interceptor
 
-    def before_request(request)
+    def before_request
       request.params[:tid] = 123
     end
   end
@@ -27,15 +27,20 @@ like [Caching](/docs/interceptors/caching.md), [Monitoring](/docs/interceptors/m
 
 ## Callbacks
 
-`before_raw_request(request)` is called before the raw typhoeus request is prepared/created.
+`before_raw_request` is called before the raw typhoeus request is prepared/created.
 
-`before_request(request)` is called when the request is prepared and about to be executed.
+`before_request` is called when the request is prepared and about to be executed.
 
-`after_request(request)` is called after request was started.
+`after_request` is called after request was started.
 
-`before_response(request)` is called when response started to arrive.
+`before_response` is called when response started to arrive.
 
-`after_response(response)` is called after the response arrived completely.
+`after_response` is called after the response arrived completely.
+
+
+## Attributes: Request/Response
+
+Every interceptor can directly access their instance `request` or `response`.
 
 → [Read more about the request object](request.md)
 

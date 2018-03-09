@@ -1,3 +1,3 @@
 module LHC
-  VERSION ||= '7.3.3'
+  VERSION ||= '8.0.0'
 end

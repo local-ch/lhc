@@ -1,14 +1,24 @@
 class LHC::Interceptor
 
-  def before_raw_request(request); end
+  attr_reader :request
 
-  def before_request(request); end
+  def initialize(request)
+    @request = request
+  end
 
-  def after_request(request); end
+  def response
+    @request.response
+  end
 
-  def before_response(request); end
+  def before_raw_request; end
 
-  def after_response(response); end
+  def before_request; end
+
+  def after_request; end
+
+  def before_response; end
+
+  def after_response; end
 
   # Prevent Interceptors from beeing duplicated!
   # Their classes have flag-character.

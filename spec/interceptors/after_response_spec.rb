@@ -11,7 +11,7 @@ describe LHC do
 
     before(:each) do
       class StatsTimingInterceptor < LHC::Interceptor
-        def after_response(response)
+        def after_response
           uri = URI.parse(response.request.url)
           path = [
             'web',

@@ -8,7 +8,7 @@ class LHC::Caching < LHC::Interceptor
   # Options forwarded to the cache
   FORWARDED_OPTIONS = [:expires_in, :race_condition_ttl]
 
-  def before_request(request)
+  def before_request
     return unless cache?(request)
     deprecation_warning(request.options)
     options = options(request.options)
@@ -19,7 +19,7 @@ class LHC::Caching < LHC::Interceptor
     from_cache(request, response_data)
   end
 
-  def after_response(response)
+  def after_response
     return unless response.success?
     request = response.request
     return unless cache?(request)

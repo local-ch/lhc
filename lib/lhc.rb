@@ -106,8 +106,8 @@ module LHC
 
   autoload :Interceptor,
     'lhc/interceptor'
-  autoload :InterceptorProcessor,
-    'lhc/interceptor_processor'
+  autoload :Interceptors,
+    'lhc/interceptors'
   autoload :Formats,
     'lhc/formats'
   autoload :Monitoring,
