@@ -1,6 +1,6 @@
 class LHC::Zipkin < LHC::Interceptor
 
-  def before_request(request)
+  def before_request
     return unless dependencies?
     trace_id = ZipkinTracer::TraceGenerator.new.next_trace_id
     ZipkinTracer::TraceContainer.with_trace_id(trace_id) do
@@ -11,7 +11,7 @@ class LHC::Zipkin < LHC::Interceptor
     end
   end
 
-  def after_response(response)
+  def after_response
     return unless dependencies?
     span = response.request.interceptor_environment[:zipkin_span]
     if span
