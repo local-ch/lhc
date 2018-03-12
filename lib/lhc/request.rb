@@ -8,7 +8,7 @@ class LHC::Request
 
   TYPHOEUS_OPTIONS ||= [:params, :method, :body, :headers, :follow_location, :params_encoding]
 
-  attr_accessor :response, :options, :raw, :format, :error_handler, :errors_ignored, :interceptor_environment
+  attr_accessor :response, :options, :raw, :format, :error_handler, :errors_ignored
 
   def initialize(options, self_executing = true)
     self.errors_ignored = options.fetch(:ignored_errors, [])
@@ -20,7 +20,6 @@ class LHC::Request
     interceptors.intercept(:before_raw_request)
     self.raw = create_request
     self.format = options.delete('format') || LHC::Formats::JSON.new
-    self.interceptor_environment ||= {}
     interceptors.intercept(:before_request)
     run! if self_executing && !response
   end
