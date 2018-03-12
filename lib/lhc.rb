@@ -118,6 +118,8 @@ module LHC
     'lhc/response'
   autoload :Rollbar,
     'lhc/interceptors/rollbar'
+  autoload :Zipkin,
+    'lhc/interceptors/zipkin'
 
   require 'lhc/railtie' if defined?(Rails)
 end

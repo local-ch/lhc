@@ -23,7 +23,7 @@ Interceptors
 ## Core Interceptors
 
 There are some interceptors that are part of LHC already, that cover some basic usecases:
-like [Caching](/docs/interceptors/caching.md), [Monitoring](/docs/interceptors/monitoring.md), [Authentication](/docs/interceptors/authentication.md), [Rollbar](/docs/interceptors/rollbar.md).
+like [Caching](/docs/interceptors/caching.md), [Monitoring](/docs/interceptors/monitoring.md), [Authentication](/docs/interceptors/authentication.md), [Rollbar](/docs/interceptors/rollbar.md), [Zipkin](/docs/interceptors/zipkin.md).
 
 ## Callbacks
 

@@ -41,3 +41,6 @@ Style/RedundantReturn:
 
 RSpec/InstanceVariable:
   Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
