@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'lhc/test/zipkin_mock.rb'
 
 describe LHC::Zipkin do
   before(:each) do

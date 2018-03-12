@@ -21,13 +21,3 @@ config.middleware.use ZipkinTracer::RackHandler, {
   sample_rate: 1 # sample rate, where 1 = 100% of all requests, and 0.1 is 10% of all requests
 }
 ```
-
-## Testing
-
-Add to your spec_helper.rb:
-
-```ruby
-  require 'lhc/test/zipkin_mock.rb'
-```
-
-This will initialize a mock implementation of zipkin.
