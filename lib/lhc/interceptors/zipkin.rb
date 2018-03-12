@@ -1,4 +1,13 @@
 class LHC::Zipkin < LHC::Interceptor
+  B3_HEADERS = {
+    trace_id: 'X-B3-TraceId'.freeze,
+    parent_id: 'X-B3-ParentSpanId'.freeze,
+    span_id: 'X-B3-SpanId'.freeze,
+    sampled: 'X-B3-Sampled'.freeze,
+    flags: 'X-B3-Flags'.freeze
+  }.freeze
+  TRUE = '1'.freeze # true in binary annotation
+
   def before_request
     return unless dependencies?
     ZipkinTracer::TraceContainer.with_trace_id(trace_id) do
@@ -25,16 +34,6 @@ class LHC::Zipkin < LHC::Interceptor
     record_error if !response.success?
     record_end
   end
-
-  B3_HEADERS = {
-    trace_id: 'X-B3-TraceId'.freeze,
-    parent_id: 'X-B3-ParentSpanId'.freeze,
-    span_id: 'X-B3-SpanId'.freeze,
-    sampled: 'X-B3-Sampled'.freeze,
-    flags: 'X-B3-Flags'.freeze
-  }.freeze
-
-  TRUE = '1'.freeze # true in binary annotation
 
   def trace_id
     @trace_id ||= ZipkinTracer::TraceGenerator.new.next_trace_id
