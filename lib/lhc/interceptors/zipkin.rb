@@ -2,9 +2,7 @@ class LHC::Zipkin < LHC::Interceptor
   def before_request
     return unless dependencies?
     ZipkinTracer::TraceContainer.with_trace_id(trace_id) do
-      B3_HEADERS.each do |method, header|
-        request.headers[header] = trace_id.send(method).to_s
-      end
+      B3_HEADERS.each { |method, header| request.headers[header] = trace_id.send(method).to_s }
       start_trace! if ::Trace.tracer && trace_id.sampled?
     end
   end
