@@ -35,7 +35,7 @@ describe LHC do
 
   context 'get json' do
     before(:each) do
-      stub_request(:get, 'http://datastore/v2/feedbacks').with(headers: { 'Content-Type' => 'application/json' })
+      stub_request(:get, 'http://datastore/v2/feedbacks').with(headers: { 'Content-Type' => 'application/json; charset=utf-8' })
         .to_return(body: { some: 'json' }.to_json)
     end
 
