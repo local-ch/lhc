@@ -2,7 +2,7 @@
 # but made accssible in the ruby world
 module LHC::Response::Data::Base
   def as_json
-    @json ||= (@data || response.format.as_json(response))
+    @json ||= (@data || response.format.as_json(response.body))
   end
 
   def as_open_struct
@@ -10,7 +10,7 @@ module LHC::Response::Data::Base
       if @data
         JSON.parse(@data.to_json, object_class: OpenStruct)
       else
-        response.format.as_open_struct(response)
+        response.format.as_open_struct(response.body)
       end
   end
 

@@ -14,12 +14,12 @@ class LHC::Request
     self.errors_ignored = options.fetch(:ignored_errors, [])
     self.options = options.deep_dup || {}
     self.error_handler = options.delete :error_handler
+    self.format = options.delete('format') || LHC::Formats::JSON.new
     use_configured_endpoint!
     generate_url_from_template!
     self.interceptors = LHC::Interceptors.new(self)
     interceptors.intercept(:before_raw_request)
     self.raw = create_request
-    self.format = options.delete('format') || LHC::Formats::JSON.new
     interceptors.intercept(:before_request)
     run! if self_executing && !response
   end
@@ -58,13 +58,22 @@ class LHC::Request
   end
 
   def create_request
-    request = Typhoeus::Request.new(optionally_encoded_url(options), typhoeusize(options))
+    request = Typhoeus::Request.new(
+      optionally_encoded_url(options),
+      translate_body(typhoeusize(options))
+    )
     request.on_headers do
       interceptors.intercept(:after_request)
       interceptors.intercept(:before_response)
     end
     request.on_complete { |response| on_complete(response) }
     request
+  end
+
+  def translate_body(options)
+    return options if options.fetch(:body, nil).blank?
+    options[:body] = format.to_body(options[:body])
+    options
   end
 
   def encode_url(url)
@@ -100,8 +109,8 @@ class LHC::Request
   def generate_url_from_template!
     endpoint = LHC::Endpoint.new(options[:url])
     params =
-      if options[:body] && options[:body].length && (options[:headers] || {}).fetch('Content-Type', nil) == 'application/json'
-        JSON.parse(options[:body]).merge(options[:params] || {}).deep_symbolize_keys
+      if format && options[:body]&.length
+        options[:body].merge(options[:params] || {}).deep_symbolize_keys
       else
         options[:params]
       end

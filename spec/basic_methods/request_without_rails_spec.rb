@@ -19,7 +19,7 @@ describe LHC do
       options = {
         url: "http://datastore/v2/feedbacks",
         method: :post,
-        body: "{}",
+        body: {},
         headers: { 'Content-Type' => 'application/json' }
       }
       expect { LHC.request(options) }.not_to raise_error
