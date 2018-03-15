@@ -4,8 +4,8 @@ module LHC::Formats
 
     def self.request(options)
       options[:headers] ||= {}
-      options[:headers]['Content-Type'] = 'application/json'
-      options[:headers]['Accept'] = 'application/json'
+      options[:headers]['Content-Type'] = 'application/json; charset=utf-8'
+      options[:headers]['Accept'] = 'application/json; charset=utf-8'
       options[:format] = new
       super(options)
     end
