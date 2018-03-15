@@ -10,12 +10,16 @@ module LHC::Formats
       super(options)
     end
 
-    def as_json(response)
-      parse(response, Hash)
+    def as_json(input)
+      parse(input, Hash)
     end
 
-    def as_open_struct(response)
-      parse(response, OpenStruct)
+    def as_open_struct(input)
+      parse(input, OpenStruct)
+    end
+
+    def to_body(input)
+      input.to_json
     end
 
     def to_s
@@ -28,10 +32,10 @@ module LHC::Formats
 
     private
 
-    def parse(response, object_class)
-      ::JSON.parse(response.body, object_class: object_class)
+    def parse(input, object_class)
+      ::JSON.parse(input, object_class: object_class)
     rescue ::JSON::ParserError => e
-      raise LHC::ParserError.new(e.message, response)
+      raise LHC::ParserError.new(e.message, input)
     end
   end
 end

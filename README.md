@@ -31,6 +31,15 @@ LHC.json.get(options)
 
 Currently supported formats: `json`
 
+If formats are used, headers for `Content-Type` and `Accept` are set by lhc, but also http bodies are translated by LHC, so you can pass bodies as ruby objects:
+
+```ruby
+LHC.json.post('http://slack', body: { text: 'Hi there' })
+# Content-Type: application/json
+# Accept: application/json
+# Translates body to "{\"text\":\"Hi there\"}" before sending
+```
+
 ## A request from scratch
 
 ```ruby
@@ -88,12 +97,13 @@ LHC.get('http://local.ch', followlocation: true)
 
 ## Transfer data through the body
 
-Data that is transfered using the HTTP request body is transfered as you provide it.
-Also consider setting the http header for content-type.
+Data that is transfered using the HTTP request body is transfered using the selected format, or the default `json`, so you need to provide it as a ruby object.
+
+Also consider setting the http header for content-type or use one of the provided formats, like `LHC.json`.
 
 ```ruby
   LHC.post('http://datastore/v2/feedbacks',
-    body: feedback.to_json,
+    body: feedback,
     headers: { 'Content-Type' => 'application/json' }
   )
 ```

@@ -18,6 +18,6 @@ describe LHC::Request do
 
   it 'considers body when compiling urls' do
     stub_request(:post, "http://datastore:8080/v2/places/123")
-    LHC.json.post('http://datastore:8080/v2/places/{id}', body: { id: 123 }.to_json)
+    LHC.json.post('http://datastore:8080/v2/places/{id}', body: { id: 123 })
   end
 end
