@@ -38,11 +38,11 @@ class LHC::Zipkin < LHC::Interceptor
     record_end
   end
 
-  # register a new span with zipkin tracer
   def trace_id
     @trace_id ||= ZipkinTracer::TraceGenerator.new.next_trace_id
   end
 
+  # register a new span with zipkin tracer
   def span
     @span ||= ::Trace.tracer.start_span(trace_id, url.path)
   end
