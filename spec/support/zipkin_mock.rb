@@ -42,7 +42,7 @@ module ZipkinTracer
     end
 
     def sampled
-      'sampled'
+      ZipkinTracer::TraceContainer.current.sampled
     end
 
     def flags
@@ -50,7 +50,7 @@ module ZipkinTracer
     end
 
     def sampled?
-      true
+      ZipkinTracer::TraceContainer.current.sampled
     end
   end
 

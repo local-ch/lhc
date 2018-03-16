@@ -11,13 +11,16 @@ class LHC::Zipkin < LHC::Interceptor
   def before_request
     return unless dependencies?
     ZipkinTracer::TraceContainer.with_trace_id(trace_id) do
+      # add headers even if the current trace_id should not be sampled
       B3_HEADERS.each { |method, header| request.headers[header] = trace_id.send(method).to_s }
+      # only sample the current call if we're instructed to do so
       start_trace! if ::Trace.tracer && trace_id.sampled?
     end
   end
 
   def after_response
-    return unless dependencies?
+    # only sample the current call if we're instructed to do so
+    return unless dependencies? && trace_id.sampled?
     end_trace!
   end
 
@@ -35,6 +38,7 @@ class LHC::Zipkin < LHC::Interceptor
     record_end
   end
 
+  # register a new span with zipkin tracer
   def trace_id
     @trace_id ||= ZipkinTracer::TraceGenerator.new.next_trace_id
   end
