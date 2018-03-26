@@ -45,6 +45,10 @@ class LHC::Error < StandardError
     error
   end
 
+  def self.dup
+    self
+  end
+
   def initialize(message, response)
     super(message)
     self._message = message
