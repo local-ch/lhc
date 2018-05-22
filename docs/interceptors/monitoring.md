@@ -1,6 +1,8 @@
 # Monitoring Interceptor
 
-Add the monitoring interceptor to your basic set of LHC interceptors.
+The monitoring interceptor reports all requests done with LHC to a given StatsD instance.
+
+## Installation
 
 ```ruby
   LHC.config.interceptors = [LHC::Monitoring]
@@ -12,8 +14,17 @@ You also have to configure statsd in order to have the monitoring interceptor re
   LHC::Monitoring.statsd = <your-instance-of-statsd>
 ```
 
-The monitoring interceptor reports all the HTTP communication done with LHS.
-It reports the trial always.
+## What it tracks
+
+It tracks request attempts with `before_request` and `after_request` (counts).
+
+In case your workers/processes are getting killed due limited time constraints, 
+you are able to detect deltas with relying on "before_request", and "after_request" counts:
+
+```ruby
+  "lhc.<app_name>.<env>.<host>.<http_method>.before_request", 1
+  "lhc.<app_name>.<env>.<host>.<http_method>.after_request", 1
+```
 
 In case of a successful response it reports the response code with a count and the response time with a gauge value.
 
@@ -25,14 +36,6 @@ In case of a successful response it reports the response code with a count and t
   "lhc.<app_name>.<env>.<host>.<http_method>.time", 43
 ```
 
-In case your workers/processes are getting killed due limited time constraints, 
-you are able to detect deltas with relying on "before_request", and "after_request" counts:
-
-```ruby
-  "lhc.<app_name>.<env>.<host>.<http_method>.before_request", 1
-  "lhc.<app_name>.<env>.<host>.<http_method>.after_request", 1
-```
-
 Timeouts are also reported:
 
 ```ruby
@@ -41,7 +44,10 @@ Timeouts are also reported:
 
 All the dots in the host are getting replaced with underscore (_), because dot is the default separator in graphite.
 
-It is also possible to set the key for Monitoring Interceptor on per request basis:
+
+## Configure
+
+It is possible to set the key for Monitoring Interceptor on per request basis:
 
 ```ruby
   LHC.get('http://local.ch', monitoring_key: 'local_website')
