@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe LHC::Logging do
-
   let(:logger) { spy('logger') }
 
   before(:each) do
