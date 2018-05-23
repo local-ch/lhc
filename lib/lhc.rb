@@ -18,12 +18,15 @@ module LHC
     'lhc/interceptors/auth'
   autoload :Caching,
     'lhc/interceptors/caching'
+  autoload :DefaultTimeout,
+    'lhc/interceptors/default_timeout'
+  autoload :Logging,
+    'lhc/interceptors/logging'
   autoload :Prometheus,
     'lhc/interceptors/prometheus'
   autoload :Retry,
     'lhc/interceptors/retry'
-  autoload :DefaultTimeout,
-    'lhc/interceptors/default_timeout'
+
   autoload :Config,
     'lhc/config'
   autoload :Endpoint,
