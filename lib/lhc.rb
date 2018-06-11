@@ -26,6 +26,8 @@ module LHC
     'lhc/interceptors/prometheus'
   autoload :Retry,
     'lhc/interceptors/retry'
+  autoload :RetryableAuth,
+    'lhc/interceptors/retryable_auth'
 
   autoload :Config,
     'lhc/config'

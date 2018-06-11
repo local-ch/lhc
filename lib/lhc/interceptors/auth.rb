@@ -22,6 +22,7 @@ class LHC::Auth < LHC::Interceptor
   end
 
   def bearer_authentication!(request, options)
+    binding.pry
     token = options[:bearer]
     token = token.call if token.is_a?(Proc)
     set_authorization_header request, "Bearer #{token}"
