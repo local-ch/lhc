@@ -62,11 +62,4 @@ describe LHC::Auth do
       LHC.get(:local)
     end
   end
-
-  # it 'adds the bearer token to every request' do
-  #   options = { bearer: -> { bearer_token } }
-  #   LHC.config.endpoint(:local, 'http://local.ch', auth: options)
-  #   stub_request(:get, 'http://local.ch').with(headers: { 'Authorization' => 'Bearer 123456' })
-  #   LHC.get(:local)
-  # end
 end
