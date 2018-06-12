@@ -18,7 +18,7 @@ module LHC
           request(options.merge(
                     url: url,
                     method: http_method
-          ))
+                  ))
         end
       end
 

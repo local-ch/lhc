@@ -100,7 +100,7 @@ describe LHC::Zipkin do
 
       it 'does register a new span' do
         # ensure a span was registered, by checking call on span
-        expect_any_instance_of(described_class).to receive(:span).at_least(1).times.and_call_original
+        expect_any_instance_of(described_class).to receive(:span).at_least(:once).and_call_original
         LHC.get(:local)
       end
     end

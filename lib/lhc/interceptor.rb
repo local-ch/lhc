@@ -10,15 +10,20 @@ class LHC::Interceptor
     @request.response
   end
 
-  def before_raw_request; end
+  def before_raw_request
+  end
 
-  def before_request; end
+  def before_request
+  end
 
-  def after_request; end
+  def after_request
+  end
 
-  def before_response; end
+  def before_response
+  end
 
-  def after_response; end
+  def after_response
+  end
 
   # Prevent Interceptors from beeing duplicated!
   # Their classes have flag-character.

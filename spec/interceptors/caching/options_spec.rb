@@ -13,6 +13,7 @@ end
 
 describe LHC::Caching do
   let(:default_cache) { LHC::Caching.cache }
+
   before(:each) do
     stub_request(:get, 'http://local.ch').to_return(status: 200, body: 'The Website')
     LHC.config.interceptors = [LHC::Caching]
@@ -26,7 +27,7 @@ describe LHC::Caching do
     expect(lambda {
       LHC.get('http://local.ch', cache: true, cache_expires_in: 5.minutes, cache_key: 'key', cache_race_condition_ttl: 15.seconds)
     }).to output(
-      %r{Cache options have changed! cache_expires_in, cache_key, cache_race_condition_ttl are deprecated and will be removed in future versions.}
+      /Cache options have changed! cache_expires_in, cache_key, cache_race_condition_ttl are deprecated and will be removed in future versions./
     ).to_stderr
   end
 

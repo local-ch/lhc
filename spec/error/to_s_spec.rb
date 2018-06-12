@@ -46,10 +46,10 @@ describe LHC::Error do
         double('request',
                method: 'GET',
                url: 'http://example.com/sessions',
-               headers: { 'Bearer Token' => "aaaaaaaa-bbbb-cccc-dddd-eeee"},
+               headers: { 'Bearer Token' => "aaaaaaaa-bbbb-cccc-dddd-eeee" },
                options: { followlocation: true,
-                          auth: { bearer: "aaaaaaaa-bbbb-cccc-dddd-eeee"},
-                          params: { limit: 20}, url: "http://example.com/sessions" })
+                          auth: { bearer: "aaaaaaaa-bbbb-cccc-dddd-eeee" },
+                          params: { limit: 20 }, url: "http://example.com/sessions" })
       end
 
       let(:response) do
