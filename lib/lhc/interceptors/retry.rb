@@ -6,7 +6,6 @@ class LHC::Retry < LHC::Interceptor
   end
 
   def after_response
-    binding.pry
     response.request.options[:retries] ||= 0
     return unless retry?(response.request)
     response.request.options[:retries] += 1
