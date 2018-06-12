@@ -11,14 +11,14 @@ describe LHC::Auth do
     before(:each) { LHC.config.interceptors = [LHC::Auth, LHC::Retry] }
 
     it "max_recovery_attempts is zero" do
-      expect_any_instance_of(described_class).to_not receive(:warn)
-      LHC.config.endpoint(:local, 'http://local.ch',auth: options.merge(max_recovery_attempts: 0))
+      expect_any_instance_of(described_class).not_to receive(:warn)
+      LHC.config.endpoint(:local, 'http://local.ch', auth: options.merge(max_recovery_attempts: 0))
       LHC.get(:local)
     end
 
     it "max_recovery_attempts is missing" do
-      expect_any_instance_of(described_class).to_not receive(:warn)
-      LHC.config.endpoint(:local, 'http://local.ch',auth: options)
+      expect_any_instance_of(described_class).not_to receive(:warn)
+      LHC.config.endpoint(:local, 'http://local.ch', auth: options)
       LHC.get(:local)
     end
   end
@@ -30,7 +30,7 @@ describe LHC::Auth do
     it "no warning with proper options" do
       LHC.config.interceptors = [LHC::Auth, LHC::Retry]
       LHC.config.endpoint(:local, 'http://local.ch', auth: options)
-      expect_any_instance_of(described_class).to_not receive(:warn)
+      expect_any_instance_of(described_class).not_to receive(:warn)
       LHC.get(:local)
     end
 

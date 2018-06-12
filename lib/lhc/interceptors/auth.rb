@@ -34,6 +34,7 @@ class LHC::Auth < LHC::Interceptor
     set_bearer_authorization_header(token)
   end
 
+  # rubocop:disable Style/AccessorMethodName
   def set_authorization_header(value)
     request.headers['Authorization'] = value
   end
@@ -41,6 +42,7 @@ class LHC::Auth < LHC::Interceptor
   def set_bearer_authorization_header(token)
     set_authorization_header("Bearer #{token}")
   end
+  # rubocop:enable Style/AccessorMethodName
 
   def attempt_recovery
     # refresh token and update header
@@ -58,7 +60,7 @@ class LHC::Auth < LHC::Interceptor
 
   def attempt_recovery?
     !response.success? &&
-      !(auth_options[:recovery_attempts]||0 < max_recovery_attempts_option) &&
+      !(auth_options[:recovery_attempts] || 0 < max_recovery_attempts_option) &&
       bearer_header_present? &&
       LHC::Error.find(response) == LHC::Unauthorized
   end
@@ -86,7 +88,7 @@ class LHC::Auth < LHC::Interceptor
   def configuration_correct?
     # only check the configuration if we got the request to attempt a recovery
     issues = []
-    if (max_recovery_attempts_option >= 1)
+    if max_recovery_attempts_option >= 1
       unless refresh_client_token_option.is_a?(Proc)
         issues << "the given refresh_client_token is either not set or not a Proc"
       end
