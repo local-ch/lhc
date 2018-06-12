@@ -9,7 +9,7 @@ class LHC::Auth < LHC::Interceptor
   def after_response
     return unless configuration_correct?
     return unless attempt_recovery?
-    attempt_recovery
+    attempt_recovery!
   end
 
   private
@@ -44,7 +44,7 @@ class LHC::Auth < LHC::Interceptor
   end
   # rubocop:enable Style/AccessorMethodName
 
-  def attempt_recovery
+  def attempt_recovery!
     # refresh token and update header
     token = refresh_client_token_option.call
     set_bearer_authorization_header(token)
