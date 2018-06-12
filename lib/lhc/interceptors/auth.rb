@@ -60,7 +60,7 @@ class LHC::Auth < LHC::Interceptor
 
   def attempt_recovery?
     !response.success? &&
-      !(auth_options[:recovery_attempts] || 0 < max_recovery_attempts_option) &&
+      (auth_options[:recovery_attempts] || 0) < max_recovery_attempts_option &&
       bearer_header_present? &&
       LHC::Error.find(response) == LHC::Unauthorized
   end
