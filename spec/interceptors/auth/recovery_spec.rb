@@ -27,6 +27,6 @@ describe LHC::Auth do
 
   it "recovery is not attempted" do
     LHC.config.endpoint(:local, 'http://local.ch', auth: options.merge(max_recovery_attempts: nil))
-    expect{LHC.get(:local)}.to raise_error(LHC::Unauthorized)
+    expect { LHC.get(:local) }.to raise_error(LHC::Unauthorized)
   end
 end
