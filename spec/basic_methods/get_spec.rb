@@ -22,14 +22,14 @@ describe LHC do
       LHC.get(:feedbacks, params: parameters)
     end
 
-    it 'it makes response data available in a rails way' do
+    it 'makes response data available in a rails way' do
       response = LHC.get('http://datastore/v2/feedbacks', params: parameters)
       expect(response.data.total).to eq 99
     end
 
     it 'provides response headers' do
       response = LHC.get('http://datastore/v2/feedbacks', params: parameters)
-      expect(response.headers).to be
+      expect(response.headers).to be_present
     end
   end
 

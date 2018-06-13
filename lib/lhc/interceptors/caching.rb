@@ -15,7 +15,7 @@ class LHC::Caching < LHC::Interceptor
     key = key(request, options[:key])
     response_data = cache_for(options).fetch(key)
     return unless response_data
-    logger.info "Served from cache: #{key}" if logger
+    logger&.info "Served from cache: #{key}"
     from_cache(request, response_data)
   end
 
@@ -51,7 +51,7 @@ class LHC::Caching < LHC::Interceptor
   # returns the request_options
   # will map deprecated options to the new format
   def options(request_options)
-    options = request_options[:cache] == true ? {} : request_options[:cache].dup
+    options = (request_options[:cache] == true) ? {} : request_options[:cache].dup
     map_deprecated_options!(request_options, options)
     options
   end

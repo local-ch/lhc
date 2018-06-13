@@ -12,7 +12,7 @@ describe LHC::Endpoint do
     it 'allows basic auth token in url, like used on github' do
       stub_request(:get, "https://d123token:@api.github.com/search")
         .to_return(body: {}.to_json)
-      expect(->{
+      expect(-> {
         LHC.get("https://d123token:@api.github.com/search")
       }).not_to raise_error
     end
@@ -20,7 +20,7 @@ describe LHC::Endpoint do
     it 'allows complete basic auth (username password) in url, like used for the gemserer' do
       stub_request(:get, "https://name:password@gemserver.com")
         .to_return(body: {}.to_json)
-      expect(->{
+      expect(-> {
         LHC.get("https://name:password@gemserver.com")
       }).not_to raise_error
     end

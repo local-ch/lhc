@@ -44,3 +44,15 @@ RSpec/InstanceVariable:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/BeforeAfterAll:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: compact

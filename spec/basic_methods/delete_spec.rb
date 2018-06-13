@@ -19,14 +19,14 @@ describe LHC do
       LHC.delete('http://datastore/v2/feedbacks/12121')
     end
 
-    it 'it makes response data available in a rails way' do
+    it 'makes response data available in a rails way' do
       response = LHC.delete('http://datastore/v2/feedbacks/12121')
       expect(response.data.recommended).to eq true
     end
 
     it 'provides response headers' do
       response = LHC.delete('http://datastore/v2/feedbacks/12121')
-      expect(response.headers).to be
+      expect(response.headers).to be_present
     end
   end
 end

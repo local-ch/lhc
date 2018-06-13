@@ -3,6 +3,7 @@ require 'rails_helper'
 describe LHC::Request do
   context 'ignoring LHC::NotFound' do
     let(:response) { LHC.get('http://local.ch', ignored_errors: [LHC::NotFound]) }
+
     before { stub_request(:get, 'http://local.ch').to_return(status: 404) }
 
     it 'does not raise an error' do
