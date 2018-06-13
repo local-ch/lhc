@@ -53,3 +53,6 @@ RSpec/MessageSpies:
 
 RSpec/BeforeAfterAll:
   Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: compact

@@ -4,11 +4,9 @@ require 'rails_helper'
 # we need a class where we can setup method expectations
 # with `expect_any_instance`
 class CacheMock
-  def fetch(*_)
-  end
+  def fetch(*_); end
 
-  def write(*_)
-  end
+  def write(*_); end
 end
 
 describe LHC::Caching do

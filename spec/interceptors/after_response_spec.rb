@@ -4,8 +4,7 @@ describe LHC do
   context 'interceptor' do
     before(:each) do
       class Services
-        def self.timing(_path, _time)
-        end
+        def self.timing(_path, _time); end
       end
 
       class StatsTimingInterceptor < LHC::Interceptor

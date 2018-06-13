@@ -5,11 +5,9 @@ describe LHC::Monitoring do
   let(:endpoint_configuration) { LHC.config.endpoint(:local, 'http://local.ch') }
 
   module Statsd
-    def self.count(_path, _value)
-    end
+    def self.count(_path, _value); end
 
-    def self.timing(_path, _value)
-    end
+    def self.timing(_path, _value); end
   end
 
   before(:each) do

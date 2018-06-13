@@ -55,11 +55,9 @@ module ZipkinTracer
   end
 
   class Span
-    def record_tag(*)
-    end
+    def record_tag(*); end
 
-    def record(*)
-    end
+    def record(*); end
   end
 end
 
