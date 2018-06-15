@@ -2,12 +2,14 @@ require 'rails_helper'
 
 describe LHC::Auth do
   let(:bearer_token) { '123456' }
+
   before(:each) do
     stub_request(:get, 'http://local.ch').with(headers: { 'Authorization' => "Bearer #{bearer_token}" })
   end
 
   context "configuration check not happening" do
     let(:options) { { bearer: bearer_token } }
+
     before(:each) { LHC.config.interceptors = [LHC::Auth, LHC::Retry] }
 
     it "max_recovery_attempts is zero" do
