@@ -4,12 +4,9 @@ describe LHC do
   context 'interceptor' do
     before(:each) do
       class Services
-        def self.timing(_path, _time)
-        end
+        def self.timing(_path, _time); end
       end
-    end
 
-    before(:each) do
       class StatsTimingInterceptor < LHC::Interceptor
         def after_response
           uri = URI.parse(response.request.url)

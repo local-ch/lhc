@@ -33,14 +33,14 @@ describe LHC do
       LHC.put(:feedbacks, body: change)
     end
 
-    it 'it makes response data available in a rails way' do
+    it 'makes response data available in a rails way' do
       response = LHC.put('http://datastore/v2/feedbacks', body: change)
       expect(response.data.recommended).to eq false
     end
 
     it 'provides response headers' do
       response = LHC.put('http://datastore/v2/feedbacks', body: change)
-      expect(response.headers).to be
+      expect(response.headers).to be_present
     end
   end
 end

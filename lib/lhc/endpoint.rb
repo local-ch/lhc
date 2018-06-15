@@ -3,7 +3,8 @@ require 'addressable/template'
 # An endpoint is an url that leads to a backend resource.
 # The url can also be an url-template (https://tools.ietf.org/html/rfc6570).
 class LHC::Endpoint
-  attr_accessor :url, :options
+  attr_accessor :url
+  attr_writer :options
 
   def initialize(url, options = nil)
     self.url = url
@@ -22,7 +23,7 @@ class LHC::Endpoint
     if expanded.variables.empty?
       expanded.pattern
     else
-      fail("Compilation incomplete. Unable to find value for #{expanded.variables.join(', ')}.")
+      raise("Compilation incomplete. Unable to find value for #{expanded.variables.join(', ')}.")
     end
   end
 
@@ -99,7 +100,7 @@ class LHC::Endpoint
   # Extracts the values from url and
   # creates params according to template
   def self.values_as_params(template, url)
-    fail("#{url} does not match the template: #{template}") if !match?(url, template)
+    raise("#{url} does not match the template: #{template}") if !match?(url, template)
     new(template).values_as_params(url)
   end
 
