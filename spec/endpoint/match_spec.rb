@@ -16,7 +16,7 @@ describe LHC::Endpoint do
         'http://local.ch/places/1/feedbacks.json' => 'http://local.ch/places/1/feedbacks.json?lang=en'
       }.each do |template, url|
         it "#{url} matches #{template}" do
-          expect(LHC::Endpoint.match?(url, template)).to be
+          expect(LHC::Endpoint.match?(url, template)).to be(true)
         end
       end
     end
@@ -31,7 +31,7 @@ describe LHC::Endpoint do
         it "#{url} should not match #{template}" do
           expect(
             LHC::Endpoint.match?(url, template)
-          ).not_to be
+          ).to be(false)
         end
       end
     end

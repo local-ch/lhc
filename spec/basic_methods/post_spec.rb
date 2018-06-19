@@ -27,14 +27,14 @@ describe LHC do
       LHC.post(:feedbacks, body: feedback)
     end
 
-    it 'it makes response data available in a rails way' do
+    it 'makes response data available in a rails way' do
       response = LHC.post('http://datastore/v2/feedbacks', body: feedback)
       expect(response.data.source_id).to eq 'aaa'
     end
 
     it 'provides response headers' do
       response = LHC.post('http://datastore/v2/feedbacks', body: feedback)
-      expect(response.headers).to be
+      expect(response.headers).to be_present
     end
   end
 end

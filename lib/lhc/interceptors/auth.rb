@@ -1,33 +1,96 @@
 class LHC::Auth < LHC::Interceptor
+  include ActiveSupport::Configurable
+  config_accessor :refresh_client_token
 
   def before_request
-    options = request.options[:auth] || {}
-    authenticate!(request, options)
+    authenticate!
+  end
+
+  def after_response
+    return unless configuration_correct?
+    return unless reauthenticate?
+    reauthenticate!
   end
 
   private
 
-  def authenticate!(request, options)
-    if options[:bearer]
-      bearer_authentication!(request, options)
-    elsif options[:basic]
-      basic_authentication!(request, options)
+  def authenticate!
+    if auth_options[:bearer]
+      bearer_authentication!
+    elsif auth_options[:basic]
+      basic_authentication!
     end
   end
 
-  def basic_authentication!(request, options)
-    auth = options[:basic]
+  def basic_authentication!
+    auth = auth_options[:basic]
     credentials = "#{auth[:username]}:#{auth[:password]}"
-    set_authorization_header request, "Basic #{Base64.encode64(credentials).chomp}"
+    set_authorization_header("Basic #{Base64.encode64(credentials).chomp}")
   end
 
-  def bearer_authentication!(request, options)
-    token = options[:bearer]
+  def bearer_authentication!
+    token = auth_options[:bearer]
     token = token.call if token.is_a?(Proc)
-    set_authorization_header request, "Bearer #{token}"
+    set_bearer_authorization_header(token)
   end
 
-  def set_authorization_header(request, value)
+  # rubocop:disable Style/AccessorMethodName
+  def set_authorization_header(value)
     request.headers['Authorization'] = value
+  end
+
+  def set_bearer_authorization_header(token)
+    set_authorization_header("Bearer #{token}")
+  end
+  # rubocop:enable Style/AccessorMethodName
+
+  def reauthenticate!
+    # refresh token and update header
+    token = refresh_client_token_option.call
+    set_bearer_authorization_header(token)
+    # trigger LHC::Retry and ensure we do not trigger reauthenticate!
+    # again should it fail another time
+    new_options = request.options.dup
+    new_options = new_options.merge(retry: { max: 1 })
+    new_options = new_options.merge(auth: { reauthenticated: true })
+    request.options = new_options
+  end
+
+  def reauthenticate?
+    !response.success? &&
+      !auth_options[:reauthenticated] &&
+      bearer_header_present? &&
+      LHC::Error.find(response) == LHC::Unauthorized
+  end
+
+  def bearer_header_present?
+    @has_bearer_header ||= request.headers['Authorization'] =~ /^Bearer [0-9a-f-]+$/i
+  end
+
+  def refresh_client_token_option
+    @refresh_client_token_option ||= auth_options[:refresh_client_token] || refresh_client_token
+  end
+
+  def all_interceptor_classes
+    @all_interceptors ||= LHC::Interceptors.new(request).all.map(&:class)
+  end
+
+  def auth_options
+    @auth_options ||= request.options[:auth].dup || {}
+  end
+
+  def configuration_correct?
+    # warn user about configs, only if refresh_client_token_option is set at all
+    refresh_client_token_option && refresh_client_token? && retry_interceptor?
+  end
+
+  def refresh_client_token?
+    return true if refresh_client_token_option.is_a?(Proc)
+    warn("[WARNING] The given refresh_client_token must be a Proc for reauthentication.")
+  end
+
+  def retry_interceptor?
+    return true if all_interceptor_classes.include?(LHC::Retry) && all_interceptor_classes.index(LHC::Retry) > all_interceptor_classes.index(self.class)
+    warn("[WARNING] Your interceptors must include LHC::Retry after LHC::Auth.")
   end
 end

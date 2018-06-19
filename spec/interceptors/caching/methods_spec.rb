@@ -5,13 +5,11 @@ describe LHC::Caching do
     LHC.config.interceptors = [LHC::Caching]
     LHC::Caching.cache = Rails.cache
     Rails.cache.clear
+
+    LHC.config.endpoint(:local, 'http://local.ch', cache: { expires_in: 5.minutes })
   end
 
   let!(:stub) { stub_request(:post, 'http://local.ch').to_return(status: 200, body: 'The Website') }
-
-  before(:each) do
-    LHC.config.endpoint(:local, 'http://local.ch', cache: { expires_in: 5.minutes })
-  end
 
   it 'only caches GET requests by default' do
     expect(Rails.cache).not_to receive(:write)

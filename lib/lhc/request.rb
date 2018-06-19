@@ -143,6 +143,6 @@ class LHC::Request
   end
 
   def throw_error(response)
-    fail error.new(error, response)
+    raise error.new(error, response)
   end
 end

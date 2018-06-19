@@ -11,7 +11,7 @@ describe LHC::Response do
       expect(response.time).to eq time
     end
 
-    it 'provides response time in seconds' do
+    it 'provides response time in miliseconds' do
       response = LHC::Response.new(raw_response, nil)
       expect(response.time_ms).to eq time * 1000
     end
