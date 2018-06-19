@@ -8,12 +8,12 @@ describe LHC::Response do
 
     it 'provides response time in seconds' do
       response = LHC::Response.new(raw_response, nil)
-      expect(response.time).to eq time * 1000
+      expect(response.time).to eq time
     end
 
     it 'provides response time in seconds' do
       response = LHC::Response.new(raw_response, nil)
-      expect(response.time_ms).to eq time
+      expect(response.time_ms).to eq time * 1000
     end
   end
 end

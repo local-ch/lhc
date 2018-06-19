@@ -34,12 +34,12 @@ class LHC::Response
 
   # Provides response time in seconds
   def time
-    time_ms * 1000
+    raw.time || 0
   end
 
   # Provides response time in milliseconds
   def time_ms
-    raw.time || 0
+    time * 1000
   end
 
   def timeout?
