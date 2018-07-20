@@ -7,7 +7,7 @@ class LHC::Monitoring < LHC::Interceptor
 
   include ActiveSupport::Configurable
 
-  config_accessor :statsd
+  config_accessor :statsd, :env
 
   def before_request
     return unless statsd
@@ -39,7 +39,7 @@ class LHC::Monitoring < LHC::Interceptor
     key = [
       'lhc',
       Rails.application.class.parent_name.underscore,
-      Rails.env,
+      LHC::Monitoring.env || Rails.env,
       URI.parse(url).host.gsub(/\./, '_'),
       request.method
     ]
