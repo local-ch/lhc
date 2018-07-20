@@ -77,4 +77,19 @@ describe LHC::Monitoring do
       LHC.get(:local)
     end
   end
+
+  context 'with configured environment' do
+    before do
+      LHC::Monitoring.env = 'beta'
+    end
+
+    it 'uses the configured env' do
+      stub
+      expect(Statsd).to receive(:count).with('lhc.dummy.beta.local_ch.get.before_request', 1)
+      expect(Statsd).to receive(:count).with('lhc.dummy.beta.local_ch.get.after_request', 1)
+      expect(Statsd).to receive(:count).with('lhc.dummy.beta.local_ch.get.count', 1)
+      expect(Statsd).to receive(:count).with('lhc.dummy.beta.local_ch.get.200', 1)
+      LHC.get(:local)
+    end
+  end
 end

@@ -14,6 +14,14 @@ You also have to configure statsd in order to have the monitoring interceptor re
   LHC::Monitoring.statsd = <your-instance-of-statsd>
 ```
 
+### Environment
+
+By default, the monitoring interceptor uses Rails.env to determine the environment. In case you want to configure that, use:
+
+```ruby
+LHC::Monitoring.env = ENV['DEPLOYMENT_TYPE'] || Rails.env
+```
+
 ## What it tracks
 
 It tracks request attempts with `before_request` and `after_request` (counts).
