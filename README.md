@@ -11,11 +11,13 @@ See [LHS](https://github.com/local-ch/LHS), if you are searching for something m
   gem install lhc
 ```
 
-or add it to your Gemfile
+or add it to your Gemfile:
 
 ```ruby
   gem 'lhc'
 ```
+
+use it like:
 
 ```ruby
   response = LHC.get('http://datastore/v2/feedbacks')
