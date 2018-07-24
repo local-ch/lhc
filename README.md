@@ -3,7 +3,7 @@ LHC
 
 LHC uses [typhoeus](https://github.com/typhoeus/typhoeus) for low level http communication.
 
-See [LHS](https://github.com/local-ch/LHS), if you are searching for something more **high level** that can query webservices easily and provides a ActiveRecord like interface.
+See [LHS](https://github.com/local-ch/LHS), if you are searching for something more **high level** that can query webservices easily and provides an ActiveRecord like interface.
 
 ## Quick start guide
 
