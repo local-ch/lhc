@@ -251,7 +251,7 @@ LHC forwards two timeout options directly to typhoeus:
 LHC.get('http://local.ch', timeout: 5, connecttimeout: 1)
 ```
 
-LHC provides a [timeout interceptor](docs/interceptors/default_timeout.md) that lets you apply default timeout values to all the requests that you are performig in your application.
+LHC provides a [timeout interceptor](#default-timeout-interceptor) that lets you apply default timeout values to all the requests that you are performig in your application.
 
 ## Response
 
