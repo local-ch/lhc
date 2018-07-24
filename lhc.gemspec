@@ -8,10 +8,10 @@ Gem::Specification.new do |s|
   s.name        = "lhc"
   s.version     = LHC::VERSION
   s.authors     = ['https://github.com/local-ch/lhc/contributors']
-  s.email       = ['ws-operations@local.ch']
+  s.email       = ['web@localsearch.ch']
   s.homepage    = 'https://github.com/local-ch/lhc'
-  s.summary     = 'LocalHttpClient'
-  s.description = 'Rails gem for HTTP: Wraps typhoeus and provides additional features (like interceptors)'
+  s.summary     = 'Advanced HTTP Client for Ruby, fueled with interceptors'
+  s.description = 'Advanced HTTP Client for Ruby, fueled with interceptors'
 
   s.files        = `git ls-files`.split("\n")
   s.test_files   = `git ls-files -- spec/*`.split("\n")
