@@ -1,6 +1,8 @@
 LHC
 ===
 
+LHC is an extended/advanced HTTP client. Implementing basic http-communication enhancements like interceptors, exception handling, format handling, accessing response data, configuring endpoints and placeholders and fully compatible, RFC-compliant URL-template support.
+
 LHC uses [typhoeus](https://github.com/typhoeus/typhoeus) for low level http communication.
 
 See [LHS](https://github.com/local-ch/LHS), if you are searching for something more **high level** that can query webservices easily and provides an ActiveRecord like interface.
