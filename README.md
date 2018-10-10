@@ -44,6 +44,7 @@ use it like:
          * [Request URL encoding](#request-url-encoding)
          * [Request URL-Templates](#request-url-templates)
          * [Request timeout](#request-timeout)
+         * [Request Agent](#request-agent)
       * [Response](#response)
          * [Accessing response data](#accessing-response-data)
       * [Exceptions](#exceptions)
@@ -254,6 +255,20 @@ LHC.get('http://local.ch', timeout: 5, connecttimeout: 1)
 ```
 
 LHC provides a [timeout interceptor](#default-timeout-interceptor) that lets you apply default timeout values to all the requests that you are performig in your application.
+
+### Request Agent
+
+LHC identifies itself towards outher services, using the `User-Agent` header.
+
+```
+User-Agent LHC (9.4.2) [https://github.com/local-ch/lhc]
+```
+
+If LHC is used in an Rails Application context, also the application name is added to the `User-Agent` header.
+
+```
+User-Agent LHC (9.4.2; MyRailsApplicationName) [https://github.com/local-ch/lhc]
+```
 
 ## Response
 
