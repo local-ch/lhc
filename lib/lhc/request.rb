@@ -58,16 +58,35 @@ class LHC::Request
   end
 
   def create_request
-    request = Typhoeus::Request.new(
-      optionally_encoded_url(options),
-      translate_body(typhoeusize(options))
-    )
+    request = Typhoeus::Request.new(typhoeus_url, typhoeus_options)
     request.on_headers do
       interceptors.intercept(:after_request)
       interceptors.intercept(:before_response)
     end
     request.on_complete { |response| on_complete(response) }
     request
+  end
+
+  def typhoeus_url
+    optionally_encoded_url(options)
+  end
+
+  def typhoeus_options
+    typhoeus_options = options
+    typhoeus_options = translate_body(options)
+    typhoeus_options = default_headers(options)
+    typhoeus_options = typhoeusize(options)
+    typhoeus_options
+  end
+
+  def default_headers(options)
+    @@default_headers ||= begin
+      options[:headers] ||= {}
+      version = LHC::VERSION
+      application = defined?(Rails) ? Rails.application.class.parent_name : nil
+      options[:headers]['User-Agent'] = "LHC (#{[version, application].compact.join('; ')}) [https://github.com/local-ch/lhc]"
+      options
+    end
   end
 
   def translate_body(options)
