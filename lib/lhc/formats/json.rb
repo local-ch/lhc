@@ -19,7 +19,11 @@ module LHC::Formats
     end
 
     def to_body(input)
-      input.to_json
+      if input.is_a?(Hash)
+        input.to_json
+      else
+        input
+      end
     end
 
     def to_s
