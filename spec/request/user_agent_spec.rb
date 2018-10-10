@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 describe LHC::Request do
+  before do
+    LHC.send(:remove_const, :Request)
+    load('lhc/concerns/lhc/request/user_agent_concern.rb')
+    load('lhc/request.rb')
+  end
+
   context 'default headers' do
     context 'agent' do
       it 'sets header agent information to be LHC' do
