@@ -1,10 +1,12 @@
 require 'uri'
 require 'active_support/core_ext/object/deep_dup'
+require 'lhc/concerns/lhc/request/user_agent_concern'
 
 # The request is doing an http-request using typhoeus.
 # It provides functionalities to access and alter request data
 # and it communicates with interceptors.
 class LHC::Request
+  include UserAgentConcern
 
   TYPHOEUS_OPTIONS ||= [:params, :method, :body, :headers, :follow_location, :params_encoding]
 
