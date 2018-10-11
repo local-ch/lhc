@@ -1,4 +1,5 @@
 require 'active_support'
+require 'lhc/version'
 
 module LHC
   class Request
