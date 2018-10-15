@@ -111,8 +111,8 @@ class LHC::Request
   def generate_url_from_template!
     endpoint = LHC::Endpoint.new(options[:url])
     params =
-      if format && options[:body]&.length && options[:body].is_a?(Hash)
-        options[:body].merge(options[:params] || {}).deep_symbolize_keys
+      if format && options[:body].present? && options[:body].respond_to?(:as_json) && options[:body].as_json.is_a?(Hash)
+        options[:body].as_json.merge(options[:params] || {}).deep_symbolize_keys
       else
         options[:params]
       end
