@@ -1,5 +1,5 @@
 module LHC::Formats
-  class Unformatted
+  class Plain
     include LHC::BasicMethodsConcern
 
     def self.request(options)
@@ -20,7 +20,7 @@ module LHC::Formats
     end
 
     def to_s
-      'unformatted'
+      'plain'
     end
 
     def to_sym
