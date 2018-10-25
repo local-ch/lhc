@@ -2,11 +2,22 @@ require 'rails_helper'
 
 describe LHC do
   context 'unformatted' do
-    it 'adds Content-Type and Accept Headers to the request' do
-      stub_request(:get, "http://local.ch/")
-        .with(headers: { 'Accept' => 'application/json; charset=utf-8', 'Content-Type' => 'application/json; charset=utf-8' })
-        .to_return(body: {}.to_json)
-      LHC.json.get('http://local.ch')
+    let(:file) do
+      ActionDispatch::Http::UploadedFile.new(
+        tempfile: Tempfile.new(Rails.root.join('spec', 'support', 'image.jpg').to_s),
+        filename: 'image.jpg',
+        type: 'image/jpeg',
+        head: %q{Content-Disposition: form-data; name="files[]"; filename="image.jpg"\r\nContent-Type: image/jpeg\r\n}
+      )
+    end
+
+    it 'leaves unformatted requests unformatted' do
+      LHC.unformatted.post(
+        'http://local.ch',
+        {
+          body: { file: file, type: 'Image' }
+        }
+      )
     end
   end
 end

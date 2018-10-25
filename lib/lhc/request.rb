@@ -16,7 +16,7 @@ class LHC::Request
     self.errors_ignored = options.fetch(:ignored_errors, [])
     self.options = options.deep_dup || {}
     self.error_handler = options.delete :error_handler
-    self.format = options.delete('format') || LHC::Formats::JSON.new
+    self.format = options.delete(:format) || LHC::Formats::JSON.new
     use_configured_endpoint!
     generate_url_from_template!
     self.interceptors = LHC::Interceptors.new(self)

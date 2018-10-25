@@ -6,6 +6,7 @@ module LHC
       def json
         LHC::Formats::JSON
       end
+      
       def unformatted
         LHC::Formats::Unformatted
       end
