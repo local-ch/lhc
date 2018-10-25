@@ -4,7 +4,7 @@ describe LHC do
   context 'plain' do
     let(:file) do
       ActionDispatch::Http::UploadedFile.new(
-        tempfile: Tempfile.new(Rails.root.join('spec', 'support', 'image.jpg').to_s),
+        tempfile: Tempfile.new,
         filename: 'image.jpg',
         type: 'image/jpeg',
         head: %q{Content-Disposition: form-data; name="files[]"; filename="image.jpg"\r\nContent-Type: image/jpeg\r\n}
