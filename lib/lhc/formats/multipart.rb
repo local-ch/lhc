@@ -1,12 +1,17 @@
 module LHC::Formats
-  class Multipart
+  class Multipart < LHC::Format
     include LHC::BasicMethodsConcern
 
     def self.request(options)
-      options[:headers] ||= {}
-      options[:headers]['Content-Type'] = 'multipart/form-data'
       options[:format] = new
       super(options)
+    end
+
+    def format_options(options)
+      options[:headers] ||= {}
+      no_content_type_header!(options)
+      options[:headers]['Content-Type'] = 'multipart/form-data'
+      options
     end
 
     def as_json(input)

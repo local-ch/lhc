@@ -14,9 +14,8 @@ class LHC::Request
 
   def initialize(options, self_executing = true)
     self.errors_ignored = options.fetch(:ignored_errors, [])
-    self.options = options.deep_dup || {}
+    self.options = format!(options.deep_dup || {})
     self.error_handler = options.delete :error_handler
-    self.format = options.delete(:format) || LHC::Formats::JSON.new
     use_configured_endpoint!
     generate_url_from_template!
     self.interceptors = LHC::Interceptors.new(self)
@@ -53,6 +52,11 @@ class LHC::Request
   private
 
   attr_accessor :interceptors
+
+  def format!(options)
+    self.format = options.delete(:format) || LHC::Formats::JSON.new
+    format.format_options(options)
+  end
 
   def optionally_encoded_url(options)
     return options[:url] unless options.fetch(:url_encoding, true)

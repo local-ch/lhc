@@ -1,10 +1,14 @@
 module LHC::Formats
-  class Plain
+  class Plain < LHC::Format
     include LHC::BasicMethodsConcern
 
     def self.request(options)
       options[:format] = new
       super(options)
+    end
+
+    def format_options(options)
+      options
     end
 
     def as_json(input)

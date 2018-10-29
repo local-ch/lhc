@@ -113,6 +113,8 @@ module LHC
     'lhc/interceptors'
   autoload :Formats,
     'lhc/formats'
+  autoload :Format,
+    'lhc/format'
   autoload :Monitoring,
     'lhc/interceptors/monitoring'
   autoload :Request,
