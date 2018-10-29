@@ -36,6 +36,9 @@ use it like:
       * [Basic methods](#basic-methods)
       * [Request](#request)
          * [Formats](#formats)
+            * [Default format](#default-format)
+            * [Unformatted requests](#unformatted-requests)
+               * [Upload with LHC](#upload-with-lhc)
          * [Parallel requests](#parallel-requests)
          * [Follow redirects](#follow-redirects)
          * [Transfer data through the request body](#transfer-data-through-the-request-body)
@@ -123,7 +126,7 @@ You can use any of the basic methods in combination with a format like `json`:
 LHC.json.get(options)
 ```
 
-Currently supported formats: `json`
+Currently supported formats: `json`, `multipart`, `plain` (for no formatting)
 
 If formats are used, headers for `Content-Type` and `Accept` are set by LHC, but also http bodies are translated by LHC, so you can pass bodies as ruby objects:
 
@@ -132,6 +135,29 @@ LHC.json.post('http://slack', body: { text: 'Hi there' })
 # Content-Type: application/json
 # Accept: application/json
 # Translates body to "{\"text\":\"Hi there\"}" before sending
+```
+
+#### Default format
+
+If you use LHC's basic methods `LHC.get`, `LHC.post` etc. without any explicit format, `JSON` will be chosen as the default format.
+
+#### Unformatted requests
+
+In case you need to send requests without LHC formatting headers or the body, use `plain`:
+
+```ruby
+LHC.plain.post('http://endpoint', body: { weird: 'format%s2xX' })
+```
+
+##### Upload with LHC
+
+If you want to upload data with LHC, it's recommended to use the `multipart` format:
+
+```ruby
+response = LHC.multipart.post('http://upload', body: { file })
+response.headers['Location']
+# Content-Type: multipart/form-data
+# Leaves body unformatted
 ```
 
 ### Parallel requests

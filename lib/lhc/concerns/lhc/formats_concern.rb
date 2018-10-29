@@ -6,6 +6,14 @@ module LHC
       def json
         LHC::Formats::JSON
       end
+
+      def multipart
+        LHC::Formats::Multipart
+      end
+
+      def plain
+        LHC::Formats::Plain
+      end
     end
   end
 end
