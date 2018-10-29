@@ -15,7 +15,7 @@ describe LHC do
       stub_request(:post, 'http://local.ch/')
         .with(body: /file=%23%3CActionDispatch%3A%3AHttp%3A%3AUploadedFile%3A.*%3E&type=Image/)
         .to_return do |request|
-          raise 'Content-Type should not be set' if request.headers['Content-Type']
+          expect(request.headers['Content-Type']).to be_blank
 
           { status: 204 }
         end
