@@ -1,13 +1,19 @@
 module LHC::Formats
-  class JSON
+  class JSON < LHC::Format
     include LHC::BasicMethodsConcern
 
     def self.request(options)
-      options[:headers] ||= {}
-      options[:headers]['Content-Type'] = 'application/json; charset=utf-8'
-      options[:headers]['Accept'] = 'application/json; charset=utf-8'
       options[:format] = new
       super(options)
+    end
+
+    def format_options(options)
+      options[:headers] ||= {}
+      no_content_type_header!(options)
+      options[:headers]['Content-Type'] = 'application/json; charset=utf-8'
+      no_accept_header!(options)
+      options[:headers]['Accept'] = 'application/json; charset=utf-8'
+      options
     end
 
     def as_json(input)
