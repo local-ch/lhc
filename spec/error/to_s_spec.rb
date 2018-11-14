@@ -65,8 +65,8 @@ describe LHC::Error do
       it 'produces correct debug output' do
         expect(subject.to_s.split("\n")).to eq(<<-MSG.strip_heredoc.split("\n"))
           GET http://example.com/sessions
-          Options: {:followlocation=>true, :auth=>{:bearer=>"aaaaaaaa-bbbb-cccc-dddd-eeee"}, :params=>{:limit=>20}, :url=>"http://example.com/sessions"}
-          Headers: {"Bearer Token"=>"aaaaaaaa-bbbb-cccc-dddd-eeee"}
+          Options: {"followlocation":true,"auth":{"bearer":"aaaaaaaa-bbbb-cccc-dddd-eeee"},"params":{"limit":20},"url":"http://example.com/sessions"}
+          Headers: {"Bearer Token":"aaaaaaaa-bbbb-cccc-dddd-eeee"}
           Response Code: 500 (internal_error)
           Repsonse Options: {:return_code=>:internal_error, :response_headers=>""}
           {"status":500,"message":"undefined"}

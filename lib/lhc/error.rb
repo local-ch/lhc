@@ -59,8 +59,8 @@ class LHC::Error < StandardError
     request = response.request
     debug = []
     debug << [request.method, request.url].map { |str| fix_invalid_encoding(str) }.join(' ')
-    debug << "Options: #{request.options}"
-    debug << "Headers: #{request.headers}"
+    debug << "Options: #{request.options.to_json}"
+    debug << "Headers: #{request.headers.to_json}"
     debug << "Response Code: #{response.code} (#{response.options[:return_code]})"
     debug << "Repsonse Options: #{response.options}"
     debug << response.body
