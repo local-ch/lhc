@@ -6,7 +6,7 @@ class LHC::Logging < LHC::Interceptor
   def before_request
     return unless logger
     logger.info(
-      "Before LHC request<#{request.object_id}> #{request.method.upcase} #{request.url} at #{Time.now.iso8601} Params=#{request.params} Headers=#{request.headers}"
+      "Before LHC request<#{request.object_id}> #{request.method.upcase} #{request.url} at #{Time.now.iso8601} Params=#{request.params.to_json} Headers=#{request.headers.to_json}"
     )
   end
 
