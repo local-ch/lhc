@@ -56,6 +56,7 @@ class LHC::Error < StandardError
   end
 
   def to_s
+    return response if response.is_a?(String)
     request = response.request
     debug = []
     debug << [request.method, request.url].map { |str| fix_invalid_encoding(str) }.join(' ')
