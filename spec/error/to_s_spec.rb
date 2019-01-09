@@ -68,7 +68,7 @@ describe LHC::Error do
           Options: {:followlocation=>true, :auth=>{:bearer=>"aaaaaaaa-bbbb-cccc-dddd-eeee"}, :params=>{:limit=>20}, :url=>"http://example.com/sessions"}
           Headers: {"Bearer Token"=>"aaaaaaaa-bbbb-cccc-dddd-eeee"}
           Response Code: 500 (internal_error)
-          Repsonse Options: {:return_code=>:internal_error, :response_headers=>""}
+          Response Options: {:return_code=>:internal_error, :response_headers=>""}
           {"status":500,"message":"undefined"}
           The error message
         MSG
