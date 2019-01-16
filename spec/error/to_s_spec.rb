@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe LHC::Error do
   context 'to_s' do
-    let(:invalid) { "in\xc3lid".force_encoding('ASCII-8BIT') }
+    let(:invalid) { "in\xc3lid".dup.force_encoding('ASCII-8BIT') }
     let(:valid) { "vælid" }
 
     context 'check assumptions' do
