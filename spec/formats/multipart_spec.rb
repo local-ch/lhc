@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe LHC do
+  include ActionDispatch::TestProcess
+
   context 'multipart' do
     let(:file) { fixture_file_upload(Tempfile.new, 'image/jpeg') }
     let(:body) { { size: 2231 }.to_json }

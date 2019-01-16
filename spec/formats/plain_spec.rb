@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe LHC do
+  include ActionDispatch::TestProcess
+
   context 'plain' do
     let(:file) { fixture_file_upload(Tempfile.new, 'image/jpeg') }
 
