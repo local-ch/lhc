@@ -4,14 +4,7 @@ require 'rails_helper'
 
 describe LHC do
   context 'multipart' do
-    let(:file) do
-      ActionDispatch::Http::UploadedFile.new(
-        tempfile: Tempfile.new,
-        filename: 'image.jpg',
-        type: 'image/jpeg',
-        head: %q{Content-Disposition: form-data; name="files[]"; filename="image.jpg"\r\nContent-Type: image/jpeg\r\n}
-      )
-    end
+    let(:file) { fixture_file_upload(Tempfile.new, 'image/jpeg') }
     let(:body) { { size: 2231 }.to_json }
     let(:location) { 'http://local.ch/uploads/image.jpg' }
 
