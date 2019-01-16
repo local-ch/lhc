@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LHC::Formats
   class JSON < LHC::Format
     include LHC::BasicMethodsConcern

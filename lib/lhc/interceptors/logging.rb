@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LHC::Logging < LHC::Interceptor
 
   include ActiveSupport::Configurable

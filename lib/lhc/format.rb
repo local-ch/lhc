@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LHC::Format
 
   private

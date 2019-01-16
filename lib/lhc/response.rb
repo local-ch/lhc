@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/core_ext/module'
 
 # The response contains the raw response (typhoeus)

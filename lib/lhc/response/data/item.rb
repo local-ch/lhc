@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LHC::Response::Data::Item < OpenStruct
   include LHC::Response::Data::Base
 

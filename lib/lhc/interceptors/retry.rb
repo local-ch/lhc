@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LHC::Retry < LHC::Interceptor
   attr_accessor :retries, :current_retry
 

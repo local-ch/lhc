@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.configure do |config|
   LHC::Caching.cache = ActiveSupport::Cache::MemoryStore.new
 

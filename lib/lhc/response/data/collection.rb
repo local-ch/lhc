@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LHC::Response::Data::Collection < Array
   include LHC::Response::Data::Base
 

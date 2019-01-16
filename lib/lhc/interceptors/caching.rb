@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LHC::Caching < LHC::Interceptor
   include ActiveSupport::Configurable
 

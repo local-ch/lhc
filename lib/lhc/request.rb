@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'uri'
 require 'active_support/core_ext/object/deep_dup'
 require 'lhc/concerns/lhc/request/user_agent_concern'

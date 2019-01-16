@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ZipkinTracer
   class TraceContainer
     attr_reader :trace_id, :parent_id, :span_id, :sampled, :flags
@@ -81,19 +83,19 @@ module Trace
   end
 
   class Annotation
-    CLIENT_SEND = 'client_send'.freeze
-    CLIENT_RECV = 'client_recv'.freeze
+    CLIENT_SEND = 'client_send'
+    CLIENT_RECV = 'client_recv'
   end
 
   class BinaryAnnotation
-    PATH = 'path'.freeze
-    SERVER_ADDRESS = 'server_address'.freeze
-    STATUS = 'status'.freeze
-    ERROR = 'error'.freeze
+    PATH = 'path'
+    SERVER_ADDRESS = 'server_address'
+    STATUS = 'status'
+    ERROR = 'error'
 
     class Type
-      STRING = 'string'.freeze
-      BOOL = 'bool'.freeze
+      STRING = 'string'
+      BOOL = 'bool'
     end
   end
 
