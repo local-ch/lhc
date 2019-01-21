@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LHC::Auth < LHC::Interceptor
   include ActiveSupport::Configurable
   config_accessor :refresh_client_token

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Response data is data provided through the response body
 # but made accssible in the ruby world
 module LHC::Response::Data::Base

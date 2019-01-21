@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LHC::Response::Data
   autoload :Base, 'lhc/response/data/base'
   autoload :Item, 'lhc/response/data/item'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LHC::Monitoring < LHC::Interceptor
 
   # Options forwarded to the monitoring

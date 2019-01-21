@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 class LHC::Zipkin < LHC::Interceptor
   B3_HEADERS = {
-    trace_id: 'X-B3-TraceId'.freeze,
-    parent_id: 'X-B3-ParentSpanId'.freeze,
-    span_id: 'X-B3-SpanId'.freeze,
-    sampled: 'X-B3-Sampled'.freeze,
-    flags: 'X-B3-Flags'.freeze
+    trace_id: 'X-B3-TraceId',
+    parent_id: 'X-B3-ParentSpanId',
+    span_id: 'X-B3-SpanId',
+    sampled: 'X-B3-Sampled',
+    flags: 'X-B3-Flags'
   }.freeze
-  TRUE = '1'.freeze # true in binary annotation
+  TRUE = '1' # true in binary annotation
 
   def before_request
     return unless dependencies?

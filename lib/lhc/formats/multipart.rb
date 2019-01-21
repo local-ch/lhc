@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LHC::Formats
   class Multipart < LHC::Format
     include LHC::BasicMethodsConcern

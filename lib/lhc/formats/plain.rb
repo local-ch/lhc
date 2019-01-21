@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LHC::Formats
   class Plain < LHC::Format
     include LHC::BasicMethodsConcern

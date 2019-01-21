@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LHC::Error < StandardError
   attr_accessor :response, :_message
 

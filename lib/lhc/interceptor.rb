@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LHC::Interceptor
 
   attr_reader :request

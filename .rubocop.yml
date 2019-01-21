@@ -43,7 +43,7 @@ RSpec/InstanceVariable:
   Enabled: false
 
 Style/FrozenStringLiteralComment:
-  Enabled: false
+  Enabled: true
 
 Naming/MemoizedInstanceVariableName:
   Enabled: false

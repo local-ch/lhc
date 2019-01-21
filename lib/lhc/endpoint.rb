@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'addressable/template'
 
 # An endpoint is an url that leads to a backend resource.

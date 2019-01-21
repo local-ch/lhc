@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Handles interceptions during the lifecycle of a request
 # Represents all active interceptors for a request/response.
 class LHC::Interceptors

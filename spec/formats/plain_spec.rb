@@ -1,19 +1,16 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe LHC do
+  include ActionDispatch::TestProcess
+
   context 'plain' do
-    let(:file) do
-      ActionDispatch::Http::UploadedFile.new(
-        tempfile: Tempfile.new,
-        filename: 'image.jpg',
-        type: 'image/jpeg',
-        head: %q{Content-Disposition: form-data; name="files[]"; filename="image.jpg"\r\nContent-Type: image/jpeg\r\n}
-      )
-    end
+    let(:file) { fixture_file_upload(Tempfile.new, 'image/jpeg') }
 
     it 'leaves plains requests unformatted' do
       stub_request(:post, 'http://local.ch/')
-        .with(body: /file=%23%3CActionDispatch%3A%3AHttp%3A%3AUploadedFile%3A.*%3E&type=Image/)
+        .with(body: /file=%23%3CRack%3A%3ATest%3A%3AUploadedFile%3.*%3E&type=Image/)
         .to_return do |request|
           expect(request.headers['Content-Type']).to be_blank
 

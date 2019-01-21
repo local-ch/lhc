@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module LHC
   module FormatsConcern
     extend ActiveSupport::Concern
