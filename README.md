@@ -100,7 +100,7 @@ Other methods are available using `LHC.request(options)`.
 
 ## Request
 
-The request class handles the http request, implements the interceptor pattern, loads configured endpoints, generates urls from url-templates and raises [exceptions](#exceptions) for any response code that is not indicating success (2xx).
+The request class handles the http request, implements the interceptor pattern, loads configured endpoints, generates urls from url-templates and raises [exceptions](#exceptions) for any response code that is not indicating success (4xx-5xx).
 
 ```ruby
   response = LHC.request(url: 'http://local.ch', method: :options)
@@ -335,7 +335,7 @@ You can also access response data directly through the response object (with squ
 
 ## Exceptions
 
-Anything but a response code indicating success (2xx) raises an exception.
+Anything but a response code indicating success (1xx-3xx) raises an exception.
 
 ```ruby
 
