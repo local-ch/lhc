@@ -926,4 +926,4 @@ You can access the request.response to identify if a response was already provid
 
 ## License
 
-[GNU Affero General Public License Version 3.](https://www.gnu.org/licenses/agpl-3.0.en.html)
+[GNU General Public License Version 3.](https://www.gnu.org/licenses/gpl-3.0.en.html)
