@@ -7,12 +7,12 @@ class LHC::Format
   def no_content_type_header!(options)
     return if (options[:headers].keys & [:'Content-Type', 'Content-Type']).blank?
 
-    raise 'Content-Type header is not allowed for formatted requests!'
+    raise 'Content-Type header is not allowed for formatted requests! Use plain requests instead.'
   end
 
   def no_accept_header!(options)
     return if (options[:headers].keys & [:Accept, 'Accept']).blank?
 
-    raise 'Accept header is not allowed for formatted requests!'
+    raise 'Accept header is not allowed for formatted requests! Use plain requests instead.'
   end
 end
