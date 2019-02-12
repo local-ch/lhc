@@ -20,7 +20,7 @@ describe LHC do
               'Content-Type': 'multipart/form-data'
             }
           )
-        }).to raise_error 'Content-Type header is not allowed for formatted requests!'
+        }).to raise_error 'Content-Type header is not allowed for formatted requests!\nSee https://github.com/local-ch/lhc#formats for more information.'
       end
 
       it 'raises an error when trying to set accept header even though the format is used' do
@@ -31,7 +31,7 @@ describe LHC do
               'Accept': 'multipart/form-data'
             }
           )
-        }).to raise_error 'Accept header is not allowed for formatted requests!'
+        }).to raise_error 'Accept header is not allowed for formatted requests!\nSee https://github.com/local-ch/lhc#formats for more information.'
       end
     end
 
@@ -44,7 +44,7 @@ describe LHC do
               'Content-Type' => 'multipart/form-data'
             }
           )
-        }).to raise_error 'Content-Type header is not allowed for formatted requests!'
+        }).to raise_error 'Content-Type header is not allowed for formatted requests!\nSee https://github.com/local-ch/lhc#formats for more information.'
       end
 
       it 'raises an error when trying to set accept header even though the format is used' do
@@ -55,7 +55,7 @@ describe LHC do
               'Accept' => 'multipart/form-data'
             }
           )
-        }).to raise_error 'Accept header is not allowed for formatted requests!'
+        }).to raise_error 'Accept header is not allowed for formatted requests!\nSee https://github.com/local-ch/lhc#formats for more information.'
       end
     end
   end
