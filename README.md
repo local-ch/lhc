@@ -128,7 +128,7 @@ LHC.json.get(options)
 
 Currently supported formats: `json`, `multipart`, `plain` (for no formatting)
 
-If formats are used, headers for `Content-Type` and `Accept` are set by LHC, but also http bodies are translated by LHC, so you can pass bodies as ruby objects:
+If formats are used, headers for `Content-Type` and `Accept` are enforced by LHC, but also http bodies are translated by LHC, so you can pass bodies as ruby objects:
 
 ```ruby
 LHC.json.post('http://slack', body: { text: 'Hi there' })
