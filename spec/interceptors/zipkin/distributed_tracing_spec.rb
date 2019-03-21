@@ -20,35 +20,14 @@ describe LHC::Zipkin do
       )
     end
 
-    it 'adds the proper X-B3 headers' do
+    it 'adds the proper X-B3 headers and trace the request' do
+      expect(::ZipkinTracer::TraceContainer).to receive(:with_trace_id).and_call_original
       headers = LHC.get(:local).request.headers
       expect(headers['X-B3-TraceId']).to eq('trace_id')
       expect(headers['X-B3-ParentSpanId']).to eq('parent_id')
       expect(headers['X-B3-SpanId']).to eq('span_id')
       expect(headers['X-B3-Sampled']).to eq('true')
       expect(headers['X-B3-Flags']).to eq('flags')
-    end
-  end
-
-  context 'wihtout zipkin integration' do
-    before(:all) do
-      TemporaryZipkinTracer = ::ZipkinTracer
-      Object.send(:remove_const, :ZipkinTracer)
-    end
-
-    after(:all) do
-      ::ZipkinTracer = TemporaryZipkinTracer
-    end
-
-    it 'adds the proper X-B3 headers' do
-      headers = nil
-      expect { headers = LHC.get(:local).request.headers }.not_to raise_error
-
-      expect(headers['X-B3-TraceId']).to be_nil
-      expect(headers['X-B3-ParentSpanId']).to be_nil
-      expect(headers['X-B3-SpanId']).to be_nil
-      expect(headers['X-B3-Sampled']).to be_nil
-      expect(headers['X-B3-Flags']).to be_nil
     end
   end
 
@@ -104,6 +83,52 @@ describe LHC::Zipkin do
         # ensure a span was registered, by checking call on span
         expect_any_instance_of(described_class).to receive(:span).at_least(:once).and_call_original
         LHC.get(:local)
+      end
+    end
+  end
+
+  %w(ZipkinTracer Trace).each do |klass|
+    context "without #{klass}" do
+      before(:all) do
+        TemporaryClass = Object.send(:const_get, klass)
+        Object.send(:remove_const, klass)
+      end
+
+      after(:all) do
+        Object.send(:const_set, klass, TemporaryClass)
+      end
+
+      it 'does not trace the request' do
+        headers = nil
+        expect { headers = LHC.get(:local).request.headers }.not_to raise_error
+        expect(headers['X-B3-TraceId']).to be_nil
+        expect(headers['X-B3-ParentSpanId']).to be_nil
+        expect(headers['X-B3-SpanId']).to be_nil
+        expect(headers['X-B3-Sampled']).to be_nil
+        expect(headers['X-B3-Flags']).to be_nil
+      end
+    end
+  end
+
+  %w(Annotation BinaryAnnotation Endpoint).each do |klass|
+    context "without Trace::#{klass}" do
+      before(:all) do
+        TemporaryClass = Trace.send(:const_get, klass)
+        Trace.send(:remove_const, klass)
+      end
+
+      after(:all) do
+        Trace.send(:const_set, klass, TemporaryClass)
+      end
+
+      it 'does not trace the request' do
+        headers = nil
+        expect { headers = LHC.get(:local).request.headers }.not_to raise_error
+        expect(headers['X-B3-TraceId']).to be_nil
+        expect(headers['X-B3-ParentSpanId']).to be_nil
+        expect(headers['X-B3-SpanId']).to be_nil
+        expect(headers['X-B3-Sampled']).to be_nil
+        expect(headers['X-B3-Flags']).to be_nil
       end
     end
   end
