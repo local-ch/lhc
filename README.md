@@ -838,6 +838,8 @@ If it raises, it forwards the request and response object to rollbar, which cont
 
 #### Zipkin
 
+** Zipkin 0.33 breaks our current implementation of the Zipkin interceptor **
+
 Zipkin is a distributed tracing system. It helps gather timing data needed to troubleshoot latency problems in microservice architectures [Zipkin Distributed Tracing](https://zipkin.io/).
 
 Add the zipkin interceptor to your basic set of LHC interceptors.
@@ -850,7 +852,7 @@ Add the zipkin interceptor to your basic set of LHC interceptors.
 
 The following configuration needs to happen in the application that wants to run this interceptor:
 
-1. Add `gem 'zipkin-tracer'` to your Gemfile.
+1. Add `gem 'zipkin-tracer', '< 0.33.0'` to your Gemfile.
 2. Add the necessary Rack middleware and configuration
 
 ```ruby
