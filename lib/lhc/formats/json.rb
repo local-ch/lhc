@@ -12,9 +12,10 @@ module LHC::Formats
     def format_options(options)
       options[:headers] ||= {}
       no_content_type_header!(options)
-      options[:headers]['Content-Type'] = 'application/json; charset=utf-8'
       no_accept_header!(options)
-      options[:headers]['Accept'] = 'application/json'
+
+      options[:headers]['Content-Type'] = 'application/json; charset=utf-8'
+      options[:headers]['Accept'] = 'application/json,application/vnd.api+json'
       options[:headers]['Accept-Charset'] = 'utf-8'
       options
     end

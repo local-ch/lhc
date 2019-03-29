@@ -7,7 +7,7 @@ describe LHC do
     it 'adds Content-Type, Accept and Accept-Charset Headers to the request' do
       stub_request(:get, "http://local.ch/")
         .with(headers: {
-                'Accept' => 'application/json',
+                'Accept' => 'application/json,application/vnd.api+json',
                 'Content-Type' => 'application/json; charset=utf-8',
                 'Accept-Charset' => 'utf-8'
               })
