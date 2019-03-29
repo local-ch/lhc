@@ -4,9 +4,13 @@ require 'rails_helper'
 
 describe LHC do
   context 'formats' do
-    it 'adds Content-Type and Accept Headers to the request' do
+    it 'adds Content-Type, Accept and Accept-Charset Headers to the request' do
       stub_request(:get, "http://local.ch/")
-        .with(headers: { 'Accept' => 'application/json; charset=utf-8', 'Content-Type' => 'application/json; charset=utf-8' })
+        .with(headers: {
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json; charset=utf-8',
+                'Accept-Charset' => 'utf-8'
+              })
         .to_return(body: {}.to_json)
       LHC.json.get('http://local.ch')
     end

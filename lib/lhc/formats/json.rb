@@ -14,7 +14,8 @@ module LHC::Formats
       no_content_type_header!(options)
       options[:headers]['Content-Type'] = 'application/json; charset=utf-8'
       no_accept_header!(options)
-      options[:headers]['Accept'] = 'application/json; charset=utf-8'
+      options[:headers]['Accept'] = 'application/json'
+      options[:headers]['Accept-Charset'] = 'utf-8'
       options
     end
 
