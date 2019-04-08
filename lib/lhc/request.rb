@@ -15,7 +15,7 @@ class LHC::Request
   attr_accessor :response, :options, :raw, :format, :error_handler, :errors_ignored
 
   def initialize(options, self_executing = true)
-    self.errors_ignored = options.fetch(:ignored_errors, [])
+    self.errors_ignored = (options.fetch(:ignored_errors, []) || []).compact
     self.options = format!(options.deep_dup || {})
     self.error_handler = options.delete :error_handler
     use_configured_endpoint!

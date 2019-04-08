@@ -46,4 +46,20 @@ describe LHC::Request do
       }.to raise_error(LHC::NotFound)
     end
   end
+
+  context 'does not raise exception if ignored errors is set to nil' do
+    before { stub_request(:get, 'http://local.ch').to_return(status: 404) }
+
+    it "does not raise an error when ignored errors is set to array with nil" do
+      expect {
+        LHC.get('http://local.ch', ignored_errors: [nil])
+      }.to raise_error(LHC::NotFound)
+    end
+
+    it "does not raise an error when ignored errors is set to nil" do
+      expect {
+        LHC.get('http://local.ch', ignored_errors: nil)
+      }.to raise_error(LHC::NotFound)
+    end
+  end
 end
