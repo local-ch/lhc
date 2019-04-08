@@ -56,7 +56,7 @@ describe LHC::Request do
       }.to raise_error(LHC::NotFound)
     end
 
-    it "does not raise an error when ignored errors is set to array with nil" do
+    it "does not raise an error when ignored errors is set to nil" do
       expect {
         LHC.get('http://local.ch', ignored_errors: nil)
       }.to raise_error(LHC::NotFound)
