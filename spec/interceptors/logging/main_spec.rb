@@ -22,11 +22,10 @@ describe LHC::Logging do
   end
 
   context 'source' do
-
     let(:source) { '/Users/Sebastian/LHC/test.rb' }
 
     it 'does log the source if provided as option' do
-      LHC.get('http://local.ch', { source: source })
+      LHC.get('http://local.ch', source: source)
       expect(logger).to have_received(:info).once.with(
         %r{Before LHC request <\d+> GET http://local.ch at \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2} Params={} Headers={.*?} \nCalled from #{source}}
       )
