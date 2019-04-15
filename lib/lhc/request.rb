@@ -12,10 +12,11 @@ class LHC::Request
 
   TYPHOEUS_OPTIONS ||= [:params, :method, :body, :headers, :follow_location, :params_encoding]
 
-  attr_accessor :response, :options, :raw, :format, :error_handler, :errors_ignored
+  attr_accessor :response, :options, :raw, :format, :error_handler, :errors_ignored, :source
 
   def initialize(options, self_executing = true)
     self.errors_ignored = (options.fetch(:ignored_errors, []) || []).compact
+    self.source = options&.dig(:source)
     self.options = format!(options.deep_dup || {})
     self.error_handler = options.delete :error_handler
     use_configured_endpoint!
