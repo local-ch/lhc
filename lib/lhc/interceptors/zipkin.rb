@@ -11,7 +11,7 @@ class LHC::Zipkin < LHC::Interceptor
   TRUE = '1' # true in binary annotation
 
   def before_request
-    return unless dependencies?
+    return if !dependencies? || !tracing?
     ZipkinTracer::TraceContainer.with_trace_id(trace_id) do
       # add headers even if the current trace_id should not be sampled
       B3_HEADERS.each { |method, header| request.headers[header] = trace_id.send(method).to_s }
@@ -27,6 +27,10 @@ class LHC::Zipkin < LHC::Interceptor
   end
 
   private
+
+  def tracing?
+    ZipkinTracer::TraceContainer.current
+  end
 
   def start_trace!
     record_path
@@ -97,7 +101,6 @@ class LHC::Zipkin < LHC::Interceptor
   def dependencies?
     (
       defined?(ZipkinTracer::TraceContainer) &&
-      ZipkinTracer::TraceContainer.current &&
       defined?(::Trace) &&
       defined?(::Trace::Annotation) &&
       defined?(::Trace::BinaryAnnotation) &&
