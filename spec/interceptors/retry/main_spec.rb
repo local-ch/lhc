@@ -43,7 +43,6 @@ describe LHC::Rollbar do
   end
 
   context 'retry all' do
-
     let(:max_retry_count) { 2 }
 
     before do
