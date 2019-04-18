@@ -814,6 +814,15 @@ Consider, that all other interceptors will run for every single retry.
   LHC::Retry.max = 3
 ```
 
+##### Retry all requests
+
+If you want to retry all requests made from your application, you just need to configure it globally:
+
+```ruby
+  LHC::Retry.all = true
+  configuration.interceptors = [LHC::Retry]
+```
+
 #### Rollbar Interceptor
 
 Forward errors to rollbar when exceptions occur during http requests.
