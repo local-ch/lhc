@@ -4,7 +4,7 @@ class LHC::Retry < LHC::Interceptor
   attr_accessor :retries, :current_retry
 
   class << self
-    attr_accessor :max
+    attr_accessor :max, :all
   end
 
   def after_response
@@ -24,7 +24,7 @@ class LHC::Retry < LHC::Interceptor
 
   def retry?(request)
     return false if request.response.success?
-    return false unless request.options.dig(:retry)
+    return false if !request.options.dig(:retry) && !LHC::Retry.all
     request.options[:retries] < max(request)
   end
 
