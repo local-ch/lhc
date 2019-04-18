@@ -41,4 +41,22 @@ describe LHC::Rollbar do
       expect(request_stub).to have_been_requested.times(2)
     end
   end
+
+  context 'retry all' do
+
+    let(:max_retry_count) { 2 }
+
+    before do
+      expect(LHC::Retry).to receive(:max).at_least(:once).and_return(2)
+      expect(LHC::Retry).to receive(:all).at_least(:once).and_return(true)
+    end
+
+    it 'retries if configured globally' do
+      request_stub
+      response = LHC.get('http://local.ch')
+      expect(response.success?).to eq true
+      expect(response.code).to eq 200
+      expect(request_stub).to have_been_requested.times(3)
+    end
+  end
 end
