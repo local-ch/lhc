@@ -1,0 +1,3 @@
+---
+  request_reviews: true
+  cleanup_stale_branches: 8.days
