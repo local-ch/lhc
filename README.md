@@ -847,7 +847,7 @@ If it raises, it forwards the request and response object to rollbar, which cont
 
 #### Throttle
 
-The throttle interceptor allows you to raise an exception if a predefined quota of an provider request limit is reached in advance.
+The throttle interceptor allows you to raise an exception if a predefined quota of a provider request limit is reached in advance.
 
 ```ruby
   LHC.configure do |c|
