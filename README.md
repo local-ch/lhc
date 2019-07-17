@@ -858,7 +858,7 @@ The throttle interceptor allows you to raise an exception if a predefined quota 
 options = { 
   throttle: {
     track: true, # enables tracking of current limit/remaining requests of rate-limiting
-    break: '80%', # quota in percent after which errors are raised
+    break: '80%', # quota in percent after which errors are raised. Percentage symbol is optional, values will be converted to integer (e.g. '23.5' will become 23)
     provider: 'local.ch', # name of the provider under which throttling tracking is aggregated,
     limit: { header: 'Rate-Limit-Limit' }, # either a hard-coded integer, or a hash pointing at the response header containing the limit value
     remaining: { header: 'Rate-Limit-Remaining' }, # a hash pointing at the response header containing the current amount of remaining requests
