@@ -851,7 +851,7 @@ The throttle interceptor allows you to raise an exception if a predefined quota 
 
 ```ruby
   LHC.configure do |c|
-    c.interceptors = [LHC::LHC::Throttle]
+    c.interceptors = [LHC::Throttle]
   end
 ```
 ```ruby
