@@ -25,10 +25,12 @@ describe LHC::Throttle do
     LHC.config.interceptors = [LHC::Throttle]
 
     stub_request(:get, 'http://local.ch')
-      .to_return(headers: {
-        'Rate-Limit-Limit' => limit,
-        'Rate-Limit-Remaining' => remaining
-      })
+      .to_return(
+        headers: {
+          'Rate-Limit-Limit' => limit,
+          'Rate-Limit-Remaining' => remaining
+        }
+      )
   end
 
   it 'tracks the request limits based on response data' do
