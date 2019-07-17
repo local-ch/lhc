@@ -845,6 +845,33 @@ If it raises, it forwards the request and response object to rollbar, which cont
   LHC.get('http://local.ch', rollbar: { tracking_key: 'this particular request' })
 ```
 
+#### Throttle
+
+The throttle interceptor allows you to raise an exception if a predefined quota of a provider request limit is reached in advance.
+
+```ruby
+  LHC.configure do |c|
+    c.interceptors = [LHC::Throttle]
+  end
+```
+```ruby
+options = { 
+  throttle: {
+    track: true, # enables tracking of current limit/remaining requests of rate-limiting
+    break: '80%', # quota in percent after which errors are raised. Percentage symbol is optional, values will be converted to integer (e.g. '23.5' will become 23)
+    provider: 'local.ch', # name of the provider under which throttling tracking is aggregated,
+    limit: { header: 'Rate-Limit-Limit' }, # either a hard-coded integer, or a hash pointing at the response header containing the limit value
+    remaining: { header: 'Rate-Limit-Remaining' }, # a hash pointing at the response header containing the current amount of remaining requests
+  } 
+}
+
+LHC.get('http://local.ch', options)
+# { headers: { 'Rate-Limit-Limit' => 100, 'Rate-Limit-Remaining' => 19 } }
+
+LHC.get('http://local.ch', options)
+# raises LHC::Throttle::OutOfQuota: Reached predefined quota for local.ch
+```
+
 #### Zipkin
 
 ** Zipkin 0.33 breaks our current implementation of the Zipkin interceptor **

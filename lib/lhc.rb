@@ -28,6 +28,8 @@ module LHC
     'lhc/interceptors/prometheus'
   autoload :Retry,
     'lhc/interceptors/retry'
+  autoload :Throttle,
+    'lhc/interceptors/throttle'
 
   autoload :Config,
     'lhc/config'
