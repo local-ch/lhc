@@ -38,7 +38,7 @@ class LHC::Throttle < LHC::Interceptor
     remaining = track[:remaining] * 100
     limit = track[:limit]
     quota = 100 - options[:break].to_i
-    raise(OutOfQuota, "Reached predefined quota for #{options[:provider]}") if remaining / limit < quota
+    raise(OutOfQuota, "Reached predefined quota for #{options[:provider]}") if remaining < quota * limit
   end
 
   def limit(options:, response:)
