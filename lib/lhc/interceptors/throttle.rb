@@ -74,11 +74,7 @@ class LHC::Throttle < LHC::Interceptor
   end
 
   def convert_expires(value)
-    if value.respond_to?(:to_datetime)
-      value.to_datetime
-    elsif value.is_a?(ActiveSupport::Duration)
-      (Time.zone.now + value).to_datetime
-    elsif value.is_a?(Integer)
+    if value.is_a?(Integer)
       Time.zone.at(value).to_datetime
     end
   end
