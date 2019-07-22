@@ -33,7 +33,7 @@ class LHC::Throttle < LHC::Interceptor
   def break_when_quota_reached!
     options = request.options.dig(:throttle)
     track = (self.class.track || {}).dig(options[:provider])
-    return unless track
+    return if track.blank? || track[:remaining].blank? || track[:limit].blank?
     # avoid floats by multiplying with 100
     remaining = track[:remaining] * 100
     limit = track[:limit]
