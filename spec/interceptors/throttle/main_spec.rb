@@ -77,5 +77,14 @@ describe LHC::Throttle do
     it 'does not raise an exception' do
       LHC.get('http://local.ch', options)
     end
+
+    context 'no remaining tracked, but break enabled' do
+      let(:break_option) { '90%' }
+
+      it 'does not fail if a remaining was not tracked yet' do
+        LHC.get('http://local.ch', options)
+        LHC.get('http://local.ch', options)
+      end
+    end
   end
 end
