@@ -67,4 +67,15 @@ describe LHC::Throttle do
       end
     end
   end
+
+  context 'no response headers' do
+    before do
+      stub_request(:get, 'http://local.ch')
+        .to_return(status: 200)
+    end
+
+    it 'does not raise an exception' do
+      LHC.get('http://local.ch', options)
+    end
+  end
 end

@@ -45,7 +45,7 @@ class LHC::Throttle < LHC::Interceptor
     @limit ||= begin
       if options.is_a?(Integer)
         options
-      elsif options.is_a?(Hash) && options[:header]
+      elsif options.is_a?(Hash) && options[:header] && response.headers.present?
         response.headers[options[:header]]&.to_i
       end
     end
@@ -53,7 +53,7 @@ class LHC::Throttle < LHC::Interceptor
 
   def remaining(options:, response:)
     @remaining ||= begin
-      if options.is_a?(Hash) && options[:header]
+      if options.is_a?(Hash) && options[:header] && response.headers.present?
         response.headers[options[:header]]&.to_i
       end
     end
