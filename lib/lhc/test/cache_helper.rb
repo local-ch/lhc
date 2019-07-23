@@ -1,9 +1,3 @@
 # frozen_string_literal: true
 
-RSpec.configure do |config|
-  LHC::Caching.cache = ActiveSupport::Cache::MemoryStore.new
-
-  config.before(:each) do
-    LHC::Caching.cache.clear
-  end
-end
+warn("[WARNING] require 'lhc/test/cache_helper.rb' is not needed any more! Just require 'lhc/rspec' in your spec helper instead.")

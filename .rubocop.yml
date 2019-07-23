@@ -56,3 +56,6 @@ RSpec/BeforeAfterAll:
 
 Style/EmptyMethod:
   EnforcedStyle: compact
+
+RSpec/RepeatedExample:
+  Enabled: false

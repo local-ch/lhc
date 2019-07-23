@@ -67,7 +67,6 @@ use it like:
                * [Bearer Authentication with client access token](#bearer-authentication-with-client-access-token)
             * [Caching Interceptor](#caching-interceptor)
                * [Options](#options)
-               * [Testing](#testing)
             * [Default Timeout Interceptor](#default-timeout-interceptor)
                * [Overwrite defaults](#overwrite-defaults)
             * [Logging Interceptor](#logging-interceptor)
@@ -83,13 +82,16 @@ use it like:
             * [Retry Interceptor](#retry-interceptor)
                * [Limit the amount of retries while making the request](#limit-the-amount-of-retries-while-making-the-request)
                * [Change the default maximum of retries of the retry interceptor](#change-the-default-maximum-of-retries-of-the-retry-interceptor)
+               * [Retry all requests](#retry-all-requests)
             * [Rollbar Interceptor](#rollbar-interceptor)
                * [Forward additional parameters](#forward-additional-parameters)
+            * [Throttle](#throttle)
             * [Zipkin](#zipkin)
          * [Create an interceptor from scratch](#create-an-interceptor-from-scratch)
             * [Interceptor callbacks](#interceptor-callbacks)
             * [Interceptor request/response](#interceptor-requestresponse)
             * [Provide a response replacement through an interceptor](#provide-a-response-replacement-through-an-interceptor)
+      * [Testing](#testing)
       * [License](#license)
 
 ## Basic methods
@@ -629,16 +631,6 @@ To avoid that case the first process to find an expired cache entry will bump th
 
 `use` - Set an explicit cache to be used for this request. If this option is missing `LHC::Caching.cache` is used.
 
-##### Testing
-
-Add to your spec_helper.rb:
-
-```ruby
-  require 'lhc/test/cache_helper.rb'
-```
-
-This will initialize a MemoryStore cache for LHC::Caching interceptor and resets the cache before every test.
-
 #### Default Timeout Interceptor
 
 Applies default timeout values to all requests made in an application, that uses LHC.
@@ -961,6 +953,16 @@ You can access the request.response to identify if a response was already provid
       return LHC::Response.new(remote_cache)
     end
   end
+```
+
+## Testing
+
+When writing tests for your application when using LHC, please make sure you require the lhc rspec test helper:
+
+```ruby
+# spec/spec_helper.rb
+
+require 'lhc/rspec'
 ```
 
 ## License
