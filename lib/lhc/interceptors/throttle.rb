@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'active_support/duration'
+
 class LHC::Throttle < LHC::Interceptor
 
   class OutOfQuota < StandardError
@@ -24,7 +26,8 @@ class LHC::Throttle < LHC::Interceptor
     self.class.track ||= {}
     self.class.track[options.dig(:provider)] = {
       limit: limit(options: options[:limit], response: response),
-      remaining: remaining(options: options[:remaining], response: response)
+      remaining: remaining(options: options[:remaining], response: response),
+      expires: expires(options: options[:expires], response: response)
     }
   end
 
@@ -33,7 +36,8 @@ class LHC::Throttle < LHC::Interceptor
   def break_when_quota_reached!
     options = request.options.dig(:throttle)
     track = (self.class.track || {}).dig(options[:provider])
-    return if track.blank? || track[:remaining].blank? || track[:limit].blank?
+    return if track.blank? || track[:remaining].blank? || track[:limit].blank? || track[:expires].blank?
+    return if Time.zone.now > track[:expires]
     # avoid floats by multiplying with 100
     remaining = track[:remaining] * 100
     limit = track[:limit]
@@ -56,6 +60,22 @@ class LHC::Throttle < LHC::Interceptor
       if options.is_a?(Hash) && options[:header] && response.headers.present?
         response.headers[options[:header]]&.to_i
       end
+    end
+  end
+
+  def expires(options:, response:)
+    @expires ||= begin
+      if options.is_a?(Hash) && options[:header] && response.headers.present?
+        convert_expires(response.headers[options[:header]]&.to_i)
+      else
+        convert_expires(options)
+      end
+    end
+  end
+
+  def convert_expires(value)
+    if value.is_a?(Integer)
+      Time.zone.at(value).to_datetime
     end
   end
 end

@@ -862,6 +862,7 @@ options = {
     provider: 'local.ch', # name of the provider under which throttling tracking is aggregated,
     limit: { header: 'Rate-Limit-Limit' }, # either a hard-coded integer, or a hash pointing at the response header containing the limit value
     remaining: { header: 'Rate-Limit-Remaining' }, # a hash pointing at the response header containing the current amount of remaining requests
+    expires: { header: 'Rate-Limit-Reset' } # a hash pointing at the response header containing the timestamp when the quota will reset
   } 
 }
 

@@ -13,12 +13,14 @@ describe LHC::Throttle do
         track: true,
         limit: limit_options,
         remaining: { header: 'Rate-Limit-Remaining' },
+        expires: { header: 'Rate-Limit-Reset' },
         break: break_option
       }
     }
   end
   let(:limit_options) { { header: 'Rate-Limit-Limit' } }
   let(:break_option) { false }
+  let(:expires_in) { (Time.zone.now + 1.hour).to_i }
 
   before(:each) do
     LHC::Throttle.track = nil
@@ -28,7 +30,8 @@ describe LHC::Throttle do
       .to_return(
         headers: {
           'Rate-Limit-Limit' => limit,
-          'Rate-Limit-Remaining' => remaining
+          'Rate-Limit-Remaining' => remaining,
+          'Rate-Limit-Reset' => expires_in
         }
       )
   end
@@ -85,6 +88,19 @@ describe LHC::Throttle do
         LHC.get('http://local.ch', options)
         LHC.get('http://local.ch', options)
       end
+    end
+  end
+
+  context 'expires' do
+    let(:break_option) { '80%' }
+
+    it 'attempts another request if the quota expired' do
+      LHC.get('http://local.ch', options)
+      expect(-> {
+        LHC.get('http://local.ch', options)
+      }).to raise_error(LHC::Throttle::OutOfQuota, 'Reached predefined quota for local.ch')
+      Timecop.travel(Time.zone.now + 2.hours)
+      LHC.get('http://local.ch', options)
     end
   end
 end
