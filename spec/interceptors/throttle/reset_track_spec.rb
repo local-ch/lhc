@@ -39,15 +39,15 @@ describe LHC::Throttle do
   # If LHC::Trottle.track would be kept accross multiple tests,
   # at least 2/3 of the following would fail
 
-  it 'resets track' do
+  it 'resets track accross multiple tests' do
     LHC.get('http://local.ch', options)
   end
 
-  it 'accross multiple' do
+  it 'resets track accross multiple tests' do
     LHC.get('http://local.ch', options)
   end
 
-  it 'specs' do
+  it 'resets track accross multiple tests' do
     LHC.get('http://local.ch', options)
   end
 end
