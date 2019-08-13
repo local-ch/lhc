@@ -20,7 +20,6 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.requirements << 'Ruby >= 2.0.0'
-  s.required_ruby_version = '>= 2.6.3'
 
   s.add_dependency 'activesupport', '>= 4.2'
   s.add_dependency 'addressable'
