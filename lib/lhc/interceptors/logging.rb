@@ -7,7 +7,6 @@ class LHC::Logging < LHC::Interceptor
 
   def before_request
     return unless logger
-
     logger.info(
       [
         'Before LHC request',
@@ -23,7 +22,6 @@ class LHC::Logging < LHC::Interceptor
 
   def after_response
     return unless logger
-
     logger.info(
       [
         'After LHC response for request',

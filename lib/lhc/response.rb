@@ -50,7 +50,6 @@ class LHC::Response
 
   def format
     return LHC::Formats::JSON.new if request.nil?
-
     request.format
   end
 

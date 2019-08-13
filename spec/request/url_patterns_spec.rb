@@ -35,7 +35,7 @@ describe LHC::Request do
           @data.as_json
         end
 
-        def to_json(*_args)
+        def to_json
           as_json.to_json
         end
       end

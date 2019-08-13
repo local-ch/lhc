@@ -12,23 +12,19 @@ class LHC::Caching < LHC::Interceptor
 
   def before_request
     return unless cache?(request)
-
     deprecation_warning(request.options)
     options = options(request.options)
     key = key(request, options[:key])
     response_data = cache_for(options).fetch(key)
     return unless response_data
-
     logger&.info "Served from cache: #{key}"
     from_cache(request, response_data)
   end
 
   def after_response
     return unless response.success?
-
     request = response.request
     return unless cache?(request)
-
     options = options(request.options)
     cache_for(options).write(
       key(request, options[:key]),
@@ -49,7 +45,6 @@ class LHC::Caching < LHC::Interceptor
   # return false if this interceptor cannot work
   def cache?(request)
     return false unless request.options[:cache]
-
     options = options(request.options)
     cache_for(options) &&
       cached_method?(request.method, options[:methods])

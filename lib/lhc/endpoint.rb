@@ -55,7 +55,6 @@ class LHC::Endpoint
   # Example: {+datastore}/contracts/{id} == http://local.ch/contracts/1
   def match?(url)
     return true if url == uri.pattern
-
     match_data = match_data(url)
     return false if match_data.nil?
 
@@ -76,7 +75,6 @@ class LHC::Endpoint
   def values_as_params(url)
     match_data = match_data(url)
     return if match_data.nil?
-
     Hash[match_data.variables.map(&:to_sym).zip(match_data.values)]
   end
 
@@ -105,7 +103,6 @@ class LHC::Endpoint
   # creates params according to template
   def self.values_as_params(template, url)
     raise("#{url} does not match the template: #{template}") if !match?(url, template)
-
     new(template).values_as_params(url)
   end
 

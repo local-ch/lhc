@@ -19,7 +19,6 @@ class LHC::Interceptors
       result = interceptor.send(name)
       if result.is_a? LHC::Response
         raise 'Response already set from another interceptor' if @response
-
         @response = interceptor.request.response = result
       end
     end

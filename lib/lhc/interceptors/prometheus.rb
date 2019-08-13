@@ -20,7 +20,6 @@ class LHC::Prometheus < LHC::Interceptor
   def initialize(request)
     super(request)
     return if LHC::Prometheus.registered || LHC::Prometheus.client.blank?
-
     LHC::Prometheus.client.registry.counter(LHC::Prometheus.request_key, 'Counter of all LHC requests.')
     LHC::Prometheus.client.registry.histogram(LHC::Prometheus.times_key, 'Times for all LHC requests.')
     LHC::Prometheus.registered = true
@@ -28,7 +27,6 @@ class LHC::Prometheus < LHC::Interceptor
 
   def after_response
     return if !LHC::Prometheus.registered || LHC::Prometheus.client.blank?
-
     LHC::Prometheus.client.registry
       .get(LHC::Prometheus.request_key)
       .increment(

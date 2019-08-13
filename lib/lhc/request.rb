@@ -63,7 +63,6 @@ class LHC::Request
 
   def optionally_encoded_url(options)
     return options[:url] unless options.fetch(:url_encoding, true)
-
     encode_url(options[:url])
   end
 
@@ -82,14 +81,12 @@ class LHC::Request
 
   def translate_body(options)
     return options if options.fetch(:body, nil).blank?
-
     options[:body] = format.to_body(options[:body])
     options
   end
 
   def encode_url(url)
     return url if url.nil?
-
     URI.escape(url)
   end
 
@@ -99,7 +96,6 @@ class LHC::Request
     options.delete(:url)
     options.each do |key, _v|
       next if TYPHOEUS_OPTIONS.include? key
-
       method = "#{key}="
       options.delete key unless easy.respond_to?(method)
     end
@@ -111,7 +107,6 @@ class LHC::Request
   def use_configured_endpoint!
     endpoint = LHC.config.endpoints[options[:url]]
     return unless endpoint
-
     # explicit options override endpoint options
     new_options = endpoint.options.deep_merge(options)
     # set new options
@@ -140,7 +135,6 @@ class LHC::Request
 
   def handle_error(response)
     return if ignore_error?
-
     throw_error(response) unless error_handler
     response.body_replacement = error_handler.call(response)
   end

@@ -13,20 +13,17 @@ class LHC::Monitoring < LHC::Interceptor
 
   def before_request
     return unless statsd
-
     LHC::Monitoring.statsd.count("#{key(request)}.before_request", 1)
   end
 
   def after_request
     return unless statsd
-
     LHC::Monitoring.statsd.count("#{key(request)}.count", 1)
     LHC::Monitoring.statsd.count("#{key(request)}.after_request", 1)
   end
 
   def after_response
     return unless statsd
-
     key = key(response)
     LHC::Monitoring.statsd.timing("#{key}.time", response.time) if response.success?
     key += response.timeout? ? '.timeout' : ".#{response.code}"
@@ -53,7 +50,6 @@ class LHC::Monitoring < LHC::Interceptor
 
   def sanitize_url(url)
     return url if url.match(%r{https?://})
-
     "http://#{url}"
   end
 
