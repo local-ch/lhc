@@ -11,6 +11,7 @@ class LHC::Auth < LHC::Interceptor
   def after_response
     return unless configuration_correct?
     return unless reauthenticate?
+
     reauthenticate!
   end
 
@@ -88,11 +89,13 @@ class LHC::Auth < LHC::Interceptor
 
   def refresh_client_token?
     return true if refresh_client_token_option.is_a?(Proc)
+
     warn("[WARNING] The given refresh_client_token must be a Proc for reauthentication.")
   end
 
   def retry_interceptor?
     return true if all_interceptor_classes.include?(LHC::Retry) && all_interceptor_classes.index(LHC::Retry) > all_interceptor_classes.index(self.class)
+
     warn("[WARNING] Your interceptors must include LHC::Retry after LHC::Auth.")
   end
 end

@@ -41,6 +41,7 @@ class LHC::Error < StandardError
 
   def self.find(response)
     return LHC::Timeout if response.timeout?
+
     status_code = response.code.to_s[0..2].to_i
     error = map[status_code]
     error ||= LHC::UnknownError
@@ -59,6 +60,7 @@ class LHC::Error < StandardError
 
   def to_s
     return response if response.is_a?(String)
+
     request = response.request
     debug = []
     debug << [request.method, request.url].map { |str| fix_invalid_encoding(str) }.join(' ')
@@ -78,6 +80,7 @@ class LHC::Error < StandardError
   # an empty string is returned instead
   def fix_invalid_encoding(string)
     return string unless string.is_a?(String)
+
     result = string.dup
 
     # we assume it's ISO-8859-1 first
