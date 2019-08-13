@@ -7,7 +7,6 @@ trial_attachments:
     include_match: Gemfile
     content_type: text/plain
 
-
 environment_variables:
   BUNDLER: '_1.17.3_'
 
