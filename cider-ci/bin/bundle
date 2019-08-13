@@ -19,13 +19,33 @@ DIGEST=$(git ls-tree HEAD --\
   cider-ci.yml cider-ci Gemfile.lock \
   | openssl dgst -sha1 | cut -d ' ' -f 2)
 
+if [ ! -z ${ACTIVESUPPORT:-} ]; then
+  DIGEST=$(echo "$DIGEST $ACTIVESUPPORT")
+fi
+
 DIGEST=$(echo "$DIGEST $PATH" \
  | openssl dgst -sha1 | cut -d ' ' -f 2)
+
+echo "DIGEST"
+echo "${DIGEST}"
 
 CACHE_SIGNATURE_FILE="/tmp/bundle_cache_signature_${DIGEST}"
 
 if [ ! -f  $CACHE_SIGNATURE_FILE ] ; then
-  bundle install
+  if [ ! -z ${ACTIVESUPPORT:-} ]; then
+    if [ ! -z ${BUNDLER:-} ]; then
+      echo "BUNDLE_GEMFILE=Gemfile.activesupport$ACTIVESUPPORT bundle $BUNDLER install"
+      BUNDLE_GEMFILE=Gemfile.activesupport$ACTIVESUPPORT bundle $BUNDLER install
+    else
+      echo "BUNDLE_GEMFILE=Gemfile.activesupport$ACTIVESUPPORT bundle install"
+      BUNDLE_GEMFILE=Gemfile.activesupport$ACTIVESUPPORT bundle install
+    fi
+  else
+    echo "bundle install"
+    bundle $BUNDLER install
+  fi
   touch $CACHE_SIGNATURE_FILE
 fi
 
+echo "bundle install"
+bundle $BUNDLER install
