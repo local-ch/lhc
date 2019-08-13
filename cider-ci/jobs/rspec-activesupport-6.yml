@@ -1,4 +1,4 @@
-rspec-active-support-v5:
+rspec-active-support-v6:
   name: 'rspec with ActiveSupport v6'
 
   run_when:
