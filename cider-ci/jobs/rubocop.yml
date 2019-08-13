@@ -11,8 +11,8 @@ rubocop:
     tasks:
 
       rubocop:
-        
-        include:        
+
+        include:
           - cider-ci/task_components/ruby.yml
           - cider-ci/task_components/bundle.yml
           - cider-ci/task_components/rubocop.yml
