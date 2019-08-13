@@ -96,7 +96,7 @@ Layout/AlignParameters:
 Layout/EmptyLinesAroundClassBody:
   Enabled: false
 
-Layout/IndentArray:
+Layout/IndentFirstArrayElement:
   EnforcedStyle: consistent
 
 Layout/MultilineMethodCallIndentation:
