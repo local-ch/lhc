@@ -7,6 +7,8 @@ describe LHC::Rollbar do
     LHC.config.interceptors = [LHC::Retry]
   end
 
+  let(:status) { 500 }
+
   let(:request_stub) do
     @retry_count = 0
     stub_request(:get, 'http://local.ch').to_return do |_|
@@ -14,7 +16,7 @@ describe LHC::Rollbar do
         { status: 200 }
       else
         @retry_count += 1
-        { status: 500 }
+        { status: status }
       end
     end
   end
@@ -56,6 +58,16 @@ describe LHC::Rollbar do
       expect(response.success?).to eq true
       expect(response.code).to eq 200
       expect(request_stub).to have_been_requested.times(3)
+    end
+  end
+
+  context 'ignore error' do
+    let(:status) { 404 }
+
+    it 'does not retry if the error is explicitly ignored' do
+      request_stub
+      LHC.get('http://local.ch', retry: { max: 1 }, ignored_errors: [LHC::NotFound])
+      expect(request_stub).to have_been_requested.times(1)
     end
   end
 end

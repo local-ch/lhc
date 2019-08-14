@@ -815,6 +815,20 @@ If you want to retry all requests made from your application, you just need to c
   configuration.interceptors = [LHC::Retry]
 ```
 
+##### Do not retry certain response codes
+
+If you do not want to retry based on certain response codes, use retry in combination with explicit `ignore_errors`:
+
+```ruby
+  LHC.get('http://local.ch', ignore_errors: [LHC::NotFound], retry: { max: 1 })
+```
+
+Or if you use `LHC::Retry.all`:
+
+```ruby
+LHC.get('http://local.ch', ignore_errors: [LHC::NotFound])
+```
+
 #### Rollbar Interceptor
 
 Forward errors to rollbar when exceptions occur during http requests.
