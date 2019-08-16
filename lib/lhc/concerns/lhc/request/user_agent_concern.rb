@@ -11,7 +11,12 @@ module LHC
       included do
         Typhoeus::Config.user_agent = begin
           version = LHC::VERSION
-          application = defined?(Rails) ? Rails.application.class.parent_name : nil
+          application = nil
+          if defined?(Rails)
+            app_class = Rails.application.class
+            application = (ActiveSupport.gem_version >= Gem::Version.new('6.0.0.rc2')) ? app_class.module_parent_name : app_class.parent_name
+          end
+
           "LHC (#{[version, application].compact.join('; ')}) [https://github.com/local-ch/lhc]"
         end
       end
