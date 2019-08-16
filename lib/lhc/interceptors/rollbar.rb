@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
+require 'core_ext/hash/deep_transform_values'
+
 class LHC::Rollbar < LHC::Interceptor
   include ActiveSupport::Configurable
+  include LHC::FixInvalidEncodingConcern
 
   def after_response
     return unless Object.const_defined?('Rollbar')
@@ -23,6 +26,11 @@ class LHC::Rollbar < LHC::Interceptor
         params: request.params
       }
     }.merge additional_params
-    Rollbar.warning("Status: #{response.code} URL: #{request.url}", data)
+    begin
+      Rollbar.warning("Status: #{response.code} URL: #{request.url}", data)
+    rescue Encoding::UndefinedConversionError
+      sanitized_data = data.deep_transform_values { |value| self.class.fix_invalid_encoding(value) }
+      Rollbar.warning("Status: #{response.code} URL: #{request.url}", sanitized_data)
+    end
   end
 end

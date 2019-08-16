@@ -9,6 +9,8 @@ module LHC
     'lhc/concerns/lhc/basic_methods_concern'
   autoload :ConfigurationConcern,
     'lhc/concerns/lhc/configuration_concern'
+  autoload :FixInvalidEncodingConcern,
+    'lhc/concerns/lhc/fix_invalid_encoding_concern'
   autoload :FormatsConcern,
     'lhc/concerns/lhc/formats_concern'
 

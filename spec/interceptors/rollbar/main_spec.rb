@@ -7,16 +7,21 @@ describe LHC::Rollbar do
     LHC.config.interceptors = [LHC::Rollbar]
   end
 
-  it 'does not report if Rollbar is not defined' do
-    stub_request(:get, 'http://local.ch').to_return(status: 400)
-    expect(-> { LHC.get('http://local.ch') })
-      .to raise_error LHC::BadRequest
+  context 'Rollbar is undefined' do
+    before(:each) do
+      Object.send(:remove_const, 'Rollbar') if Object.const_defined?('Rollbar')
+    end
+    it 'does not report' do
+      stub_request(:get, 'http://local.ch').to_return(status: 400)
+      expect(-> { LHC.get('http://local.ch') })
+        .to raise_error LHC::BadRequest
+    end
   end
 
   context 'Rollbar is defined' do
     before(:each) do
       class Rollbar; end
-      allow(::Rollbar).to receive(:warning)
+      ::Rollbar.stub(:warning)
     end
 
     it 'does report errors to rollbar' do
