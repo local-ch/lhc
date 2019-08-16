@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 require 'typhoeus'
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/hash/keys'
@@ -9,6 +8,8 @@ module LHC
     'lhc/concerns/lhc/basic_methods_concern'
   autoload :ConfigurationConcern,
     'lhc/concerns/lhc/configuration_concern'
+  autoload :FixInvalidEncodingConcern,
+    'lhc/concerns/lhc/fix_invalid_encoding_concern'
   autoload :FormatsConcern,
     'lhc/concerns/lhc/formats_concern'
 

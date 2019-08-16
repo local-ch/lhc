@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class LHC::Error < StandardError
+  include LHC::FixInvalidEncodingConcern
+
   attr_accessor :response, :_message
 
   def self.map
@@ -61,44 +63,14 @@ class LHC::Error < StandardError
     return response if response.is_a?(String)
     request = response.request
     debug = []
-    debug << [request.method, request.url].map { |str| fix_invalid_encoding(str) }.join(' ')
+    debug << [request.method, request.url].map { |str| self.class.fix_invalid_encoding(str) }.join(' ')
     debug << "Options: #{request.options}"
     debug << "Headers: #{request.headers}"
     debug << "Response Code: #{response.code} (#{response.options[:return_code]})"
     debug << "Response Options: #{response.options}"
     debug << response.body
     debug << _message
-    debug.map { |str| fix_invalid_encoding(str) }.join("\n")
-  end
 
-  private
-
-  # fix strings that contain non-UTF8 encoding in a forceful way
-  # should none of the fix-attempts be successful,
-  # an empty string is returned instead
-  def fix_invalid_encoding(string)
-    return string unless string.is_a?(String)
-    result = string.dup
-
-    # we assume it's ISO-8859-1 first
-    if !result.valid_encoding? || !utf8?(result)
-      result.encode!('UTF-8', 'ISO-8859-1', invalid: :replace, undef: :replace, replace: '')
-    end
-
-    # if it's still an issue, try with BINARY
-    if !result.valid_encoding? || !utf8?(result)
-      result.encode!('UTF-8', 'BINARY', invalid: :replace, undef: :replace, replace: '')
-    end
-
-    # if its STILL an issue, return an empty string :(
-    if !result.valid_encoding? || !utf8?(result)
-      result = ""
-    end
-
-    result
-  end
-
-  def utf8?(string)
-    string.encoding == Encoding::UTF_8
+    debug.map { |str| self.class.fix_invalid_encoding(str) }.join("\n")
   end
 end
