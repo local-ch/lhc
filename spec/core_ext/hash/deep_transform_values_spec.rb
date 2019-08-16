@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'core_ext/hash/deep_transform_values'
 
-describe 'core_ext/hash/deep_transform_values' do
+describe Hash do
   subject do
     {
       'key' => 'value',
