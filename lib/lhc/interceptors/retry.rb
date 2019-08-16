@@ -24,6 +24,7 @@ class LHC::Retry < LHC::Interceptor
 
   def retry?(request)
     return false if request.response.success?
+    return false if request.error_ignored?
     return false if !request.options.dig(:retry) && !LHC::Retry.all
     request.options[:retries] < max(request)
   end
