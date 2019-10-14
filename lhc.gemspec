@@ -7,6 +7,9 @@ require "lhc/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
+  s.metadata['allowed_push_host'] = 'https://gem.fury.io/localsearch'
+
+
   s.name        = "lhc"
   s.version     = LHC::VERSION
   s.authors     = ['https://github.com/local-ch/lhc/contributors']
@@ -25,7 +28,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'addressable'
   s.add_dependency 'typhoeus', '>= 0.11'
 
-  s.add_development_dependency 'geminabox'
   s.add_development_dependency 'prometheus-client', '~> 0.7.1'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'rails', '>= 4.2'
