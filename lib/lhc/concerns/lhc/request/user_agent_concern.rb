@@ -14,7 +14,7 @@ module LHC
           application = nil
           if defined?(Rails)
             app_class = Rails.application.class
-            application = (ActiveSupport.gem_version >= Gem::Version.new('6.0.0.rc2')) ? app_class.module_parent_name : app_class.parent_name
+            application = (ActiveSupport.gem_version >= Gem::Version.new('6.0.0')) ? app_class.module_parent_name : app_class.parent_name
           end
 
           "LHC (#{[version, application].compact.join('; ')}) [https://github.com/local-ch/lhc]"
