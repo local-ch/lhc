@@ -5,28 +5,18 @@ class LHC::Prometheus < LHC::Interceptor
 
   config_accessor :client, :namespace
 
+  REQUEST_COUNTER_KEY = :lhc_requests
+  REQUEST_HISTOGRAM_KEY = :lhc_request_seconds
+
   class << self
     attr_accessor :registered
-  end
-
-  def self.request_key
-    [LHC::Prometheus.namespace, 'lhc_requests'].join('_').to_sym
-  end
-
-  def self.times_key
-    [LHC::Prometheus.namespace, 'lhc_request_seconds'].join('_').to_sym
-  end
-
-  def self.deprecated_times_key
-    [LHC::Prometheus.namespace, 'lhc_times'].join('_').to_sym
   end
 
   def initialize(request)
     super(request)
     return if LHC::Prometheus.registered || LHC::Prometheus.client.blank?
-    LHC::Prometheus.client.registry.counter(LHC::Prometheus.request_key, 'Counter of all LHC requests.')
-    LHC::Prometheus.client.registry.histogram(LHC::Prometheus.deprecated_times_key, 'Times for all LHC requests (Deprecated)')
-    LHC::Prometheus.client.registry.histogram(LHC::Prometheus.times_key, 'Request timings for all LHC requests in seconds.')
+    LHC::Prometheus.client.registry.counter(LHC::Prometheus::REQUEST_COUNTER_KEY, 'Counter of all LHC requests.')
+    LHC::Prometheus.client.registry.histogram(LHC::Prometheus::REQUEST_HISTOGRAM_KEY, 'Request timings for all LHC requests in seconds.')
     LHC::Prometheus.registered = true
   end
 
@@ -36,20 +26,20 @@ class LHC::Prometheus < LHC::Interceptor
     host = URI.parse(request.url).host
 
     LHC::Prometheus.client.registry
-      .get(LHC::Prometheus.request_key)
+      .get(LHC::Prometheus::REQUEST_COUNTER_KEY)
       .increment(
         code: response.code,
         success: response.success?,
         timeout: response.timeout?,
-        host: host
+        host: host,
+        app: LHC::Prometheus.namespace
       )
 
     LHC::Prometheus.client.registry
-      .get(LHC::Prometheus.deprecated_times_key)
-      .observe({}, response.time_ms)
-
-    LHC::Prometheus.client.registry
-      .get(LHC::Prometheus.times_key)
-      .observe({ host: host }, response.time)
+      .get(LHC::Prometheus::REQUEST_HISTOGRAM_KEY)
+      .observe({
+                 host: host,
+                 app: LHC::Prometheus.namespace
+               }, response.time)
   end
 end
