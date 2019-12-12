@@ -15,7 +15,7 @@ class LHC::Prometheus < LHC::Interceptor
   def initialize(request)
     super(request)
     return if LHC::Prometheus.registered || LHC::Prometheus.client.blank?
-    
+
     begin
       LHC::Prometheus.client.registry.counter(LHC::Prometheus::REQUEST_COUNTER_KEY, 'Counter of all LHC requests.')
       LHC::Prometheus.client.registry.histogram(LHC::Prometheus::REQUEST_HISTOGRAM_KEY, 'Request timings for all LHC requests in seconds.')
