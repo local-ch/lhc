@@ -15,9 +15,15 @@ class LHC::Prometheus < LHC::Interceptor
   def initialize(request)
     super(request)
     return if LHC::Prometheus.registered || LHC::Prometheus.client.blank?
-    LHC::Prometheus.client.registry.counter(LHC::Prometheus::REQUEST_COUNTER_KEY, 'Counter of all LHC requests.')
-    LHC::Prometheus.client.registry.histogram(LHC::Prometheus::REQUEST_HISTOGRAM_KEY, 'Request timings for all LHC requests in seconds.')
-    LHC::Prometheus.registered = true
+
+    begin
+      LHC::Prometheus.client.registry.counter(LHC::Prometheus::REQUEST_COUNTER_KEY, 'Counter of all LHC requests.')
+      LHC::Prometheus.client.registry.histogram(LHC::Prometheus::REQUEST_HISTOGRAM_KEY, 'Request timings for all LHC requests in seconds.')
+    rescue Prometheus::Client::Registry::AlreadyRegisteredError => e
+      Rails.logger.error(e) if defined?(Rails)
+    ensure
+      LHC::Prometheus.registered = true
+    end
   end
 
   def after_response
