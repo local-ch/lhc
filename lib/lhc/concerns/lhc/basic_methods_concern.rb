@@ -27,7 +27,7 @@ module LHC
       private
 
       def parallel_requests(options)
-        hydra = Typhoeus::Hydra.hydra
+        hydra = Typhoeus::Hydra.new # do not use memoization !
         requests = []
         options.each do |option|
           request = LHC::Request.new(option, false)
