@@ -37,4 +37,23 @@ describe LHC::Request do
       expect(@called).to eq 2
     end
   end
+
+  context 'webmock disabled' do
+    before do
+      WebMock.disable!
+    end
+
+    after do
+      WebMock.enable!
+    end
+
+    it 'does not memorize parallelization handlers in typhoeus (hydra) in case one request of the parallization fails' do
+      begin
+        LHC.request([{ url: 'https://www.google.com/' }, { url: 'https://nonexisting123' }, { url: 'https://www.google.com/' }, { url: 'https://nonexisting123' }])
+      rescue LHC::UnknownError
+      end
+
+      LHC.request([{ url: 'https://www.google.com' }])
+    end
+  end
 end
