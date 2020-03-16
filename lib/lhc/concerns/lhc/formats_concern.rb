@@ -5,6 +5,11 @@ module LHC
     extend ActiveSupport::Concern
 
     module ClassMethods
+
+      def form
+        LHC::Formats::Form
+      end
+
       def json
         LHC::Formats::JSON
       end
