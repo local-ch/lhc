@@ -31,4 +31,14 @@ describe LHC::Auth do
     LHC.config.endpoint(:local, 'http://local.ch', auth: options.merge(reauthenticated: true))
     expect { LHC.get(:local) }.to raise_error(LHC::Unauthorized)
   end
+
+  context 'token format' do
+    let(:initial_token) { 'BAsZ-98-ZZZ' }
+
+    it 'refreshes tokens with various formats' do
+      LHC.config.endpoint(:local, 'http://local.ch', auth: options)
+      LHC.get(:local)
+      expect(auth_suceeding_after_recovery).to have_been_made.once
+    end
+  end
 end
