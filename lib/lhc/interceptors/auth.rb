@@ -66,7 +66,7 @@ class LHC::Auth < LHC::Interceptor
   end
 
   def bearer_header_present?
-    @has_bearer_header ||= request.headers['Authorization'] =~ /^Bearer [0-9a-f-]+$/i
+    @has_bearer_header ||= request.headers['Authorization'] =~ /^Bearer .+$/i
   end
 
   def refresh_client_token_option
