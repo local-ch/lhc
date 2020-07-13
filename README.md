@@ -1,6 +1,3 @@
-LHC
-===
-
 LHC is an extended/advanced HTTP client. Implementing basic http-communication enhancements like interceptors, exception handling, format handling, accessing response data, configuring endpoints and placeholders and fully compatible, RFC-compliant URL-template support.
 
 LHC uses [typhoeus](https://github.com/typhoeus/typhoeus) for low level http communication.
@@ -30,69 +27,70 @@ use it like:
 ```
 
 ## Table of contents
-   * [LHC](#lhc)
-      * [Quick start guide](#quick-start-guide)
-      * [Table of contents](#table-of-contents)
-      * [Basic methods](#basic-methods)
-      * [Request](#request)
-         * [Formats](#formats)
-            * [Default format](#default-format)
-            * [Unformatted requests](#unformatted-requests)
-               * [Upload with LHC](#upload-with-lhc)
-         * [Parallel requests](#parallel-requests)
-         * [Follow redirects](#follow-redirects)
-         * [Transfer data through the request body](#transfer-data-through-the-request-body)
-         * [Request parameters](#request-parameters)
-            * [Array Parameter Encoding](#array-parameter-encoding)
-         * [Request URL encoding](#request-url-encoding)
-         * [Request URL-Templates](#request-url-templates)
-         * [Request timeout](#request-timeout)
-         * [Request Agent](#request-agent)
-      * [Response](#response)
-         * [Accessing response data](#accessing-response-data)
-      * [Exceptions](#exceptions)
-         * [Custom error handling](#custom-error-handling)
-         * [Ignore certain errors](#ignore-certain-errors)
-      * [Configuration](#configuration)
-         * [Configuring endpoints](#configuring-endpoints)
-         * [Configuring placeholders](#configuring-placeholders)
-      * [Interceptors](#interceptors)
-         * [Quick start: Configure/Enable Interceptors](#quick-start-configureenable-interceptors)
-         * [Interceptors on local request level](#interceptors-on-local-request-level)
-         * [Core Interceptors](#core-interceptors)
-            * [Authentication Interceptor](#authentication-interceptor)
-               * [Bearer Authentication](#bearer-authentication)
-               * [Basic Authentication](#basic-authentication)
-               * [Reauthenticate](#reauthenticate)
-               * [Bearer Authentication with client access token](#bearer-authentication-with-client-access-token)
-            * [Caching Interceptor](#caching-interceptor)
-               * [Options](#options)
-            * [Default Timeout Interceptor](#default-timeout-interceptor)
-               * [Overwrite defaults](#overwrite-defaults)
-            * [Logging Interceptor](#logging-interceptor)
-               * [Installation](#installation)
-               * [What and how it logs](#what-and-how-it-logs)
-               * [Configure](#configure)
-            * [Monitoring Interceptor](#monitoring-interceptor)
-               * [Installation](#installation-1)
-               * [Environment](#environment)
-               * [What it tracks](#what-it-tracks)
-               * [Configure](#configure-1)
-            * [Prometheus Interceptor](#prometheus-interceptor)
-            * [Retry Interceptor](#retry-interceptor)
-               * [Limit the amount of retries while making the request](#limit-the-amount-of-retries-while-making-the-request)
-               * [Change the default maximum of retries of the retry interceptor](#change-the-default-maximum-of-retries-of-the-retry-interceptor)
-               * [Retry all requests](#retry-all-requests)
-            * [Rollbar Interceptor](#rollbar-interceptor)
-               * [Forward additional parameters](#forward-additional-parameters)
-            * [Throttle](#throttle)
-            * [Zipkin](#zipkin)
-         * [Create an interceptor from scratch](#create-an-interceptor-from-scratch)
-            * [Interceptor callbacks](#interceptor-callbacks)
-            * [Interceptor request/response](#interceptor-requestresponse)
-            * [Provide a response replacement through an interceptor](#provide-a-response-replacement-through-an-interceptor)
-      * [Testing](#testing)
-      * [License](#license)
+  * [Quick start guide](#quick-start-guide)
+  * [Basic methods](#basic-methods)
+  * [Request](#request)
+     * [Formats](#formats)
+        * [Default format](#default-format)
+        * [Unformatted requests](#unformatted-requests)
+           * [Upload with LHC](#upload-with-lhc)
+     * [Parallel requests](#parallel-requests)
+     * [Follow redirects](#follow-redirects)
+     * [Transfer data through the request body](#transfer-data-through-the-request-body)
+     * [Request parameters](#request-parameters)
+        * [Array Parameter Encoding](#array-parameter-encoding)
+     * [Request URL encoding](#request-url-encoding)
+     * [Request URL-Templates](#request-url-templates)
+     * [Request timeout](#request-timeout)
+     * [Request Agent](#request-agent)
+  * [Response](#response)
+     * [Accessing response data](#accessing-response-data)
+  * [Exceptions](#exceptions)
+     * [Custom error handling (rescue)](#custom-error-handling-rescue)
+     * [Ignore certain errors](#ignore-certain-errors)
+  * [Configuration](#configuration)
+     * [Configuring endpoints](#configuring-endpoints)
+     * [Configuring placeholders](#configuring-placeholders)
+  * [Interceptors](#interceptors)
+     * [Quick start: Configure/Enable Interceptors](#quick-start-configureenable-interceptors)
+     * [Interceptors on local request level](#interceptors-on-local-request-level)
+     * [Core Interceptors](#core-interceptors)
+        * [Authentication Interceptor](#authentication-interceptor)
+           * [Bearer Authentication](#bearer-authentication)
+           * [Basic Authentication](#basic-authentication)
+           * [Reauthenticate](#reauthenticate)
+           * [Bearer Authentication with client access token](#bearer-authentication-with-client-access-token)
+        * [Caching Interceptor](#caching-interceptor)
+           * [Options](#options)
+        * [Default Timeout Interceptor](#default-timeout-interceptor)
+           * [Overwrite defaults](#overwrite-defaults)
+        * [Logging Interceptor](#logging-interceptor)
+           * [Installation](#installation)
+           * [What and how it logs](#what-and-how-it-logs)
+           * [Configure](#configure)
+        * [Monitoring Interceptor](#monitoring-interceptor)
+           * [Installation](#installation-1)
+           * [Environment](#environment)
+           * [What it tracks](#what-it-tracks)
+           * [Configure](#configure-1)
+        * [Prometheus Interceptor](#prometheus-interceptor)
+        * [Retry Interceptor](#retry-interceptor)
+           * [Limit the amount of retries while making the request](#limit-the-amount-of-retries-while-making-the-request)
+           * [Change the default maximum of retries of the retry interceptor](#change-the-default-maximum-of-retries-of-the-retry-interceptor)
+           * [Retry all requests](#retry-all-requests)
+           * [Do not retry certain response codes](#do-not-retry-certain-response-codes)
+        * [Rollbar Interceptor](#rollbar-interceptor)
+           * [Forward additional parameters](#forward-additional-parameters)
+        * [Throttle](#throttle)
+        * [Zipkin](#zipkin)
+     * [Create an interceptor from scratch](#create-an-interceptor-from-scratch)
+        * [Interceptor callbacks](#interceptor-callbacks)
+        * [Interceptor request/response](#interceptor-requestresponse)
+        * [Provide a response replacement through an interceptor](#provide-a-response-replacement-through-an-interceptor)
+  * [Testing](#testing)
+  * [License](#license)
+
+
 
 ## Basic methods
 
@@ -403,7 +401,7 @@ timeout? => LHC::Timeout
 anything_else => LHC::UnknownError
 ```
 
-### Custom error handling
+### Custom error handling (rescue)
 
 You can provide custom error handlers to handle errors happening during the request.
 
@@ -413,19 +411,21 @@ If your error handler returns anything else but `nil` it replaces the response b
 
 ```ruby
 handler = ->(response){ do_something_with_response; return {name: 'unknown'} }
-response = LHC.get('http://something', error_handler: handler)
+response = LHC.get('http://something', rescue: handler)
 response.data.name # 'unknown'
 ```
 
 ### Ignore certain errors
 
 As it's discouraged to rescue errors and then don't handle them (ruby styleguide)[https://github.com/bbatsov/ruby-style-guide#dont-hide-exceptions],
-but you often want to continue working with `nil`, LHC provides the `ignored_errors` option.
+but you often want to continue working with `nil`, LHC provides the `ignore` option.
 
 Errors listed in this option will not be raised and will leave the `response.body` and `response.data` to stay `nil`.
 
+You can either pass the LHC error class you want to be ignored or an array of LHC error classes.
+
 ```ruby
-response = LHC.get('http://something', ignored_errors: [LHC::NotFound])
+response = LHC.get('http://something', ignore: LHC::NotFound)
 
 response.body # nil
 response.data # nil
@@ -817,16 +817,16 @@ If you want to retry all requests made from your application, you just need to c
 
 ##### Do not retry certain response codes
 
-If you do not want to retry based on certain response codes, use retry in combination with explicit `ignore_errors`:
+If you do not want to retry based on certain response codes, use retry in combination with explicit `ignore`:
 
 ```ruby
-  LHC.get('http://local.ch', ignore_errors: [LHC::NotFound], retry: { max: 1 })
+  LHC.get('http://local.ch', ignore: LHC::NotFound, retry: { max: 1 })
 ```
 
 Or if you use `LHC::Retry.all`:
 
 ```ruby
-LHC.get('http://local.ch', ignore_errors: [LHC::NotFound])
+LHC.get('http://local.ch', ignore: LHC::NotFound)
 ```
 
 #### Rollbar Interceptor

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe LHC::Request do
   context 'ignoring LHC::NotFound' do
-    let(:response) { LHC.get('http://local.ch', ignored_errors: [LHC::NotFound]) }
+    let(:response) { LHC.get('http://local.ch', ignore: [LHC::NotFound]) }
 
     before { stub_request(:get, 'http://local.ch').to_return(status: 404) }
 
@@ -36,13 +36,13 @@ describe LHC::Request do
 
     it "does not raise an error when it's a subclass of the ignored error" do
       expect {
-        LHC.get('http://local.ch', ignored_errors: [LHC::Error])
+        LHC.get('http://local.ch', ignore: [LHC::Error])
       }.not_to raise_error
     end
 
     it "does raise an error if it's not a subclass of the ignored error" do
       expect {
-        LHC.get('http://local.ch', ignored_errors: [ArgumentError])
+        LHC.get('http://local.ch', ignore: [ArgumentError])
       }.to raise_error(LHC::NotFound)
     end
   end
@@ -52,13 +52,13 @@ describe LHC::Request do
 
     it "does not raise an error when ignored errors is set to array with nil" do
       expect {
-        LHC.get('http://local.ch', ignored_errors: [nil])
+        LHC.get('http://local.ch', ignore: [nil])
       }.to raise_error(LHC::NotFound)
     end
 
     it "does not raise an error when ignored errors is set to nil" do
       expect {
-        LHC.get('http://local.ch', ignored_errors: nil)
+        LHC.get('http://local.ch', ignore: nil)
       }.to raise_error(LHC::NotFound)
     end
   end
@@ -67,7 +67,7 @@ describe LHC::Request do
     before { stub_request(:get, 'http://local.ch').to_return(status: 404) }
 
     it "does not raise an error when ignored errors is a key instead of an array" do
-      LHC.get('http://local.ch', ignored_errors: LHC::NotFound)
+      LHC.get('http://local.ch', ignore: LHC::NotFound)
     end
   end
 end

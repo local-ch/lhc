@@ -15,10 +15,10 @@ class LHC::Request
   attr_accessor :response, :options, :raw, :format, :error_handler, :errors_ignored, :source
 
   def initialize(options, self_executing = true)
-    self.errors_ignored = (options.fetch(:ignored_errors, []) || []).to_a.compact
+    self.errors_ignored = (options.fetch(:ignore, []) || []).to_a.compact
     self.source = options&.dig(:source)
     self.options = format!(options.deep_dup || {})
-    self.error_handler = options.delete :error_handler
+    self.error_handler = options.delete :rescue
     use_configured_endpoint!
     generate_url_from_template!
     self.interceptors = LHC::Interceptors.new(self)
