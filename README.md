@@ -424,8 +424,10 @@ but you often want to continue working with `nil`, LHC provides the `ignore` opt
 
 Errors listed in this option will not be raised and will leave the `response.body` and `response.data` to stay `nil`.
 
+You can either pass the LHC error class you want to be ignored or an array of LHC error classes.
+
 ```ruby
-response = LHC.get('http://something', ignore: [LHC::NotFound])
+response = LHC.get('http://something', ignore: LHC::NotFound)
 
 response.body # nil
 response.data # nil
@@ -820,13 +822,13 @@ If you want to retry all requests made from your application, you just need to c
 If you do not want to retry based on certain response codes, use retry in combination with explicit `ignore`:
 
 ```ruby
-  LHC.get('http://local.ch', ignore: [LHC::NotFound], retry: { max: 1 })
+  LHC.get('http://local.ch', ignore: LHC::NotFound, retry: { max: 1 })
 ```
 
 Or if you use `LHC::Retry.all`:
 
 ```ruby
-LHC.get('http://local.ch', ignore: [LHC::NotFound])
+LHC.get('http://local.ch', ignore: LHC::NotFound)
 ```
 
 #### Rollbar Interceptor
