@@ -403,7 +403,7 @@ timeout? => LHC::Timeout
 anything_else => LHC::UnknownError
 ```
 
-### Custom error handling
+### Custom error handling (rescue)
 
 You can provide custom error handlers to handle errors happening during the request.
 
@@ -413,7 +413,7 @@ If your error handler returns anything else but `nil` it replaces the response b
 
 ```ruby
 handler = ->(response){ do_something_with_response; return {name: 'unknown'} }
-response = LHC.get('http://something', error_handler: handler)
+response = LHC.get('http://something', rescue: handler)
 response.data.name # 'unknown'
 ```
 

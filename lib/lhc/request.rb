@@ -18,7 +18,7 @@ class LHC::Request
     self.errors_ignored = (options.fetch(:ignore, []) || []).to_a.compact
     self.source = options&.dig(:source)
     self.options = format!(options.deep_dup || {})
-    self.error_handler = options.delete :error_handler
+    self.error_handler = options.delete :rescue
     use_configured_endpoint!
     generate_url_from_template!
     self.interceptors = LHC::Interceptors.new(self)
