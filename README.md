@@ -1,6 +1,3 @@
-LHC
-===
-
 LHC is an extended/advanced HTTP client. Implementing basic http-communication enhancements like interceptors, exception handling, format handling, accessing response data, configuring endpoints and placeholders and fully compatible, RFC-compliant URL-template support.
 
 LHC uses [typhoeus](https://github.com/typhoeus/typhoeus) for low level http communication.
@@ -30,7 +27,6 @@ use it like:
 ```
 
 ## Table of contents
-   * [LHC](#lhc)
   * [Quick start guide](#quick-start-guide)
   * [Basic methods](#basic-methods)
   * [Request](#request)
@@ -93,6 +89,7 @@ use it like:
         * [Provide a response replacement through an interceptor](#provide-a-response-replacement-through-an-interceptor)
   * [Testing](#testing)
   * [License](#license)
+
 
 
 ## Basic methods
