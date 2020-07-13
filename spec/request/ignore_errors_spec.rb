@@ -68,6 +68,6 @@ describe LHC::Request do
 
     it "does not raise an error when ignored errors is a key instead of an array" do
       LHC.get('http://local.ch', ignored_errors: LHC::NotFound)
-    end    
+    end
   end
 end
