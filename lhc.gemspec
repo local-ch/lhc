@@ -35,5 +35,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'timecop'
   s.add_development_dependency 'webmock'
 
-  s.license = 'GPL-3'
+  s.license = 'GPL-3.0'
 end
