@@ -59,6 +59,10 @@ class LHC::Error < StandardError
     self.response = response
   end
 
+  def self.to_a
+    [self]
+  end
+
   def to_s
     return response if response.is_a?(String)
     request = response.request

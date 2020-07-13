@@ -62,4 +62,12 @@ describe LHC::Request do
       }.to raise_error(LHC::NotFound)
     end
   end
+
+  context 'passing keys instead of arrays' do
+    before { stub_request(:get, 'http://local.ch').to_return(status: 404) }
+
+    it "does not raise an error when ignored errors is a key instead of an array" do
+      LHC.get('http://local.ch', ignored_errors: LHC::NotFound)
+    end    
+  end
 end
