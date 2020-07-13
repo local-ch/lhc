@@ -66,7 +66,7 @@ describe LHC::Rollbar do
 
     it 'does not retry if the error is explicitly ignored' do
       request_stub
-      LHC.get('http://local.ch', retry: { max: 1 }, ignored_errors: [LHC::NotFound])
+      LHC.get('http://local.ch', retry: { max: 1 }, ignore: [LHC::NotFound])
       expect(request_stub).to have_been_requested.times(1)
     end
   end
