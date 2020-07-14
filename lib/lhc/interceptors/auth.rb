@@ -27,7 +27,7 @@ class LHC::Auth < LHC::Interceptor
   def basic_authentication!
     auth = auth_options[:basic]
     credentials = "#{auth[:username]}:#{auth[:password]}"
-    set_authorization_header("Basic #{Base64.encode64(credentials).chomp}")
+    set_authorization_header("Basic #{Base64.strict_encode64(credentials).chomp}")
   end
 
   def bearer_authentication!
