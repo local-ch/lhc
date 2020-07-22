@@ -573,7 +573,6 @@ Adds the following to the request body:
   'userToken': 'dheur5hrk3'
 ```
 
-
 ##### Reauthenticate
 
 The current implementation can only offer reauthenticate for _client access tokens_. For this to work the following has to be given:

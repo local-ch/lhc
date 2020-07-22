@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module LHC
-  VERSION ||= '12.0.3'
+  VERSION ||= '12.1.0'
 end
