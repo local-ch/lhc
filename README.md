@@ -549,6 +549,31 @@ Adds the following header to the request:
 
 Which is the base64 encoded credentials "username:password".
 
+##### API Key Authentication
+
+##### Header
+
+```ruby
+  LHC.get('http://local.ch', api_key: { key: 'apitoken', value: '5hguebb44', add_to: :header })
+```
+
+Adds the following header to the request:
+```
+  'apitoken': '5hguebb44'
+```
+
+##### Body 
+
+```ruby
+  LHC.get('http://local.ch', api_key: { key: 'userToken', value: 'dheur5hrk3', add_to: :body })
+```
+
+Adds the following to the request body:
+```
+  'userToken': 'dheur5hrk3'
+```
+
+
 ##### Reauthenticate
 
 The current implementation can only offer reauthenticate for _client access tokens_. For this to work the following has to be given:
