@@ -21,13 +21,15 @@ class LHC::Auth < LHC::Interceptor
       bearer_authentication!
     elsif auth_options[:basic]
       basic_authentication!
+    elsif auth_options[:api_key]
+      api_key_authentication!
     end
   end
 
   def basic_authentication!
     auth = auth_options[:basic]
     credentials = "#{auth[:username]}:#{auth[:password]}"
-    set_authorization_header("Basic #{Base64.strict_encode64(credentials).chomp}")
+    set_authorization_header(key: 'Authorization', value: "Basic #{Base64.strict_encode64(credentials).chomp}")
   end
 
   def bearer_authentication!
@@ -36,13 +38,31 @@ class LHC::Auth < LHC::Interceptor
     set_bearer_authorization_header(token)
   end
 
+  def api_key_authentication!
+    key = auth_options[:api_key][:key]
+    value = auth_options[:api_key][:value]
+    add_to = auth_options[:api_key][:add_to]
+    if add_to == :header
+      set_authorization_header(key: key, value: value)
+    elsif add_to == :body
+      set_authorization_body(key: key, value: value)
+    end
+  end
+
   # rubocop:disable Style/AccessorMethodName
-  def set_authorization_header(value)
-    request.headers['Authorization'] = value
+  def set_authorization_header(key:, value:)
+    request.headers[key] = value
   end
 
   def set_bearer_authorization_header(token)
-    set_authorization_header("Bearer #{token}")
+    set_authorization_header(key: 'Authorization', value: "Bearer #{token}")
+  end
+
+  def set_authorization_body(key:, value:)
+    auth_body = { key => value }
+    provided_body = JSON.parse(request.raw.options[:body])
+    body = provided_body.merge(auth_body)
+    request.raw.options[:body] = body.to_json
   end
   # rubocop:enable Style/AccessorMethodName
 
