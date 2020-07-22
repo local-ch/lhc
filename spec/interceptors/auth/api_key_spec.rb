@@ -24,5 +24,3 @@ describe LHC::Auth do
     LHC.post(:local, body: { 'foo' => 'bar' })
   end
 end
-
-# TODO also update readme
