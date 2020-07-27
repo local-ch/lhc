@@ -15,8 +15,8 @@ describe LHC::Auth do
       }.to_json)
 
     LHC.post('http://local.ch', auth: { body: { userToken: 'dheur5hrk3' } }, body: {
-      message: 'body'
-    })
+               message: 'body'
+             })
   end
 
   it 'adds body authentication to an empty request body' do
