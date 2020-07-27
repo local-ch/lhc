@@ -58,6 +58,7 @@ use it like:
         * [Authentication Interceptor](#authentication-interceptor)
            * [Bearer Authentication](#bearer-authentication)
            * [Basic Authentication](#basic-authentication)
+           * [Body Authentication](#body-authentication)
            * [Reauthenticate](#reauthenticate)
            * [Bearer Authentication with client access token](#bearer-authentication-with-client-access-token)
         * [Caching Interceptor](#caching-interceptor)
@@ -89,6 +90,7 @@ use it like:
         * [Provide a response replacement through an interceptor](#provide-a-response-replacement-through-an-interceptor)
   * [Testing](#testing)
   * [License](#license)
+
 
 
 
@@ -548,6 +550,20 @@ Adds the following header to the request:
 ```
 
 Which is the base64 encoded credentials "username:password".
+
+##### Body Authentication
+
+```ruby
+  LHC.post('http://local.ch', auth: { body: { userToken: 'dheur5hrk3' } })
+```
+
+Adds the following to body of all requests:
+
+```
+  {
+    "userToken": "dheur5hrk3"
+  }
+```
 
 ##### Reauthenticate
 

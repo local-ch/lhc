@@ -4,7 +4,7 @@ class LHC::Auth < LHC::Interceptor
   include ActiveSupport::Configurable
   config_accessor :refresh_client_token
 
-  def before_request
+  def before_raw_request
     authenticate!
   end
 
@@ -21,7 +21,14 @@ class LHC::Auth < LHC::Interceptor
       bearer_authentication!
     elsif auth_options[:basic]
       basic_authentication!
+    elsif auth_options[:body]
+      body_authentication!
     end
+  end
+
+  def body_authentication!
+    auth = auth_options[:body]
+    request.options[:body] = (request.options[:body] || {}).merge(auth)
   end
 
   def basic_authentication!
