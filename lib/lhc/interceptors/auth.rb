@@ -80,7 +80,7 @@ class LHC::Auth < LHC::Interceptor
   end
 
   def auth_options
-    @auth_options ||= request.options[:auth].dup || {}
+    request.options[:auth] || {}
   end
 
   def configuration_correct?
