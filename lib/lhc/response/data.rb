@@ -12,9 +12,9 @@ class LHC::Response::Data
     @data = data
 
     if as_json.is_a?(Hash)
-      @base = LHC::Response::Data::Item.new(response, data: data)
+      @base = LHC::Response::Data::Item.new(@response, data: data)
     elsif as_json.is_a?(Array)
-      @base = LHC::Response::Data::Collection.new(response, data: data)
+      @base = LHC::Response::Data::Collection.new(@response, data: data)
     end
   end
 

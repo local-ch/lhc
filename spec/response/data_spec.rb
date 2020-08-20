@@ -77,7 +77,7 @@ describe LHC::Response do
       LHC.get('http://listings')
     rescue LHC::Error => error
       expect(
-        error.response.request.response.data.meta.errors.detect { |item| item.code == 2000 }.name
+        error.response.request.response.data.meta.errors.detect { |item| item.code == 2000 }.msg
       ).to eq 'I like to hide error messages (this is meta).'
     end
   end
