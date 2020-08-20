@@ -72,7 +72,7 @@ describe LHC::Response do
         }.to_json)
     end
 
-    it 'does not through a stack level to deep issue when accessing data in a rescue context' do
+    it 'does not throw a stack level to deep issue when accessing data in a rescue context' do
       begin
         LHC.get('http://listings')
       rescue LHC::Error => error
