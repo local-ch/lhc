@@ -58,4 +58,27 @@ describe LHC::Response do
       end
     end
   end
+
+  context 'response data if responding error data contains a response' do
+
+    before do
+      stub_request(:get, "http://listings/")
+        .to_return(status: 404, body: {
+          meta: {
+            errors: [
+              { code: 2000, msg: 'I like to hide error messages (this is meta).' }
+            ]
+          },
+          response: 'why not?'
+        }.to_json)
+    end
+
+    it 'does not through a stack level to deep issue when accessing data in a rescue context' do
+      LHC.get('http://listings')
+    rescue LHC::Error => error
+      expect(
+        error.response.request.response.data.meta.errors.detect { |item| item.code == 2000 }.name
+      ).to eq 'I like to hide error messages (this is meta).'
+    end
+  end
 end
