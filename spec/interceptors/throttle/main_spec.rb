@@ -133,4 +133,30 @@ describe LHC::Throttle do
       end
     end
   end
+
+  describe 'parsing reset time given in prose' do
+    let(:quota_reset) { (Time.zone.now + 1.day).strftime('%A, %B %d, %Y 12:00:00 AM GMT').to_s }
+
+    before { LHC.get('http://local.ch', options) }
+
+    context 'breaks' do
+      let(:options_break) { '80%' }
+
+      it 'hit the breaks if throttling quota is reached' do
+        expect { LHC.get('http://local.ch', options) }.to raise_error(
+          LHC::Throttle::OutOfQuota,
+          'Reached predefined quota for local.ch'
+        )
+      end
+
+      context 'still within quota' do
+        let(:options_break) { '90%' }
+
+        it 'does not hit the breaks' do
+          LHC.get('http://local.ch', options)
+          LHC.get('http://local.ch', options)
+        end
+      end
+    end
+  end
 end
