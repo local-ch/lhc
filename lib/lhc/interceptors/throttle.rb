@@ -21,8 +21,7 @@ class LHC::Throttle < LHC::Interceptor
 
   def after_response
     options = response.request.options.dig(:throttle)
-    return unless options
-    return unless options.dig(:track)
+    return if throttling_futile?(options)
     self.class.track ||= {}
     self.class.track[options.dig(:provider)] = {
       limit: limit(options: options[:limit], response: response),
@@ -32,6 +31,10 @@ class LHC::Throttle < LHC::Interceptor
   end
 
   private
+
+  def throttling_futile?(options)
+    [options&.dig(:track), response.headers].any?(&:blank?)
+  end
 
   def break_when_quota_reached!
     options = request.options.dig(:throttle)
@@ -46,36 +49,41 @@ class LHC::Throttle < LHC::Interceptor
   end
 
   def limit(options:, response:)
-    @limit ||= begin
-      if options.is_a?(Integer)
-        options
-      elsif options.is_a?(Hash) && options[:header] && response.headers.present?
-        response.headers[options[:header]]&.to_i
+    @limit ||=
+      begin
+        if options.is_a?(Integer)
+          options
+        elsif options.is_a?(Hash) && options[:header] && response.headers.present?
+          response.headers[options[:header]]&.to_i
+        end
       end
-    end
   end
 
   def remaining(options:, response:)
-    @remaining ||= begin
-      if options.is_a?(Hash) && options[:header] && response.headers.present?
-        response.headers[options[:header]]&.to_i
+    @remaining ||=
+      begin
+        if options.is_a?(Proc)
+          options.call(response)
+        elsif options.is_a?(Hash) && options[:header] && response.headers.present?
+          response.headers[options[:header]]&.to_i
+        end
       end
-    end
   end
 
   def expires(options:, response:)
-    @expires ||= begin
-      if options.is_a?(Hash) && options[:header] && response.headers.present?
-        convert_expires(response.headers[options[:header]]&.to_i)
-      else
-        convert_expires(options)
-      end
+    @expires ||= convert_expires(read_expire_option(options, response))
+  end
+
+  def read_expire_option(options, response)
+    if options.is_a?(Hash) && options[:header] && response.headers.present?
+      response.headers[options[:header]]
+    else
+      options
     end
   end
 
   def convert_expires(value)
-    if value.is_a?(Integer)
-      Time.zone.at(value).to_datetime
-    end
+    return Time.parse(value) if value.match(/GMT/)
+    Time.zone.at(value.to_i).to_datetime if value.present?
   end
 end

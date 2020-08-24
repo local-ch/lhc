@@ -103,4 +103,58 @@ describe LHC::Throttle do
       LHC.get('http://local.ch', options)
     end
   end
+
+  describe 'calculate "remaining" in Proc' do
+    let(:quota_allotted) { 10 }
+    let(:quota_current) { 8 }
+    let(:quota_reset) { (Time.zone.now + 1.day).strftime('%A, %B %d, %Y 12:00:00 AM GMT').to_s }
+    let(:options) do
+      {
+        throttle: {
+          provider: 'local.ch',
+          track: true,
+          break: break_option,
+          limit: { header: 'X-Plan-Quota-Allotted' },
+          expires: { header: 'X-Plan-Quota-Reset' },
+          remaining: lambda do |response|
+            (response.headers['X-Plan-Quota-Allotted']).to_i - (response.headers['X-Plan-Quota-Current']).to_i
+          end
+        }
+      }
+    end
+
+    before(:each) do
+      LHC::Throttle.track = nil
+
+      stub_request(:get, 'http://local.ch').to_return(
+        headers: {
+          'X-Plan-Quota-Allotted' => quota_allotted,
+          'X-Plan-Quota-Current' => quota_current,
+          'X-Plan-Quota-Reset' => quota_reset
+        }
+      )
+
+      LHC.get('http://local.ch', options)
+    end
+
+    context 'breaks' do
+      let(:break_option) { '79%' }
+
+      it 'hit the breaks if throttling quota is reached' do
+        expect { LHC.get('http://local.ch', options) }.to raise_error(
+          LHC::Throttle::OutOfQuota,
+          'Reached predefined quota for local.ch'
+        )
+      end
+
+      context 'still within quota' do
+        let(:break_option) { '80%' }
+
+        it 'does not hit the breaks' do
+          LHC.get('http://local.ch', options)
+          LHC.get('http://local.ch', options)
+        end
+      end
+    end
+  end
 end
