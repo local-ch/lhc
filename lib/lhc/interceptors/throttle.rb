@@ -21,7 +21,7 @@ class LHC::Throttle < LHC::Interceptor
 
   def after_response
     options = response.request.options.dig(:throttle)
-    return if throttling_futile?(options)
+    return unless throttle?(options)
     self.class.track ||= {}
     self.class.track[options.dig(:provider)] = {
       limit: limit(options: options[:limit], response: response),
@@ -32,8 +32,8 @@ class LHC::Throttle < LHC::Interceptor
 
   private
 
-  def throttling_futile?(options)
-    [options&.dig(:track), response.headers].any?(&:blank?)
+  def throttle?(options)
+    [options&.dig(:track), response.headers].none?(&:blank?)
   end
 
   def break_when_quota_reached!
@@ -53,7 +53,7 @@ class LHC::Throttle < LHC::Interceptor
       begin
         if options.is_a?(Integer)
           options
-        elsif options.is_a?(Hash) && options[:header] && response.headers.present?
+        elsif options.is_a?(Hash) && options[:header]
           response.headers[options[:header]]&.to_i
         end
       end
@@ -64,7 +64,7 @@ class LHC::Throttle < LHC::Interceptor
       begin
         if options.is_a?(Proc)
           options.call(response)
-        elsif options.is_a?(Hash) && options[:header] && response.headers.present?
+        elsif options.is_a?(Hash) && options[:header]
           response.headers[options[:header]]&.to_i
         end
       end
@@ -75,11 +75,7 @@ class LHC::Throttle < LHC::Interceptor
   end
 
   def read_expire_option(options, response)
-    if options.is_a?(Hash) && options[:header] && response.headers.present?
-      response.headers[options[:header]]
-    else
-      options
-    end
+    (options.is_a?(Hash) && options[:header]) ? response.headers[options[:header]] : options
   end
 
   def convert_expires(value)
