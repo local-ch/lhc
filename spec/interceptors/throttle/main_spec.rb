@@ -3,66 +3,64 @@
 require 'rails_helper'
 
 describe LHC::Throttle do
+  let(:options_break) { false }
+  let(:options_expires) { { header: 'reset' } }
+  let(:options_limit) { { header: 'limit' } }
+  let(:options_remaining) { { header: 'remaining' } }
   let(:provider) { 'local.ch' }
-  let(:limit) { 10000 }
-  let(:remaining) { 1900 }
+  let(:quota_limit) { 10_000 }
+  let(:quota_remaining) { 1900 }
+  let(:quota_reset) { (Time.zone.now + 1.hour).to_i }
   let(:options) do
     {
       throttle: {
         provider: provider,
         track: true,
-        limit: limit_options,
-        remaining: { header: 'Rate-Limit-Remaining' },
-        expires: { header: 'Rate-Limit-Reset' },
-        break: break_option
+        limit: options_limit,
+        remaining: options_remaining,
+        expires: options_expires,
+        break: options_break
       }
     }
   end
-  let(:limit_options) { { header: 'Rate-Limit-Limit' } }
-  let(:break_option) { false }
-  let(:expires_in) { (Time.zone.now + 1.hour).to_i }
 
   before(:each) do
     LHC::Throttle.track = nil
     LHC.config.interceptors = [LHC::Throttle]
 
-    stub_request(:get, 'http://local.ch')
-      .to_return(
-        headers: {
-          'Rate-Limit-Limit' => limit,
-          'Rate-Limit-Remaining' => remaining,
-          'Rate-Limit-Reset' => expires_in
-        }
-      )
+    stub_request(:get, 'http://local.ch').to_return(
+      headers: { 'limit' => quota_limit, 'remaining' => quota_remaining, 'reset' => quota_reset }
+    )
   end
 
   it 'tracks the request limits based on response data' do
     LHC.get('http://local.ch', options)
-    expect(LHC::Throttle.track[provider][:limit]).to eq limit
-    expect(LHC::Throttle.track[provider][:remaining]).to eq remaining
+    expect(LHC::Throttle.track[provider][:limit]).to eq quota_limit
+    expect(LHC::Throttle.track[provider][:remaining]).to eq quota_remaining
   end
 
   context 'fix predefined integer for limit' do
-    let(:limit_options) { 1000 }
+    let(:options_limit) { 1000 }
 
     it 'tracks the limit based on initialy provided data' do
       LHC.get('http://local.ch', options)
-      expect(LHC::Throttle.track[provider][:limit]).to eq limit_options
+      expect(LHC::Throttle.track[provider][:limit]).to eq options_limit
     end
   end
 
   context 'breaks' do
-    let(:break_option) { '80%' }
+    let(:options_break) { '80%' }
 
     it 'hit the breaks if throttling quota is reached' do
       LHC.get('http://local.ch', options)
-      expect(-> {
-        LHC.get('http://local.ch', options)
-      }).to raise_error(LHC::Throttle::OutOfQuota, 'Reached predefined quota for local.ch')
+      expect { LHC.get('http://local.ch', options) }.to raise_error(
+        LHC::Throttle::OutOfQuota,
+        'Reached predefined quota for local.ch'
+      )
     end
 
     context 'still within quota' do
-      let(:break_option) { '90%' }
+      let(:options_break) { '90%' }
 
       it 'does not hit the breaks' do
         LHC.get('http://local.ch', options)
@@ -72,17 +70,14 @@ describe LHC::Throttle do
   end
 
   context 'no response headers' do
-    before do
-      stub_request(:get, 'http://local.ch')
-        .to_return(status: 200)
-    end
+    before { stub_request(:get, 'http://local.ch').to_return(status: 200) }
 
     it 'does not raise an exception' do
       LHC.get('http://local.ch', options)
     end
 
     context 'no remaining tracked, but break enabled' do
-      let(:break_option) { '90%' }
+      let(:options_break) { '90%' }
 
       it 'does not fail if a remaining was not tracked yet' do
         LHC.get('http://local.ch', options)
@@ -92,53 +87,34 @@ describe LHC::Throttle do
   end
 
   context 'expires' do
-    let(:break_option) { '80%' }
+    let(:options_break) { '80%' }
 
     it 'attempts another request if the quota expired' do
       LHC.get('http://local.ch', options)
-      expect(-> {
-        LHC.get('http://local.ch', options)
-      }).to raise_error(LHC::Throttle::OutOfQuota, 'Reached predefined quota for local.ch')
+      expect { LHC.get('http://local.ch', options) }.to raise_error(
+        LHC::Throttle::OutOfQuota,
+        'Reached predefined quota for local.ch'
+      )
       Timecop.travel(Time.zone.now + 2.hours)
       LHC.get('http://local.ch', options)
     end
   end
 
-  describe 'calculate "remaining" in Proc' do
-    let(:quota_allotted) { 10 }
-    let(:quota_current) { 8 }
-    let(:quota_reset) { (Time.zone.now + 1.day).strftime('%A, %B %d, %Y 12:00:00 AM GMT').to_s }
-    let(:options) do
-      {
-        throttle: {
-          provider: 'local.ch',
-          track: true,
-          break: break_option,
-          limit: { header: 'X-Plan-Quota-Allotted' },
-          expires: { header: 'X-Plan-Quota-Reset' },
-          remaining: lambda do |response|
-            (response.headers['X-Plan-Quota-Allotted']).to_i - (response.headers['X-Plan-Quota-Current']).to_i
-          end
-        }
-      }
+  describe 'calculate "remaining" in proc' do
+    let(:quota_current) { 8100 }
+    let(:options_remaining) do
+      ->(response) { (response.headers['limit']).to_i - (response.headers['current']).to_i }
     end
 
     before(:each) do
-      LHC::Throttle.track = nil
-
       stub_request(:get, 'http://local.ch').to_return(
-        headers: {
-          'X-Plan-Quota-Allotted' => quota_allotted,
-          'X-Plan-Quota-Current' => quota_current,
-          'X-Plan-Quota-Reset' => quota_reset
-        }
+        headers: { 'limit' => quota_limit, 'current' => quota_current, 'reset' => quota_reset }
       )
-
       LHC.get('http://local.ch', options)
     end
 
     context 'breaks' do
-      let(:break_option) { '79%' }
+      let(:options_break) { '80%' }
 
       it 'hit the breaks if throttling quota is reached' do
         expect { LHC.get('http://local.ch', options) }.to raise_error(
@@ -148,7 +124,7 @@ describe LHC::Throttle do
       end
 
       context 'still within quota' do
-        let(:break_option) { '80%' }
+        let(:options_break) { '90%' }
 
         it 'does not hit the breaks' do
           LHC.get('http://local.ch', options)
