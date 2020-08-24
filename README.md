@@ -263,7 +263,7 @@ You can also use URL templates, when [configuring endpoints](#configuring-endpoi
   LHC.configure do |c|
     c.endpoint(:find_feedback, 'http://datastore/v2/feedbacks/{id}')
   end
-  
+
   LHC.get(:find_feedback, params:{ id: 123 }) # GET http://datastore/v2/feedbacks/123
 ```
 
@@ -276,7 +276,7 @@ Working and configuring timeouts is important, to ensure your app stays alive wh
 LHC forwards two timeout options directly to typhoeus:
 
 `timeout` (in seconds) - The maximum time in seconds that you allow the libcurl transfer operation to take. Normally, name lookups can take a considerable time and limiting operations to less than a few seconds risk aborting perfectly normal operations. This option may cause libcurl to use the SIGALRM signal to timeout system calls.
-`connecttimeout` (in seconds) - It should contain the maximum time in seconds that you allow the connection phase to the server to take. This only limits the connection phase, it has no impact once it has connected. Set to zero to switch to the default built-in connection timeout - 300 seconds. 
+`connecttimeout` (in seconds) - It should contain the maximum time in seconds that you allow the connection phase to the server to take. This only limits the connection phase, it has no impact once it has connected. Set to zero to switch to the default built-in connection timeout - 300 seconds.
 
 ```ruby
 LHC.get('http://local.ch', timeout: 5, connecttimeout: 1)
@@ -481,7 +481,7 @@ You can configure global placeholders, that are used when generating urls from u
     c.placeholder(:datastore, 'http://datastore')
     c.endpoint(:feedbacks, '{+datastore}/feedbacks', { params: { has_reviews: true } })
   end
-  
+
   LHC.get(:feedbacks) # http://datastore/v2/feedbacks
 ```
 
@@ -729,7 +729,7 @@ LHC::Monitoring.env = ENV['DEPLOYMENT_TYPE'] || Rails.env
 
 It tracks request attempts with `before_request` and `after_request` (counts).
 
-In case your workers/processes are getting killed due limited time constraints, 
+In case your workers/processes are getting killed due limited time constraints,
 you are able to detect deltas with relying on "before_request", and "after_request" counts:
 
 ```ruby
@@ -780,7 +780,7 @@ Logs basic request/response information to prometheus.
   LHC.configure do |c|
     c.interceptors = [LHC::Prometheus]
   end
-    
+
   LHC::Prometheus.client = Prometheus::Client
   LHC::Prometheus.namespace = 'web_location_app'
 ```
@@ -802,7 +802,7 @@ If you enable the retry interceptor, you can have LHC retry requests for you:
   LHC.configure do |c|
     c.interceptors = [LHC::Retry]
   end
-  
+
   response = LHC.get('http://local.ch', retry: true)
 ```
 
@@ -877,15 +877,15 @@ The throttle interceptor allows you to raise an exception if a predefined quota 
   end
 ```
 ```ruby
-options = { 
+options = {
   throttle: {
-    track: true, # enables tracking of current limit/remaining requests of rate-limiting
-    break: '80%', # quota in percent after which errors are raised. Percentage symbol is optional, values will be converted to integer (e.g. '23.5' will become 23)
-    provider: 'local.ch', # name of the provider under which throttling tracking is aggregated,
-    limit: { header: 'Rate-Limit-Limit' }, # either a hard-coded integer, or a hash pointing at the response header containing the limit value
-    remaining: { header: 'Rate-Limit-Remaining' }, # a hash pointing at the response header containing the current amount of remaining requests
-    expires: { header: 'Rate-Limit-Reset' } # a hash pointing at the response header containing the timestamp when the quota will reset
-  } 
+    track: true, #
+    break: '80%', #
+    provider: 'local.ch', #
+    limit: { header: 'Rate-Limit-Limit' }, #
+    remaining: { header: 'Rate-Limit-Remaining' }, #
+    expires: { header: 'Rate-Limit-Reset' } #
+  }
 }
 
 LHC.get('http://local.ch', options)
@@ -894,6 +894,16 @@ LHC.get('http://local.ch', options)
 LHC.get('http://local.ch', options)
 # raises LHC::Throttle::OutOfQuota: Reached predefined quota for local.ch
 ```
+**Options Description**
+* `track`: enables tracking of current limit/remaining requests of rate-limiting
+* `break`: quota in percent after which errors are raised. Percentage symbol is optional, values will be converted to integer (e.g. '23.5' will become 23)
+* `provider`: name of the provider under which throttling tracking is aggregated,
+* `limit`: either a hard-coded integer, or a hash pointing at the response header containing the limit value
+* `remaining`:
+  * a hash pointing at the response header containing the current amount of remaining requests
+  * a proc that receives the response as argument and returns the current amount
+  of remaining requests
+* `expires`: a hash pointing at the response header containing the timestamp when the quota will reset
 
 #### Zipkin
 
