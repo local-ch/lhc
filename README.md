@@ -880,12 +880,12 @@ The throttle interceptor allows you to raise an exception if a predefined quota 
 ```ruby
 options = {
   throttle: {
-    track: true, #
-    break: '80%', #
-    provider: 'local.ch', #
-    limit: { header: 'Rate-Limit-Limit' }, #
-    remaining: { header: 'Rate-Limit-Remaining' }, #
-    expires: { header: 'Rate-Limit-Reset' } #
+    track: true,
+    break: '80%',
+    provider: 'local.ch',
+    limit: { header: 'Rate-Limit-Limit' },
+    remaining: { header: 'Rate-Limit-Remaining' },
+    expires: { header: 'Rate-Limit-Reset' }
   }
 }
 
