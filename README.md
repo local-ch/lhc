@@ -94,6 +94,7 @@ use it like:
 
 
 
+
 ## Basic methods
 
 Available are `get`, `post`, `put` & `delete`.
