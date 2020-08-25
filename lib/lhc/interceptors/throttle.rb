@@ -3,7 +3,8 @@
 require 'active_support/duration'
 
 class LHC::Throttle < LHC::Interceptor
-  class OutOfQuota < StandardError; end
+  class OutOfQuota < StandardError
+  end
 
   class << self
     attr_accessor :track
