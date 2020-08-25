@@ -3,7 +3,6 @@
 require 'active_support/duration'
 
 class LHC::Throttle < LHC::Interceptor
-
   class OutOfQuota < StandardError
   end
 
@@ -79,7 +78,8 @@ class LHC::Throttle < LHC::Interceptor
   end
 
   def convert_expires(value)
+    return if value.blank?
     return Time.parse(value) if value.match(/GMT/)
-    Time.zone.at(value.to_i).to_datetime if value.present?
+    Time.zone.at(value.to_i).to_datetime
   end
 end
