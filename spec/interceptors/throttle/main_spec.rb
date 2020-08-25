@@ -128,7 +128,6 @@ describe LHC::Throttle do
 
         it 'does not hit the breaks' do
           LHC.get('http://local.ch', options)
-          LHC.get('http://local.ch', options)
         end
       end
     end
@@ -154,9 +153,23 @@ describe LHC::Throttle do
 
         it 'does not hit the breaks' do
           LHC.get('http://local.ch', options)
-          LHC.get('http://local.ch', options)
         end
       end
+    end
+  end
+
+  context 'when value is empty' do
+    let(:quota_reset) { nil }
+
+    before do
+      stub_request(:get, 'http://local.ch').to_return(
+        headers: { 'limit' => quota_limit, 'remaining' => quota_remaining }
+      )
+      LHC.get('http://local.ch', options)
+    end
+
+    it 'still runs' do
+      LHC.get('http://local.ch', options)
     end
   end
 end
