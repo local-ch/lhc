@@ -49,12 +49,12 @@ class LHC::Throttle < LHC::Interceptor
 
   def limit(options:, response:)
     @limit ||=
-      begin
-        if options.is_a?(Integer)
-          options
-        elsif options.is_a?(Hash) && options[:header]
-          response.headers[options[:header]]&.to_i
-        end
+      if options.is_a?(Proc)
+        options.call(response)
+      elsif options.is_a?(Integer)
+        options
+      elsif options.is_a?(Hash) && options[:header]
+        response.headers[options[:header]]&.to_i
       end
   end
 
@@ -79,6 +79,7 @@ class LHC::Throttle < LHC::Interceptor
 
   def convert_expires(value)
     return if value.blank?
+    return value.call(response) if value.is_a?(Proc)
     return Time.parse(value) if value.match(/GMT/)
     Time.zone.at(value.to_i).to_datetime
   end

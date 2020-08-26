@@ -895,16 +895,22 @@ LHC.get('http://local.ch', options)
 LHC.get('http://local.ch', options)
 # raises LHC::Throttle::OutOfQuota: Reached predefined quota for local.ch
 ```
+
 **Options Description**
 * `track`: enables tracking of current limit/remaining requests of rate-limiting
 * `break`: quota in percent after which errors are raised. Percentage symbol is optional, values will be converted to integer (e.g. '23.5' will become 23)
 * `provider`: name of the provider under which throttling tracking is aggregated,
-* `limit`: either a hard-coded integer, or a hash pointing at the response header containing the limit value
+* `limit`:
+  * a hard-coded integer
+  * a hash pointing at the response header containing the limit value
+  * a proc that receives the response as argument and returns the limit value
 * `remaining`:
   * a hash pointing at the response header containing the current amount of remaining requests
-  * a proc that receives the response as argument and returns the current amount
-  of remaining requests
-* `expires`: a hash pointing at the response header containing the timestamp when the quota will reset
+  * a proc that receives the response as argument and returns the current amount of remaining requests
+* `expires`:
+  * a hash pointing at the response header containing the timestamp when the quota will reset
+  * a proc that receives the response as argument and returns the timestamp when the quota will reset
+
 
 #### Zipkin
 

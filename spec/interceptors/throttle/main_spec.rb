@@ -100,34 +100,95 @@ describe LHC::Throttle do
     end
   end
 
-  describe 'calculate "remaining" in proc' do
-    let(:quota_current) { 8100 }
-    let(:options_remaining) do
-      ->(response) { (response.headers['limit']).to_i - (response.headers['current']).to_i }
-    end
-
-    before(:each) do
-      stub_request(:get, 'http://local.ch').to_return(
-        headers: { 'limit' => quota_limit, 'current' => quota_current, 'reset' => quota_reset }
-      )
-      LHC.get('http://local.ch', options)
-    end
-
-    context 'breaks' do
-      let(:options_break) { '80%' }
-
-      it 'hit the breaks if throttling quota is reached' do
-        expect { LHC.get('http://local.ch', options) }.to raise_error(
-          LHC::Throttle::OutOfQuota,
-          'Reached predefined quota for local.ch'
-        )
+  describe 'configuration values as Procs' do
+    describe 'calculate "limit" in proc' do
+      let(:options_limit) do
+        ->(*) { 10_000 }
       end
 
-      context 'still within quota' do
-        let(:options_break) { '90%' }
+      before(:each) do
+        LHC.get('http://local.ch', options)
+      end
 
-        it 'does not hit the breaks' do
-          LHC.get('http://local.ch', options)
+      context 'breaks' do
+        let(:options_break) { '80%' }
+
+        it 'hit the breaks if throttling quota is reached' do
+          expect { LHC.get('http://local.ch', options) }.to raise_error(
+            LHC::Throttle::OutOfQuota,
+            'Reached predefined quota for local.ch'
+          )
+        end
+
+        context 'still within quota' do
+          let(:options_break) { '90%' }
+
+          it 'does not hit the breaks' do
+            LHC.get('http://local.ch', options)
+          end
+        end
+      end
+    end
+
+    describe 'calculate "remaining" in proc' do
+      let(:quota_current) { 8100 }
+      let(:options_remaining) do
+        ->(response) { (response.headers['limit']).to_i - (response.headers['current']).to_i }
+      end
+
+      before(:each) do
+        stub_request(:get, 'http://local.ch').to_return(
+          headers: { 'limit' => quota_limit, 'current' => quota_current, 'reset' => quota_reset }
+        )
+        LHC.get('http://local.ch', options)
+      end
+
+      context 'breaks' do
+        let(:options_break) { '80%' }
+
+        it 'hit the breaks if throttling quota is reached' do
+          expect { LHC.get('http://local.ch', options) }.to raise_error(
+            LHC::Throttle::OutOfQuota,
+            'Reached predefined quota for local.ch'
+          )
+        end
+
+        context 'still within quota' do
+          let(:options_break) { '90%' }
+
+          it 'does not hit the breaks' do
+            LHC.get('http://local.ch', options)
+          end
+        end
+      end
+    end
+
+    describe 'calculate "reset" in proc' do
+      let(:options_expires) { ->(*) { Time.zone.now + 1.second } }
+
+      before(:each) do
+        stub_request(:get, 'http://local.ch').to_return(
+          headers: { 'limit' => quota_limit, 'remaining' => quota_remaining }
+        )
+        LHC.get('http://local.ch', options)
+      end
+
+      context 'breaks' do
+        let(:options_break) { '80%' }
+
+        it 'hit the breaks if throttling quota is reached' do
+          expect { LHC.get('http://local.ch', options) }.to raise_error(
+            LHC::Throttle::OutOfQuota,
+            'Reached predefined quota for local.ch'
+          )
+        end
+
+        context 'still within quota' do
+          let(:options_break) { '90%' }
+
+          it 'does not hit the breaks' do
+            LHC.get('http://local.ch', options)
+          end
         end
       end
     end
