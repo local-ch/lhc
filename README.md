@@ -601,7 +601,6 @@ You can configure your own cache (default Rails.cache) and logger (default Rails
 
 ```ruby
   LHC::Caching.cache = ActiveSupport::Cache::MemoryStore.new
-  LHC::Caching.logger = Logger.new(STDOUT)
 ```
 
 Caching is not enabled by default, although you added it to your basic set of interceptors.

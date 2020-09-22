@@ -2,7 +2,7 @@
 class LHC::Caching < LHC::Interceptor
   include ActiveSupport::Configurable
 
-  config_accessor :cache, :logger, :central
+  config_accessor :cache, :central
 
   # to control cache invalidation across all applications in case of
   # breaking changes within this inteceptor 
@@ -20,13 +20,20 @@ class LHC::Caching < LHC::Interceptor
     end
 
     def fetch(key)
-      central_response = @central.read.fetch(key) if @central && @central[:read].present?
-      return central_response if central_response.present?
-      @local.fetch(key)
+      central_response = @central[:read].fetch(key) if @central && @central[:read].present?
+      if central_response
+        puts %Q{[LHC] served from central cache: "#{key}"}
+        return central_response
+      end
+      local_response = @local.fetch(key) if @local
+      if local_response
+        puts %Q{[LHC] served from local cache: "#{key}"}
+        return local_response
+      end
     end
 
     def write(key, content, options)
-      @central.write.write(key, content, options) if @central && @central[:write].present?
+      @central[:write].write(key, content, options) if @central && @central[:write].present?
       @local.write(key, content, options) if @local.present?
     end
   end
@@ -36,7 +43,6 @@ class LHC::Caching < LHC::Interceptor
     key = key(request, options[:key])
     response_data = multilevel_cache.fetch(key)
     return unless response_data
-    logger&.info "Served from cache: #{key}"
     from_cache(request, response_data)
   end
 
@@ -69,9 +75,8 @@ class LHC::Caching < LHC::Interceptor
   def central_cache
     return nil if central.blank? || (central[:read].blank? && central[:write].blank?)
     {}.tap do |options|
-      binding.pry
-      options[:read] = ActiveSupport::Cache::RedisCacheStore.new(central[:read]) if central[:read].present?
-      options[:write] = ActiveSupport::Cache::RedisCacheStore.new(central[:write]) if central[:write].present?
+      options[:read] = ActiveSupport::Cache::RedisCacheStore.new(url: central[:read]) if central[:read].present?
+      options[:write] = ActiveSupport::Cache::RedisCacheStore.new(url: central[:write]) if central[:write].present?
     end
   end
 
@@ -80,7 +85,7 @@ class LHC::Caching < LHC::Interceptor
   # return false if this interceptor cannot work
   def cache?(request)
     return false unless request.options[:cache]
-    local_cache &&
+    (local_cache || central_cache) &&
       cached_method?(request.method, options[:methods])
   end
 
