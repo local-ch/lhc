@@ -1,21 +1,40 @@
 # frozen_string_literal: true
-
 class LHC::Caching < LHC::Interceptor
   include ActiveSupport::Configurable
 
-  config_accessor :cache, :logger
+  config_accessor :cache, :logger, :central
 
+  # to control cache invalidation across all applications in case of
+  # breaking changes within this inteceptor 
+  # that do not lead to cache invalidation otherwise
   CACHE_VERSION = '1'
 
   # Options forwarded to the cache
   FORWARDED_OPTIONS = [:expires_in, :race_condition_ttl]
 
+  class MultilevelCache
+
+    def initialize(central: nil, local: nil)
+      @central = central
+      @local = local
+    end
+
+    def fetch(key)
+      central_response = @central.read.fetch(key) if @central && @central[:read].present?
+      return central_response if central_response.present?
+      @local.fetch(key)
+    end
+
+    def write(key, content, options)
+      @central.write.write(key, content, options) if @central && @central[:write].present?
+      @local.write(key, content, options) if @local.present?
+    end
+  end
+
   def before_request
     return unless cache?(request)
-    deprecation_warning(request.options)
-    options = options(request.options)
     key = key(request, options[:key])
-    response_data = cache_for(options).fetch(key)
+    response_data = multilevel_cache.fetch(key)
     return unless response_data
     logger&.info "Served from cache: #{key}"
     from_cache(request, response_data)
@@ -23,21 +42,37 @@ class LHC::Caching < LHC::Interceptor
 
   def after_response
     return unless response.success?
-    request = response.request
     return unless cache?(request)
-    options = options(request.options)
-    cache_for(options).write(
+    multilevel_cache.write(
       key(request, options[:key]),
       to_cache(response),
-      cache_options(options)
+      cache_options
     )
   end
 
   private
 
-  # return the cache for the given options
-  def cache_for(options)
+  # performs read/write (fetch/write) on all configured cache levels (e.g. local & central)
+  def multilevel_cache
+    MultilevelCache.new(
+      central: central_cache,
+      local: local_cache
+    )
+  end
+
+  # returns the local cache either configured for entire LHC
+  # or configured locally for that particular request
+  def local_cache
     options.fetch(:use, cache)
+  end
+
+  def central_cache
+    return nil if central.blank? || (central[:read].blank? && central[:write].blank?)
+    {}.tap do |options|
+      binding.pry
+      options[:read] = ActiveSupport::Cache::RedisCacheStore.new(central[:read]) if central[:read].present?
+      options[:write] = ActiveSupport::Cache::RedisCacheStore.new(central[:write]) if central[:write].present?
+    end
   end
 
   # do we even need to bother with this interceptor?
@@ -45,25 +80,13 @@ class LHC::Caching < LHC::Interceptor
   # return false if this interceptor cannot work
   def cache?(request)
     return false unless request.options[:cache]
-    options = options(request.options)
-    cache_for(options) &&
+    local_cache &&
       cached_method?(request.method, options[:methods])
   end
 
-  # returns the request_options
-  # will map deprecated options to the new format
-  def options(request_options)
-    options = (request_options[:cache] == true) ? {} : request_options[:cache].dup
-    map_deprecated_options!(request_options, options)
+  def options
+    options = (request.options[:cache] == true) ? {} : request.options[:cache].dup
     options
-  end
-
-  # maps `cache_key` -> `key`, `cache_expires_in` -> `expires_in` and so on
-  def map_deprecated_options!(request_options, options)
-    deprecated_keys(request_options).each do |deprecated_key|
-      new_key = deprecated_key.to_s.gsub(/^cache_/, '').to_sym
-      options[new_key] = request_options[deprecated_key]
-    end
   end
 
   # converts json we read from the cache to an LHC::Response object
@@ -104,24 +127,10 @@ class LHC::Caching < LHC::Interceptor
 
   # extracts the options that should be forwarded to
   # the cache
-  def cache_options(input = {})
-    input.each_with_object({}) do |(key, value), result|
+  def cache_options
+    options.each_with_object({}) do |(key, value), result|
       result[key] = value if key.in? FORWARDED_OPTIONS
       result
-    end
-  end
-
-  # grabs the deprecated keys from the request options
-  def deprecated_keys(request_options)
-    request_options.keys.select { |k| k =~ /^cache_.*/ }.sort
-  end
-
-  # emits a deprecation warning if necessary
-  def deprecation_warning(request_options)
-    unless deprecated_keys(request_options).empty?
-      ActiveSupport::Deprecation.warn(
-        "Cache options have changed! #{deprecated_keys(request_options).join(', ')} are deprecated and will be removed in future versions."
-      )
     end
   end
 end

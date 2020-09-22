@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
 
   s.requirements << 'Ruby >= 2.0.0'
 
-  s.add_dependency 'activesupport', '>= 4.2'
+  s.add_dependency 'activesupport', '>= 5.2'
   s.add_dependency 'addressable'
   s.add_dependency 'typhoeus', '>= 0.11'
 
