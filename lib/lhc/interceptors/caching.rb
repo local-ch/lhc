@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+
 class LHC::Caching < LHC::Interceptor
   include ActiveSupport::Configurable
 
   config_accessor :cache, :central
 
   # to control cache invalidation across all applications in case of
-  # breaking changes within this inteceptor 
+  # breaking changes within this inteceptor
   # that do not lead to cache invalidation otherwise
   CACHE_VERSION = '1'
 

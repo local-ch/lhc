@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 describe LHC::Caching do
-
   let(:redis_url) { 'redis://localhost:6379/0' }
   let(:redis_cache) do
     spy('ActiveSupport::Cache::RedisCacheStore')
@@ -40,7 +39,6 @@ describe LHC::Caching do
   end
 
   context 'only local cache has been configured' do
-
     before do
       LHC::Caching.cache = Rails.cache
     end
@@ -48,7 +46,7 @@ describe LHC::Caching do
     it 'serves a response from local cache without trying the central cache' do
       expect(Rails.cache).to receive(:fetch).at_least(:once).and_call_original
       expect(Rails.cache).to receive(:write).and_call_original
-      expect(->{ response_has_been_cached_and_served_from_cache! })
+      expect(-> { response_has_been_cached_and_served_from_cache! })
         .to output(%Q{[LHC] served from local cache: "LHC_CACHE(v1): GET http://local.ch"\n}).to_stdout
     end
   end
@@ -64,11 +62,11 @@ describe LHC::Caching do
 
     context 'found in central cache' do
       it 'serves it from central cache if found there' do
-        expect(redis_cache).to receive(:fetch).and_return(nil, { body: '<h1>Hi there</h1>', code: 200, headers: nil, return_code: nil, mock: :webmock })
+        expect(redis_cache).to receive(:fetch).and_return(nil, body: '<h1>Hi there</h1>', code: 200, headers: nil, return_code: nil, mock: :webmock)
         expect(redis_cache).to receive(:write).and_return(true)
         expect(Rails.cache).to receive(:fetch).and_call_original
         expect(Rails.cache).to receive(:write).and_call_original
-        expect(->{ response_has_been_cached_and_served_from_cache! })
+        expect(-> { response_has_been_cached_and_served_from_cache! })
           .to output(%Q{[LHC] served from central cache: "LHC_CACHE(v1): GET http://local.ch"\n}).to_stdout
       end
     end
@@ -79,11 +77,10 @@ describe LHC::Caching do
         expect(redis_cache).to receive(:write).and_return(true)
         expect(Rails.cache).to receive(:fetch).at_least(:once).and_call_original
         expect(Rails.cache).to receive(:write).and_call_original
-        expect(->{ response_has_been_cached_and_served_from_cache! })
+        expect(-> { response_has_been_cached_and_served_from_cache! })
           .to output(%Q{[LHC] served from local cache: "LHC_CACHE(v1): GET http://local.ch"\n}).to_stdout
       end
     end
-
   end
 
   context 'only central read configured' do
@@ -95,11 +92,11 @@ describe LHC::Caching do
     end
 
     it 'still serves responses from cache, but does not write them back' do
-      expect(redis_cache).to receive(:fetch).and_return(nil, { body: '<h1>Hi there</h1>', code: 200, headers: nil, return_code: nil, mock: :webmock })
+      expect(redis_cache).to receive(:fetch).and_return(nil, body: '<h1>Hi there</h1>', code: 200, headers: nil, return_code: nil, mock: :webmock)
       expect(redis_cache).not_to receive(:write)
       expect(Rails.cache).to receive(:fetch).and_call_original
       expect(Rails.cache).to receive(:write).and_call_original
-      expect(->{ response_has_been_cached_and_served_from_cache! })
+      expect(-> { response_has_been_cached_and_served_from_cache! })
         .to output(%Q{[LHC] served from central cache: "LHC_CACHE(v1): GET http://local.ch"\n}).to_stdout
     end
   end
@@ -114,16 +111,15 @@ describe LHC::Caching do
 
     it 'still writes responses to cache, but does not retrieve them from there' do
       expect(redis_cache).not_to receive(:fetch)
-        expect(redis_cache).to receive(:write).and_return(true)
-        expect(Rails.cache).to receive(:fetch).at_least(:once).and_call_original
-        expect(Rails.cache).to receive(:write).and_call_original
-        expect(->{ response_has_been_cached_and_served_from_cache! })
-          .to output(%Q{[LHC] served from local cache: "LHC_CACHE(v1): GET http://local.ch"\n}).to_stdout
+      expect(redis_cache).to receive(:write).and_return(true)
+      expect(Rails.cache).to receive(:fetch).at_least(:once).and_call_original
+      expect(Rails.cache).to receive(:write).and_call_original
+      expect(-> { response_has_been_cached_and_served_from_cache! })
+        .to output(%Q{[LHC] served from local cache: "LHC_CACHE(v1): GET http://local.ch"\n}).to_stdout
     end
   end
 
   context 'central cache configured only' do
-
     before do
       LHC::Caching.cache = nil
       LHC::Caching.central = {
@@ -133,10 +129,10 @@ describe LHC::Caching do
     end
 
     it 'does not inquire the local cache for information neither to write them' do
-      expect(redis_cache).to receive(:fetch).and_return(nil, { body: '<h1>Hi there</h1>', code: 200, headers: nil, return_code: nil, mock: :webmock })
+      expect(redis_cache).to receive(:fetch).and_return(nil, body: '<h1>Hi there</h1>', code: 200, headers: nil, return_code: nil, mock: :webmock)
       expect(redis_cache).to receive(:write).and_return(true)
-      expect(->{ response_has_been_cached_and_served_from_cache! })
-          .to output(%Q{[LHC] served from central cache: "LHC_CACHE(v1): GET http://local.ch"\n}).to_stdout
+      expect(-> { response_has_been_cached_and_served_from_cache! })
+        .to output(%Q{[LHC] served from central cache: "LHC_CACHE(v1): GET http://local.ch"\n}).to_stdout
     end
   end
 end
