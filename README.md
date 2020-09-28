@@ -601,7 +601,6 @@ You can configure your own cache (default Rails.cache) and logger (default Rails
 
 ```ruby
   LHC::Caching.cache = ActiveSupport::Cache::MemoryStore.new
-  LHC::Caching.logger = Logger.new(STDOUT)
 ```
 
 Caching is not enabled by default, although you added it to your basic set of interceptors.
@@ -632,6 +631,18 @@ Responses served from cache are marked as served from cache:
   response.from_cache? # true
 ```
 
+You can also use a central http cache to be used by the `LHC::Caching` interceptor.
+
+If you configure a local and a central cache, LHC will perform multi-level-caching.
+LHC will try to retrieve cached information first from the central, in case of a miss from the local cache, while writing back into both.
+
+```ruby
+  LHC::Caching.central = {
+    read: 'redis://$PASSWORD@central-http-cache-replica.namespace:6379/0',
+    write: 'redis://$PASSWORD@central-http-cache-master.namespace:6379/0'
+  }
+```
+
 ##### Options
 
 ```ruby
@@ -644,7 +655,7 @@ Responses served from cache are marked as served from cache:
 
 `race_condition_ttl` - very useful in situations where a cache entry is used very frequently and is under heavy load.
 If a cache expires and due to heavy load several different processes will try to read data natively and then they all will try to write to cache.
-To avoid that case the first process to find an expired cache entry will bump the cache expiration time by the value set in `cache_race_condition_ttl`.
+To avoid that case the first process to find an expired cache entry will bump the cache expiration time by the value set in `race_condition_ttl`.
 
 `use` - Set an explicit cache to be used for this request. If this option is missing `LHC::Caching.cache` is used.
 
