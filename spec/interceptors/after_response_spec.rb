@@ -14,7 +14,7 @@ describe LHC do
           uri = URI.parse(response.request.url)
           path = [
             'web',
-            Rails.application.class.parent_name,
+            Rails.application.class.module_parent_name,
             Rails.env,
             response.request.method,
             uri.scheme,

@@ -25,7 +25,11 @@ class LHC::Request
     interceptors.intercept(:before_raw_request)
     self.raw = create_request
     interceptors.intercept(:before_request)
-    run! if self_executing && !response
+    if self_executing && !response
+      run!
+    elsif response
+      on_complete(response)
+    end
   end
 
   def url
@@ -128,7 +132,7 @@ class LHC::Request
   end
 
   def on_complete(response)
-    self.response = LHC::Response.new(response, self)
+    self.response ||= LHC::Response.new(response, self)
     interceptors.intercept(:after_response)
     handle_error(self.response) unless self.response.success?
   end

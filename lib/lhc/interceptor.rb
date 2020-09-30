@@ -29,4 +29,8 @@ class LHC::Interceptor
   def self.dup
     self
   end
+
+  def all_interceptor_classes
+    @all_interceptors ||= LHC::Interceptors.new(request).all.map(&:class)
+  end
 end

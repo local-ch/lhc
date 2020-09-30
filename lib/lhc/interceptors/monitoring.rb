@@ -37,11 +37,17 @@ class LHC::Monitoring < LHC::Interceptor
 
   def monitor_cache!
     return if request.options[:cache].blank?
+    return unless monitor_caching_configuration_check
     if response.from_cache?
       LHC::Monitoring.statsd.count("#{key}.cache.hit", 1)
     else
       LHC::Monitoring.statsd.count("#{key}.cache.miss", 1)
     end
+  end
+
+  def monitor_caching_configuration_check
+    return true if all_interceptor_classes.include?(LHC::Caching) && all_interceptor_classes.index(self.class) > all_interceptor_classes.index(LHC::Caching)
+    warn("[WARNING] Your interceptors must include LHC::Caching and LHC::Monitoring and also in that order.")
   end
 
   def monitor_response!
@@ -59,7 +65,7 @@ class LHC::Monitoring < LHC::Interceptor
     url = sanitize_url(request.url)
     key = [
       'lhc',
-      Rails.application.class.parent_name.underscore,
+      Rails.application.class.module_parent_name.underscore,
       LHC::Monitoring.env || Rails.env,
       URI.parse(url).host.gsub(/\./, '_'),
       request.method
