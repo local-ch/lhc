@@ -45,7 +45,7 @@ describe LHC::Error do
 
     context 'some mocked response' do
       let(:request) do
-        double('request',
+        double('LHC::Request',
                method: 'GET',
                url: 'http://example.com/sessions',
                headers: { 'Bearer Token' => "aaaaaaaa-bbbb-cccc-dddd-eeee" },
@@ -55,7 +55,7 @@ describe LHC::Error do
       end
 
       let(:response) do
-        double('response',
+        double('LHC::Response',
                request: request,
                code: 500,
                options: { return_code: :internal_error, response_headers: "" },
@@ -63,6 +63,11 @@ describe LHC::Error do
       end
 
       subject { LHC::Error.new('The error message', response) }
+
+      before do
+        allow(request).to receive(:is_a?).with(LHC::Request).and_return(true)
+        allow(response).to receive(:is_a?).with(LHC::Response).and_return(true)
+      end
 
       it 'produces correct debug output' do
         expect(subject.to_s.split("\n")).to eq(<<-MSG.strip_heredoc.split("\n"))

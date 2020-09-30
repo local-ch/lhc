@@ -67,6 +67,8 @@ class LHC::Error < StandardError
     return response.to_s unless response.is_a?(LHC::Response)
     request = response.request
     return unless request.is_a?(LHC::Request)
+    
+    debug = []
     debug << [request.method, request.url].map { |str| self.class.fix_invalid_encoding(str) }.join(' ')
     debug << "Options: #{request.options}"
     debug << "Headers: #{request.headers}"
