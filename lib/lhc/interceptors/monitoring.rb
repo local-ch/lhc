@@ -65,12 +65,16 @@ class LHC::Monitoring < LHC::Interceptor
     url = sanitize_url(request.url)
     key = [
       'lhc',
-      Rails.application.class.module_parent_name.underscore,
+      module_parent_name.underscore,
       LHC::Monitoring.env || Rails.env,
       URI.parse(url).host.gsub(/\./, '_'),
       request.method
     ]
     key.join('.')
+  end
+
+  def module_parent_name
+    (ActiveSupport.gem_version >= Gem::Version.new('6.0.0')) ? Rails.application.class.module_parent_name : Rails.application.class.parent_name
   end
 
   def sanitize_url(url)
