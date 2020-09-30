@@ -28,7 +28,6 @@ describe LHC::Monitoring do
     end
 
     context 'requesting with cache option' do
-
       it 'monitors miss/hit for caching' do
         stub
         expect(Statsd).to receive(:count).with('lhc.dummy.test.local_ch.get.cache.miss', 1)
@@ -39,7 +38,6 @@ describe LHC::Monitoring do
     end
 
     context 'request uncached' do
-
       it 'requesting without cache option' do
         stub
         expect(Statsd).not_to receive(:count).with('lhc.dummy.test.local_ch.get.cache.miss', 1)
@@ -59,7 +57,7 @@ describe LHC::Monitoring do
       stub
       expect(Statsd).not_to receive(:count).with('lhc.dummy.test.local_ch.get.cache.miss', 1)
       expect(Statsd).not_to receive(:count).with('lhc.dummy.test.local_ch.get.cache.hit', 1)
-      expect(->{
+      expect(-> {
         LHC.get('http://local.ch', cache: true)
         LHC.get('http://local.ch', cache: true)
       }).to output("[WARNING] Your interceptors must include LHC::Caching and LHC::Monitoring and also in that order.\n[WARNING] Your interceptors must include LHC::Caching and LHC::Monitoring and also in that order.\n").to_stderr
