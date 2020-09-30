@@ -42,7 +42,6 @@ class LHC::Caching < LHC::Interceptor
   def before_request
     return unless cache?(request)
     key = key(request, options[:key])
-    response_data = multilevel_cache.fetch(key)
     return unless response_data
     from_cache(request, response_data)
   end
@@ -50,6 +49,7 @@ class LHC::Caching < LHC::Interceptor
   def after_response
     return unless response.success?
     return unless cache?(request)
+    return if response_data.present?
     multilevel_cache.write(
       key(request, options[:key]),
       to_cache(response),
@@ -58,6 +58,10 @@ class LHC::Caching < LHC::Interceptor
   end
 
   private
+
+  def response_data # from cache
+    @response_data ||= multilevel_cache.fetch(key(request, options[:key]))
+  end
 
   # performs read/write (fetch/write) on all configured cache levels (e.g. local & central)
   def multilevel_cache
