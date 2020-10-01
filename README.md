@@ -73,6 +73,10 @@ use it like:
            * [Installation](#installation-1)
            * [Environment](#environment)
            * [What it tracks](#what-it-tracks)
+              * [Before and after request tracking](#before-and-after-request-tracking)
+              * [Response tracking](#response-tracking)
+              * [Timeout tracking](#timeout-tracking)
+              * [Caching tracking](#caching-tracking)
            * [Configure](#configure-1)
         * [Prometheus Interceptor](#prometheus-interceptor)
         * [Retry Interceptor](#retry-interceptor)
@@ -90,6 +94,7 @@ use it like:
         * [Provide a response replacement through an interceptor](#provide-a-response-replacement-through-an-interceptor)
   * [Testing](#testing)
   * [License](#license)
+
 
 
 
@@ -744,10 +749,14 @@ It tracks request attempts with `before_request` and `after_request` (counts).
 In case your workers/processes are getting killed due limited time constraints,
 you are able to detect deltas with relying on "before_request", and "after_request" counts:
 
+###### Before and after request tracking
+
 ```ruby
   "lhc.<app_name>.<env>.<host>.<http_method>.before_request", 1
   "lhc.<app_name>.<env>.<host>.<http_method>.after_request", 1
 ```
+
+###### Response tracking
 
 In case of a successful response it reports the response code with a count and the response time with a gauge value.
 
@@ -759,6 +768,17 @@ In case of a successful response it reports the response code with a count and t
   "lhc.<app_name>.<env>.<host>.<http_method>.time", 43
 ```
 
+In case of a unsuccessful response it reports the response code with a count but no time:
+
+```ruby
+  LHC.get('http://local.ch')
+
+  "lhc.<app_name>.<env>.<host>.<http_method>.count", 1
+  "lhc.<app_name>.<env>.<host>.<http_method>.500", 1
+```
+
+###### Timeout tracking
+
 Timeouts are also reported:
 
 ```ruby
@@ -766,6 +786,30 @@ Timeouts are also reported:
 ```
 
 All the dots in the host are getting replaced with underscore, because dot is the default separator in graphite.
+
+###### Caching tracking
+
+When you want to track caching stats please make sure you have enabled the `LHC::Caching` and the `LHC::Monitoring` interceptor.
+
+Make sure that the `LHC::Caching` is listed before `LHC::Monitoring` interceptor when configuring interceptors:
+
+```ruby
+LHC.configure do |c|
+  c.interceptors = [LHC::Caching, LHC::Monitoring]
+end
+```
+
+If a response was served from cache it tracks:
+
+```ruby
+  "lhc.<app_name>.<env>.<host>.<http_method>.cache.hit", 1
+```
+
+If a response was not served from cache it tracks:
+
+```ruby
+  "lhc.<app_name>.<env>.<host>.<http_method>.cache.miss", 1
+```
 
 ##### Configure
 
