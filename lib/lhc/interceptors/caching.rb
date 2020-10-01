@@ -41,7 +41,6 @@ class LHC::Caching < LHC::Interceptor
 
   def before_request
     return unless cache?(request)
-    key = key(request, options[:key])
     return if response_data.blank?
     from_cache(request, response_data)
   end
@@ -59,8 +58,10 @@ class LHC::Caching < LHC::Interceptor
 
   private
 
-  def response_data # from cache
-    return @response_data if defined? @response_data # stop calling multi-level cache if it already returned nil for this interceptor instance
+  # from cache
+  def response_data
+    # stop calling multi-level cache if it already returned nil for this interceptor instance
+    return @response_data if defined? @response_data
     @response_data ||= multilevel_cache.fetch(key(request, options[:key]))
   end
 

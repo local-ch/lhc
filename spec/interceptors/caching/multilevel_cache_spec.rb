@@ -62,9 +62,8 @@ describe LHC::Caching do
 
     context 'found in central cache' do
       it 'serves it from central cache if found there' do
-        expect(redis_cache).to receive(:fetch).and_return(nil, {
-          body: '<h1>Hi there</h1>', code: 200, headers: nil, return_code: nil, mock: :webmock
-        })
+        expect(redis_cache).to receive(:fetch).and_return(nil,
+                                                            body: '<h1>Hi there</h1>', code: 200, headers: nil, return_code: nil, mock: :webmock)
         expect(redis_cache).to receive(:write).and_return(true)
         expect(Rails.cache).to receive(:fetch).and_call_original
         expect(Rails.cache).to receive(:write).and_call_original

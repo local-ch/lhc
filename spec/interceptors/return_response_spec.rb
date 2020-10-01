@@ -23,7 +23,7 @@ describe LHC do
       before(:each) do
         class AnotherInterceptor < LHC::Interceptor
           def before_request
-            LHC::Response.new(Typhoeus::Response.new({response_code: 200, return_code: :ok}), nil)
+            LHC::Response.new(Typhoeus::Response.new(response_code: 200, return_code: :ok), nil)
           end
         end
       end

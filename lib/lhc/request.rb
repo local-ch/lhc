@@ -132,11 +132,7 @@ class LHC::Request
   end
 
   def on_complete(response)
-    self.response = if response.is_a?(LHC::Response)
-      response
-    else
-      LHC::Response.new(response, self)
-    end
+    self.response = response.is_a?(LHC::Response) ? response : LHC::Response.new(response, self)
     interceptors.intercept(:after_response)
     handle_error(self.response) unless self.response.success?
   end
