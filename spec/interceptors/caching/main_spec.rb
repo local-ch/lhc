@@ -47,7 +47,7 @@ describe LHC::Caching do
 
   it 'lets you configure the cache key that will be used' do
     LHC.config.endpoint(:local, 'http://local.ch', cache: { key: 'STATICKEY' })
-    expect(Rails.cache).to receive(:fetch).with("LHC_CACHE(v#{LHC::Caching::CACHE_VERSION}): STATICKEY").and_call_original
+    expect(Rails.cache).to receive(:fetch).at_least(:once).with("LHC_CACHE(v#{LHC::Caching::CACHE_VERSION}): STATICKEY").and_call_original
     expect(Rails.cache).to receive(:write).with("LHC_CACHE(v#{LHC::Caching::CACHE_VERSION}): STATICKEY", anything, anything).and_call_original
     stub
     LHC.get(:local)
@@ -66,8 +66,8 @@ describe LHC::Caching do
     stub
     LHC.config.endpoint(:local, 'http://local.ch', cache: true)
     original_response = LHC.get(:local)
-    cached_response = LHC.get(:local)
     expect(original_response.from_cache?).to eq false
+    cached_response = LHC.get(:local)
     expect(cached_response.from_cache?).to eq true
   end
 end

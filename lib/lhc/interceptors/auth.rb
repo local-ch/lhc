@@ -75,10 +75,6 @@ class LHC::Auth < LHC::Interceptor
     @refresh_client_token_option ||= auth_options[:refresh_client_token] || refresh_client_token
   end
 
-  def all_interceptor_classes
-    @all_interceptors ||= LHC::Interceptors.new(request).all.map(&:class)
-  end
-
   def auth_options
     request.options[:auth] || {}
   end
