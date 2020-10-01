@@ -8,7 +8,7 @@ describe LHC do
       class CacheInterceptor < LHC::Interceptor
 
         def before_request
-          LHC::Response.new(Typhoeus::Response.new(response_body: 'Im served from cache'), nil)
+          LHC::Response.new(Typhoeus::Response.new(response_code: 200, return_code: :ok, response_body: 'Im served from cache'), nil)
         end
       end
       LHC.configure { |c| c.interceptors = [CacheInterceptor] }
@@ -23,7 +23,7 @@ describe LHC do
       before(:each) do
         class AnotherInterceptor < LHC::Interceptor
           def before_request
-            LHC::Response.new(Typhoeus::Response.new({}), nil)
+            LHC::Response.new(Typhoeus::Response.new({response_code: 200, return_code: :ok}), nil)
           end
         end
       end
