@@ -91,9 +91,7 @@ class LHC::Request
 
   def encode_url(url)
     return url if url.nil?
-    URI.parse(url).tap do |parsed_url|
-      parsed_url.query = URI.encode_www_form_component(parsed_url.query) if parsed_url.query.present?
-    end.to_s
+    Addressable::URI.escape(url)
   end
 
   def typhoeusize(options)
