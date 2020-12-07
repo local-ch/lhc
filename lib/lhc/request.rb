@@ -91,7 +91,7 @@ class LHC::Request
 
   def encode_url(url)
     return url if url.nil?
-    URI.escape(url)
+    CGI.escape(url)
   end
 
   def typhoeusize(options)
