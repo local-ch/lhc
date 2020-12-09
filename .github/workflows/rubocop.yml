@@ -14,10 +14,10 @@ jobs:
       - name: Cache Ruby Gems
         uses: actions/cache@v2
         with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          path: /.tmp/vendor/bundle
+          key: ${{ runner.os }}-gems-v2-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-gems-
+            ${{ runner.os }}-gems-v2-
       - name: Bundle Install
         run: |
           bundle config path /.tmp/vendor/bundle
