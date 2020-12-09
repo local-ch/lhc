@@ -20,7 +20,7 @@ jobs:
             ${{ runner.os }}-gems-
       - name: Bundle Install
         run: |
-          bundle config path vendor/bundle
+          bundle config path /.tmp/vendor/bundle
           bundle install --jobs 4 --retry 3
       - name: Run Rubocop
         run: |
