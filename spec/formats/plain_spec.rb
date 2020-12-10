@@ -6,9 +6,9 @@ describe LHC do
   include ActionDispatch::TestProcess
 
   context 'plain' do
+    let(:file) { Rack::Test::UploadedFile.new(Tempfile.new) }
 
     it 'leaves plains requests unformatted' do
-      file = fixture_file_upload(Tempfile.new, 'image/jpeg')
       stub_request(:post, 'http://local.ch/')
         .with(body: /file=%23%3CRack%3A%3ATest%3A%3AUploadedFile%3.*%3E&type=Image/)
         .to_return do |request|
