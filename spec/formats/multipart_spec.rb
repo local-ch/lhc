@@ -6,7 +6,7 @@ describe LHC do
   include ActionDispatch::TestProcess
 
   context 'multipart' do
-    let(:file) { fixture_file_upload(Tempfile.new, 'image/jpeg') }
+    let(:file) { Rack::Test::UploadedFile.new(Tempfile.new) }
     let(:body) { { size: 2231 }.to_json }
     let(:location) { 'http://local.ch/uploads/image.jpg' }
 
