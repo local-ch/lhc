@@ -5,6 +5,9 @@ inherit_from:
 
 AllCops:
   TargetRubyVersion: 2.3
+  Exclude:
+    - vendor/**
+    - vendor/**/.*
 
 Lint/IneffectiveAccessModifier:
   Enabled: false

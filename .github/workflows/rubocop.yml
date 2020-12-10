@@ -1,9 +1,9 @@
-name: Test
+name: Rubocop
 
 on: push
 
 jobs:
-  rspec:
+  rubocop:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +22,6 @@ jobs:
         run: |
           bundle config path /.tmp/vendor/bundle
           bundle install --jobs 4 --retry 3
-      - name: Run Tests
+      - name: Run Rubocop
         run: |
-          bundle exec rspec
+          bundle exec rubocop
