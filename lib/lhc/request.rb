@@ -12,7 +12,7 @@ class LHC::Request
 
   TYPHOEUS_OPTIONS ||= [:params, :method, :body, :headers, :follow_location, :params_encoding]
 
-  attr_accessor :response, :options, :raw, :format, :error_handler, :errors_ignored, :source
+  attr_accessor :response, :options, :raw, :format, :scrubbed_headers, :error_handler, :errors_ignored, :source
 
   def initialize(options, self_executing = true)
     self.errors_ignored = (options.fetch(:ignore, []) || []).to_a.compact
@@ -25,6 +25,8 @@ class LHC::Request
     interceptors.intercept(:before_raw_request)
     self.raw = create_request
     interceptors.intercept(:before_request)
+    self.scrubbed_headers = headers.deep_dup
+    scrub!
     if self_executing && !response
       run!
     elsif response
@@ -157,5 +159,24 @@ class LHC::Request
 
   def throw_error(response)
     raise error.new(error, response)
+  end
+
+  # TODO get this from config
+  CONFIG_SCRUB = { auth: [:bearer, :basic] }
+
+  def scrub!
+    return if CONFIG_SCRUB.blank? # TODO test this
+    scrub_basic_authentication! if CONFIG_SCRUB[:auth].include?(:basic)
+    scrub_bearer_authentication! if CONFIG_SCRUB[:auth].include?(:bearer)
+  end
+
+  def scrub_basic_authentication!
+    return if options[:auth][:basic].blank?
+    scrubbed_headers['Authorization'] = scrubbed_headers['Authorization'].gsub(options[:auth][:basic][:base_64_encoded_credentials], '[FILTERED]')
+  end
+
+  def scrub_bearer_authentication!
+    return if options[:auth][:bearer].blank?
+    scrubbed_headers['Authorization'] = scrubbed_headers['Authorization'].gsub(options[:auth][:bearer_token], '[FILTERED]')
   end
 end

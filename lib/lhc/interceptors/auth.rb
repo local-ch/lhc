@@ -29,7 +29,7 @@ class LHC::Auth < LHC::Interceptor
   def basic_authentication!
     auth = auth_options[:basic]
     credentials = "#{auth[:username]}:#{auth[:password]}"
-    set_authorization_header("Basic #{Base64.strict_encode64(credentials).chomp}")
+    set_basic_authorization_header(Base64.strict_encode64(credentials).chomp) 
   end
 
   def bearer_authentication!
@@ -43,7 +43,13 @@ class LHC::Auth < LHC::Interceptor
     request.headers['Authorization'] = value
   end
 
+  def set_basic_authorization_header(base_64_encoded_credentials) 
+    request.options[:auth][:basic] = request.options[:auth][:basic].merge(base_64_encoded_credentials: base_64_encoded_credentials)
+    set_authorization_header("Basic #{base_64_encoded_credentials}")
+  end
+
   def set_bearer_authorization_header(token)
+    request.options[:auth] = request.options[:auth].merge(bearer_token: token)
     set_authorization_header("Bearer #{token}")
   end
   # rubocop:enable Style/AccessorMethodName

@@ -7,6 +7,8 @@ describe LHC::Auth do
     LHC.config.interceptors = [LHC::Auth]
   end
 
+  # Add this to REAMDE that logs and rollbar do fitler bearer token
+  # Add to readme that the body filtering needs to be done manual
   it 'adds the bearer token to every request' do
     def bearer_token
       '123456'
