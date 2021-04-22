@@ -8,6 +8,7 @@ class LHC::Config
   def initialize
     @endpoints = {}
     @placeholders = {}
+    @scrubs = default_scrubs
   end
 
   def endpoint(name, url, options = {})
@@ -18,6 +19,15 @@ class LHC::Config
 
   def endpoints
     @endpoints.dup
+  end
+
+  # TODO maybe also test in dummy app
+  def scrubs
+    @scrubs
+  end
+
+  def scrubs=(scrubs)
+    @scrubs = scrubs
   end
 
   def placeholder(name, value)
@@ -39,9 +49,14 @@ class LHC::Config
     @interceptors = interceptors
   end
 
+  def default_scrubs
+    { auth: [:bearer, :basic] }
+  end
+
   def reset
     @endpoints = {}
     @placeholders = {}
     @interceptors = nil
+    @scrubs = default_scrubs
   end
 end

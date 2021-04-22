@@ -24,7 +24,18 @@ describe LHC::Request do
       expect(request.scrubbed_headers).to include('Authorization' => 'Bearer [FILTERED]')
       expect(request.headers).to include(authorization_header)
     end
+
+    context 'when nothing should get scrubbed' do
+      before :each do
+        LHC.config.scrubs = {}
+      end
+
+      it 'does not filter beaerer auth' do
+        expect(request.scrubbed_headers).to include(authorization_header)
+      end
+    end
   end
+
 
   context 'basic authentication' do
     let(:username) { 'steve' }
@@ -36,6 +47,16 @@ describe LHC::Request do
     it 'provides srubbed request headers' do
       expect(request.scrubbed_headers).to include('Authorization' => 'Basic [FILTERED]')
       expect(request.headers).to include(authorization_header)
+    end
+
+    context 'when nothing should get scrubbed' do
+      before :each do
+        LHC.config.scrubs = {}
+      end
+
+      it 'does not filter basic auth' do
+        expect(request.scrubbed_headers).to include(authorization_header)
+      end
     end
   end
 end

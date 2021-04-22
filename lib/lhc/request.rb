@@ -161,22 +161,23 @@ class LHC::Request
     raise error.new(error, response)
   end
 
-  # TODO get this from config
-  CONFIG_SCRUB = { auth: [:bearer, :basic] }
-
   def scrub!
-    return if CONFIG_SCRUB.blank? # TODO test this
-    scrub_basic_authentication! if CONFIG_SCRUB[:auth].include?(:basic)
-    scrub_bearer_authentication! if CONFIG_SCRUB[:auth].include?(:bearer)
+    return if LHC.config.scrubs.blank?
+    scrub_auth! if LHC.config.scrubs[:auth].present?
+  end
+
+  def scrub_auth!
+    scrub_basic_authentication! if LHC.config.scrubs.dig(:auth).include?(:basic)
+    scrub_bearer_authentication! if LHC.config.scrubs.dig(:auth).include?(:basic)
   end
 
   def scrub_basic_authentication!
-    return if options[:auth][:basic].blank?
+    return if options.dig(:auth, :basic).blank?
     scrubbed_headers['Authorization'] = scrubbed_headers['Authorization'].gsub(options[:auth][:basic][:base_64_encoded_credentials], '[FILTERED]')
   end
 
   def scrub_bearer_authentication!
-    return if options[:auth][:bearer].blank?
+    return if options.dig(:auth, :bearer).blank?
     scrubbed_headers['Authorization'] = scrubbed_headers['Authorization'].gsub(options[:auth][:bearer_token], '[FILTERED]')
   end
 end

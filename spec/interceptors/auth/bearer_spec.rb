@@ -7,8 +7,10 @@ describe LHC::Auth do
     LHC.config.interceptors = [LHC::Auth]
   end
 
-  # Add this to REAMDE that logs and rollbar do fitler bearer token
-  # Add to readme that the body filtering needs to be done manual
+  # TODO Add this to REAMDE that logs and rollbar do fitler bearer token
+  # TODO add to readme what is the default filtering
+  # TODO Add to readme that when the filtering is overwritten the default does not take place anymore
+  # TODO Maybe merge filtering then the defaul stays
   it 'adds the bearer token to every request' do
     def bearer_token
       '123456'
