@@ -12,7 +12,16 @@ class LHC::Request
 
   TYPHOEUS_OPTIONS ||= [:params, :method, :body, :headers, :follow_location, :params_encoding]
 
-  attr_accessor :response, :options, :raw, :format, :scrubbed_headers, :error_handler, :errors_ignored, :source
+  attr_accessor :response,
+                :options,
+                :raw,
+                :format,
+                :scrubbed_params,
+                :scrubbed_headers,
+                :scrubbed_options,
+                :error_handler,
+                :errors_ignored,
+                :source
 
   def initialize(options, self_executing = true)
     self.errors_ignored = (options.fetch(:ignore, []) || []).to_a.compact
@@ -25,7 +34,10 @@ class LHC::Request
     interceptors.intercept(:before_raw_request)
     self.raw = create_request
     interceptors.intercept(:before_request)
+    self.scrubbed_params = params.deep_dup
     self.scrubbed_headers = headers.deep_dup
+    self.scrubbed_options = self.options.deep_dup
+    # TODO scrubbed_params for api keys
     scrub!
     if self_executing && !response
       run!
@@ -158,26 +170,57 @@ class LHC::Request
   end
 
   def throw_error(response)
+    # TODO here it also logs sensitive data
     raise error.new(error, response)
   end
 
   def scrub!
     return if LHC.config.scrubs.blank?
-    scrub_auth! if LHC.config.scrubs[:auth].present?
+
+    scrub_auth!(scrubbed_headers)
+    scrub_auth!(scrubbed_options[:headers])
+
+    xscrub!(scrubbed_params, LHC.config.scrubs[:params])
+    xscrub!(scrubbed_options[:params], LHC.config.scrubs[:params])
+
+    xscrub!(scrubbed_headers, LHC.config.scrubs[:headers])
+    xscrub!(scrubbed_options[:headers], LHC.config.scrubs[:headers])
+
+    xscrub!(scrubbed_options[:body], LHC.config.scrubs[:body])
   end
 
-  def scrub_auth!
-    scrub_basic_authentication! if LHC.config.scrubs.dig(:auth).include?(:basic)
-    scrub_bearer_authentication! if LHC.config.scrubs.dig(:auth).include?(:basic)
+  def scrub_auth!(headers)
+    return if LHC.config.scrubs[:auth].blank?
+    scrub_basic_authentication!(headers) if LHC.config.scrubs.dig(:auth).include?(:basic)
+    scrub_bearer_authentication!(headers) if LHC.config.scrubs.dig(:auth).include?(:bearer)
   end
 
-  def scrub_basic_authentication!
+  # TODO rename
+  def xscrub!(data, elements_to_be_scrubbed_in_data)
+    return if elements_to_be_scrubbed_in_data.blank?
+    return if data.blank?
+
+    elements_to_be_scrubbed_in_data.each do |element_to_be_scrubbed_in_data|
+      if data.has_key?(element_to_be_scrubbed_in_data.to_s)
+        key = element_to_be_scrubbed_in_data.to_s
+      elsif data.has_key?(element_to_be_scrubbed_in_data.to_sym)
+        key = element_to_be_scrubbed_in_data.to_sym
+      end
+      data[key] = '[FILTERED]' # TODO create constante
+    end
+  end
+
+  def scrub_basic_authentication!(headers)
     return if options.dig(:auth, :basic).blank?
-    scrubbed_headers['Authorization'] = scrubbed_headers['Authorization'].gsub(options[:auth][:basic][:base_64_encoded_credentials], '[FILTERED]')
+    return if headers['Authorization'].blank?
+
+    headers['Authorization'] = headers['Authorization'].gsub(options[:auth][:basic][:base_64_encoded_credentials], '[FILTERED]')
   end
 
-  def scrub_bearer_authentication!
+  def scrub_bearer_authentication!(headers)
     return if options.dig(:auth, :bearer).blank?
-    scrubbed_headers['Authorization'] = scrubbed_headers['Authorization'].gsub(options[:auth][:bearer_token], '[FILTERED]')
+    return if headers['Authorization'].blank?
+
+    headers['Authorization'] = headers['Authorization'].gsub(options[:auth][:bearer_token], '[FILTERED]')
   end
 end

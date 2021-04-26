@@ -21,7 +21,6 @@ class LHC::Config
     @endpoints.dup
   end
 
-  # TODO maybe also test in dummy app
   def scrubs
     @scrubs
   end
@@ -44,13 +43,19 @@ class LHC::Config
     (@interceptors || []).dup
   end
 
+  # TODO also make something like this
   def interceptors=(interceptors)
     raise 'Default interceptors already set and can only be set once' if @interceptors
     @interceptors = interceptors
   end
 
   def default_scrubs
-    { auth: [:bearer, :basic] }
+    {
+      auth: [:bearer, :basic],
+      params: [],
+      headers: [],
+      body: ['password', 'password_confirmation']
+    }
   end
 
   def reset
