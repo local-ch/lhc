@@ -25,9 +25,38 @@ describe LHC::Request do
   end
 
   it 'provides srubbed request options' do
-    expect(request.scrubbed_options[:params]).to include('api_key' => '[FILTERED]')
-    expect(request.scrubbed_options[:headers]).to include('Authorization' => 'Bearer [FILTERED]')
-    expect(request.scrubbed_options[:headers]).to include('private_key' => '[FILTERED]')
-    expect(request.scrubbed_options[:body]).to include('user_token' => '[FILTERED]')
+    expect(request.scrubbed_options[:params]).to include(api_key: LHC::Scrubber::SCRUB_DISPLAY)
+    expect(request.scrubbed_options[:headers]).to include(private_key: LHC::Scrubber::SCRUB_DISPLAY)
+    expect(request.scrubbed_options[:body]).to include(user_token: LHC::Scrubber::SCRUB_DISPLAY)
+    expect(request.scrubbed_options[:auth][:bearer_token]).to eq(LHC::Scrubber::SCRUB_DISPLAY)
+    expect(request.scrubbed_options[:auth][:basic]).to be nil
+  end
+
+  context 'basic authentication' do
+    let(:username) { 'steve' }
+    let(:password) { 'abcdefg' }
+    let(:credentials_base_64_codiert) { Base64.strict_encode64("#{username}:#{password}").chomp }
+    let(:authorization_header) { { 'Authorization' => "Basic #{credentials_base_64_codiert}" } }
+    let(:auth) { { basic: { username: username, password: password } } }
+
+    it 'provides srubbed request headers' do
+      expect(request.scrubbed_options[:auth][:basic][:username]).to eq(LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:auth][:basic][:password]).to eq(LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:auth][:basic][:base_64_encoded_credentials]).to eq(LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:auth][:bearer]).to be nil
+    end
+  end
+
+  context 'when nothing should get scrubbed' do
+    before :each do
+      LHC.config.scrubs = {}
+    end
+
+    it 'does not filter anything' do
+      expect(request.scrubbed_options[:params]).not_to include(api_key: LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:headers]).not_to include(private_key: LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:body]).not_to include(user_token: LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:auth][:bearer_token]).not_to eq(LHC::Scrubber::SCRUB_DISPLAY)
+    end
   end
 end
