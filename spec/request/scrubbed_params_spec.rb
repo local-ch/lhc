@@ -13,6 +13,6 @@ describe LHC::Request do
 
   it 'scrubs "private_key"' do
     LHC.config.scrubs[:params] << 'api_key'
-    expect(response.request.scrubbed_params).to include(api_key: '[FILTERED]')
+    expect(response.request.scrubbed_params).to include(api_key: LHC::Scrubber::SCRUB_DISPLAY)
   end
 end

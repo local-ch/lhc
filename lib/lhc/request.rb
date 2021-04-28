@@ -66,6 +66,23 @@ class LHC::Request
     raw.run
   end
 
+  def scrubbed_params
+    LHC::ParamsScrubber.new(params.deep_dup).scrubbed
+  end
+
+  def scrubbed_headers
+    LHC::HeadersScrubber.new(headers.deep_dup, options[:auth]).scrubbed
+  end
+
+  def scrubbed_options
+    scrubbed_options = options.deep_dup
+    scrubbed_options[:params] = LHC::ParamsScrubber.new(scrubbed_options[:params]).scrubbed
+    scrubbed_options[:headers] = LHC::HeadersScrubber.new(scrubbed_options[:headers], scrubbed_options[:auth]).scrubbed
+    scrubbed_options[:auth] = LHC::AuthScrubber.new(scrubbed_options[:auth]).scrubbed
+    scrubbed_options[:body] = LHC::BodyScrubber.new(scrubbed_options[:body]).scrubbed
+    scrubbed_options
+  end
+
   private
 
   attr_accessor :interceptors
@@ -170,20 +187,4 @@ class LHC::Request
     raise error.new(error, response)
   end
 
-  def scrubbed_params
-    LHC::ParamsScrubber.new(params.deep_dup).scrubbed
-  end
-
-  def scrubbed_headers
-    LHC::HeadersScrubber.new(headers.deep_dup, options[:auth]).scrubbed
-  end
-
-  def scrubbed_options
-    scrubbed_options = options.deep_dup
-    scrubbed_options[:params] = LHC::ParamsScrubber.new(scrubbed_options[:params]).scrubbed
-    scrubbed_options[:headers] = LHC::HeadersScrubber.new(scrubbed_options[:headers], scrubbed_options[:auth]).scrubbed
-    scrubbed_options[:auth] = LHC::AuthScrubber.new(scrubbed_options[:auth]).scrubbed
-    scrubbed_options[:body] = LHC::BodyScrubber.new(scrubbed_options[:body]).scrubbed
-    scrubbed_options
-  end
 end

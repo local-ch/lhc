@@ -14,12 +14,12 @@ describe LHC::Request do
 
   it 'scrubs "private_key"' do
     LHC.config.scrubs[:headers] << 'private_key'
-    expect(response.request.scrubbed_headers).to include(private_key: '[FILTERED]')
+    expect(response.request.scrubbed_headers).to include(private_key: LHC::Scrubber::SCRUB_DISPLAY) # TODO use constante
   end
 
   it 'does not add a new attribute when a non existing header should be scrubbed' do
     LHC.config.scrubs[:headers] << 'anything'
-    expect(response.request.scrubbed_headers).not_to include('anything' => '[FILTERED]')
+    expect(response.request.scrubbed_headers).not_to include('anything' => LHC::Scrubber::SCRUB_DISPLAY)
   end
 
   context 'when strings instead of symbols are provided' do
@@ -27,7 +27,7 @@ describe LHC::Request do
 
     it 'scrubs "private_key"' do
       LHC.config.scrubs[:headers] << 'private_key'
-      expect(response.request.scrubbed_headers).to include('private_key' => '[FILTERED]')
+      expect(response.request.scrubbed_headers).to include('private_key' => LHC::Scrubber::SCRUB_DISPLAY)
     end
   end
 
@@ -49,7 +49,7 @@ describe LHC::Request do
 
 
       it 'provides srubbed request headers' do
-        expect(request.scrubbed_headers).to include('Authorization' => 'Bearer [FILTERED]')
+        expect(request.scrubbed_headers).to include('Authorization' => "Bearer #{LHC::Scrubber::SCRUB_DISPLAY}")
         expect(request.headers).to include(authorization_header)
       end
 
@@ -72,7 +72,7 @@ describe LHC::Request do
       let(:auth) { { basic: { username: username, password: password } } }
 
       it 'provides srubbed request headers' do
-        expect(request.scrubbed_headers).to include('Authorization' => 'Basic [FILTERED]')
+        expect(request.scrubbed_headers).to include('Authorization' => "Basic #{LHC::Scrubber::SCRUB_DISPLAY}")
         expect(request.headers).to include(authorization_header)
       end
 
