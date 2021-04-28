@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# TODO test auth_scrubbed
 class LHC::AuthScrubber < LHC::Scrubber
   def initialize(data)
     super(data)
@@ -18,6 +17,7 @@ class LHC::AuthScrubber < LHC::Scrubber
 
   def scrub_basic_auth_options!
     return if scrubbed[:basic].blank?
+
     scrubbed[:basic][:username] = SCRUB_DISPLAY
     scrubbed[:basic][:password] = SCRUB_DISPLAY
     scrubbed[:basic][:base_64_encoded_credentials] = SCRUB_DISPLAY
@@ -25,6 +25,7 @@ class LHC::AuthScrubber < LHC::Scrubber
 
   def scrub_bearer_auth_options!
     return if scrubbed[:bearer].blank?
+
     scrubbed[:bearer_token] = SCRUB_DISPLAY
   end
 end
