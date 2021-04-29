@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.requirements << 'Ruby >= 2.0.0'
+  s.required_ruby_version = '2.7.2' # Needed for rubocop, copy pasted from .ruby-version file.
 
   s.add_dependency 'activesupport', '>= 5.2'
   s.add_dependency 'addressable'
@@ -32,8 +33,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'redis'
   s.add_development_dependency 'rspec-rails', '>= 3.0.0'
   s.add_development_dependency 'rubocop', '~> 1.0'
-  s.add_development_dependency 'rubocop-rspec', '~> 1.26.0'
   s.add_development_dependency 'rubocop-performance', '~> 1.0'
+  s.add_development_dependency 'rubocop-rspec', '~> 1.26.0'
   s.add_development_dependency 'timecop'
   s.add_development_dependency 'webmock'
 
