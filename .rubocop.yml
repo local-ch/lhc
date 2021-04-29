@@ -33,6 +33,12 @@ Lint/UriEscapeUnescape:
 Lint/IneffectiveAccessModifier:
   Enabled: false
 
+Lint/ConstantDefinitionInBlock:
+  Enabled: false
+
+Lint/ToJSON:
+  Enabled: false
+
 Metrics/LineLength:
   Enabled: false
 
@@ -232,6 +238,18 @@ Style/RedundantBegin:
   Enabled: false
 
 Style/RedundantAssignment:
+  Enabled: false
+
+Style/SingleArgumentDig:
+  Enabled: false
+
+Style/OptionalBooleanParameter:
+  Enabled: false
+
+Style/CaseLikeIf:
+  Enabled: false
+
+Style/OptionalBooleanParameter:
   Enabled: false
 
 RSpec/DescribeClass:
