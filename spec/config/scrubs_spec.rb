@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe LHC do
   # TODO write into readme that you need to also write down the default when you voerwrite the config
-  it 'has a default value for scrubs'  do
+  it 'has a default value for scrubs' do
     expect(LHC.config.scrubs[:auth]).to eq [:bearer, :basic]
     expect(LHC.config.scrubs[:params]).to eq []
     expect(LHC.config.scrubs[:headers]).to eq []
@@ -103,10 +103,9 @@ describe LHC do
 
     it 'does not have scrubs' do
       expect(LHC.config.scrubs.blank?).to be true
-      expect(LHC.config.scrubs[:auth]).to be nil 
+      expect(LHC.config.scrubs[:auth]).to be nil
     end
   end
-
 
   # TODO test also header attributes
   # TODO render warning when other attribute then `body, auth or header is provided`

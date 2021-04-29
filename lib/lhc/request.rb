@@ -17,9 +17,6 @@ class LHC::Request
                 :options,
                 :raw,
                 :format,
-                :scrubbed_params,
-                :scrubbed_headers,
-                :scrubbed_options,
                 :error_handler,
                 :errors_ignored,
                 :source

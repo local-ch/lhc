@@ -16,8 +16,6 @@ class LHC::HeadersScrubber < LHC::Scrubber
     LHC.config.scrubs[:headers]
   end
 
-  private
-
   def scrub_auth_headers!
     return if scrub_auth_elements.blank?
     return if auth_options.blank?

@@ -6,13 +6,10 @@ class LHC::Scrubber
   SCRUB_DISPLAY = '[FILTERED]'
 
   def initialize(data)
-    @data = data
     @scrubbed = data.deep_dup
   end
 
   private
-
-  attr_reader :data, :scrub_elements, :scrub_auth_elements
 
   def scrub_auth_elements
     LHC.config.scrubs.dig(:auth)
@@ -23,9 +20,9 @@ class LHC::Scrubber
     return if scrubbed.blank?
 
     scrub_elements.each do |scrub_element|
-      if scrubbed.has_key?(scrub_element.to_s)
+      if scrubbed.key?(scrub_element.to_s)
         key = scrub_element.to_s
-      elsif scrubbed.has_key?(scrub_element.to_sym)
+      elsif scrubbed.key?(scrub_element.to_sym)
         key = scrub_element.to_sym
       end
       next if key.blank?

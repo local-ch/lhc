@@ -21,13 +21,9 @@ class LHC::Config
     @endpoints.dup
   end
 
-  def scrubs
-    @scrubs
-  end
+  attr_reader :scrubs
 
-  def scrubs=(scrubs)
-    @scrubs = scrubs
-  end
+  attr_writer :scrubs
 
   def placeholder(name, value)
     name = name.to_sym

@@ -116,13 +116,13 @@ module LHC
   autoload :Scrubber,
     'lhc/scrubber'
   autoload :AuthScrubber,
-    'lhc/scrubbers/auth'
+    'lhc/scrubbers/auth_scrubber'
   autoload :BodyScrubber,
-    'lhc/scrubbers/body'
+    'lhc/scrubbers/body_scrubber'
   autoload :HeadersScrubber,
-    'lhc/scrubbers/headers'
+    'lhc/scrubbers/headers_scrubber'
   autoload :ParamsScrubber,
-    'lhc/scrubbers/params'
+    'lhc/scrubbers/params_scrubber'
 
   autoload :Interceptor,
     'lhc/interceptor'
