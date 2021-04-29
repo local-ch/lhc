@@ -4,7 +4,7 @@ inherit_from:
   - ./.rubocop.localch.yml
 
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.7
   Exclude:
     - vendor/**
     - vendor/**/.*
@@ -12,7 +12,22 @@ AllCops:
 Lint/IneffectiveAccessModifier:
   Enabled: false
 
-Rails:
+Performance/StringReplacement:
+  Enabled: false
+
+Performance/TimesMap:
+  Enabled: false
+
+Performance/RedundantBlockCall:
+  Enabled: false
+
+Performance/RedundantMatch:
+  Enabled: false
+
+Performance/RedundantMerge:
+  Enabled: false
+
+Performance/Casecmp:
   Enabled: false
 
 RSpec/AnyInstance:
@@ -54,6 +69,9 @@ Naming/MemoizedInstanceVariableName:
 RSpec/MessageSpies:
   Enabled: false
 
+RSpec/FactoryBot/CreateList:
+  Enabled: false
+
 RSpec/BeforeAfterAll:
   Enabled: false
 
@@ -62,3 +80,5 @@ Style/EmptyMethod:
 
 RSpec/RepeatedExample:
   Enabled: false
+
+
