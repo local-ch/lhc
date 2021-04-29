@@ -18,7 +18,7 @@ class LHC::Response::Data
     end
   end
 
-  def method_missing(method, *args, &block) # rubocop:disable Style/MethodMissingSuper
+  def method_missing(method, *args, &block)
     @base.send(method, *args, &block)
   end
 

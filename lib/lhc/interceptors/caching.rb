@@ -42,6 +42,7 @@ class LHC::Caching < LHC::Interceptor
   def before_request
     return unless cache?(request)
     return if response_data.blank?
+
     from_cache(request, response_data)
   end
 
@@ -49,6 +50,7 @@ class LHC::Caching < LHC::Interceptor
     return unless response.success?
     return unless cache?(request)
     return if response_data.present?
+
     multilevel_cache.write(
       key(request, options[:key]),
       to_cache(response),
@@ -62,6 +64,7 @@ class LHC::Caching < LHC::Interceptor
   def response_data
     # stop calling multi-level cache if it already returned nil for this interceptor instance
     return @response_data if defined? @response_data
+
     @response_data ||= multilevel_cache.fetch(key(request, options[:key]))
   end
 
@@ -81,6 +84,7 @@ class LHC::Caching < LHC::Interceptor
 
   def central_cache
     return nil if central.blank? || (central[:read].blank? && central[:write].blank?)
+
     {}.tap do |options|
       options[:read] = ActiveSupport::Cache::RedisCacheStore.new(url: central[:read]) if central[:read].present?
       options[:write] = ActiveSupport::Cache::RedisCacheStore.new(url: central[:write]) if central[:write].present?
@@ -92,6 +96,7 @@ class LHC::Caching < LHC::Interceptor
   # return false if this interceptor cannot work
   def cache?(request)
     return false unless request.options[:cache]
+
     (local_cache || central_cache) &&
       cached_method?(request.method, options[:methods])
   end

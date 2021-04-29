@@ -9,6 +9,7 @@ class LHC::Rollbar < LHC::Interceptor
   def after_response
     return unless Object.const_defined?('Rollbar')
     return if response.success?
+
     request = response.request
     additional_params = request.options.fetch(:rollbar, {})
     data = {

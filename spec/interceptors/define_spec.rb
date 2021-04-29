@@ -7,6 +7,7 @@ describe LHC do
     before(:each) do
       class SomeInterceptor < LHC::Interceptor
       end
+
       class AnotherInterceptor < LHC::Interceptor
       end
     end

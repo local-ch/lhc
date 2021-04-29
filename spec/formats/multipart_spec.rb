@@ -13,7 +13,7 @@ describe LHC do
     it 'formats requests to be multipart/form-data' do
       stub_request(:post, 'http://local.ch/') do |request|
         raise 'Content-Type header wrong' unless request.headers['Content-Type'] == 'multipart/form-data'
-        raise 'Body wrongly formatted' unless request.body.match(/file=%23%3CActionDispatch%3A%3AHttp%3A%3AUploadedFile%3A.*%3E&type=Image/)
+        raise 'Body wrongly formatted' unless request.body.match?(/file=%23%3CActionDispatch%3A%3AHttp%3A%3AUploadedFile%3A.*%3E&type=Image/)
       end.to_return(status: 200, body: body, headers: { 'Location' => location })
       response = LHC.multipart.post(
         'http://local.ch',

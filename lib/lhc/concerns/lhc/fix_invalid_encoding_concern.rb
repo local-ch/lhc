@@ -12,6 +12,7 @@ module LHC
       # an empty string is returned instead
       def fix_invalid_encoding(string)
         return string unless string.is_a?(String)
+
         result = string.dup
 
         # we assume it's ISO-8859-1 first

@@ -12,6 +12,7 @@ class LHC::Zipkin < LHC::Interceptor
 
   def before_request
     return if !dependencies? || !tracing?
+
     ZipkinTracer::TraceContainer.with_trace_id(trace_id) do
       # add headers even if the current trace_id should not be sampled
       B3_HEADERS.each { |method, header| request.headers[header] = trace_id.send(method).to_s }
@@ -23,6 +24,7 @@ class LHC::Zipkin < LHC::Interceptor
   def after_response
     # only sample the current call if we're instructed to do so
     return unless dependencies? && trace_id.sampled?
+
     end_trace!
   end
 

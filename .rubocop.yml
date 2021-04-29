@@ -255,6 +255,9 @@ Style/CaseLikeIf:
 Style/OptionalBooleanParameter:
   Enabled: false
 
+Style/HashEachMethods:
+  Enabled: false 
+
 RSpec/DescribeClass:
   Exclude:
     - spec/views/**/*
