@@ -111,10 +111,6 @@ Style/RescueStandardError:
 Style/StringLiterals:
   Enabled: false
 
-Style/RegexpLiteral:
-  Exclude:
-    - spec/**/*
-
 Style/NumericLiterals:
   Enabled: false
 
@@ -189,9 +185,6 @@ Style/ConditionalAssignment:
 Style/Lambda:
   Enabled: false
 
-Style/FrozenStringLiteralComment:
-  Enabled: false
-
 Style/SymbolArray:
   Enabled: false
 
@@ -201,9 +194,6 @@ Style/HashSyntax:
 Style/FormatStringToken:
   Enabled: false
 
-Style/EmptyMethod:
-  EnforcedStyle: expanded
-
 Style/TernaryParentheses:
   EnforcedStyle: require_parentheses_when_complex
 
@@ -212,6 +202,8 @@ Style/PerlBackrefs:
 
 Style/RegexpLiteral:
   AllowInnerSlashes: false
+  Exclude:
+    - spec/**/*
 
 Style/BlockComments:
   Enabled: false
@@ -220,9 +212,6 @@ Style/RedundantParentheses:
   Enabled: false
 
 Style/NumericPredicate:
-  Enabled: false
-
-Style/Lambda:
   Enabled: false
 
 Style/RedundantReturn:
@@ -252,9 +241,6 @@ Style/OptionalBooleanParameter:
 Style/CaseLikeIf:
   Enabled: false
 
-Style/OptionalBooleanParameter:
-  Enabled: false
-
 Style/HashEachMethods:
   Enabled: false 
 
@@ -269,24 +255,6 @@ RSpec/FilePath:
   Enabled: false
 
 RSpec/NamedSubject:
-  Enabled: false
-
-RSpec/MultipleExpectations:
-  Enabled: false
-
-RSpec/ExampleLength:
-  Enabled: false
-
-RSpec/HookArgument:
-  EnforcedStyle: implicit
-
-RSpec/MessageSpies:
-  EnforcedStyle: receive
-
-RSpec/NestedGroups:
-  Enabled: false
-
-RSpec/VerifiedDoubles:
   Enabled: false
 
 RSpec/LeadingSubject:
