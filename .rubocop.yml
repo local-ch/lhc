@@ -1,15 +1,347 @@
-# This is project specific rubocop configuration file.
-# You can tweak project settings here
-inherit_from:
-  - ./.rubocop.localch.yml
-
 AllCops:
-  TargetRubyVersion: 2.7
+  DisplayCopNames: true
+  DisplayStyleGuide: true
   Exclude:
+    - 'db/**/*'
+    - 'script/**/*'
+    - 'vendor/bundle/**/*'
+    - 'vendor/assets/**/*'
+    - 'bin/**/*'
+    - 'config/unicorn.rb'
+    - 'config/compass.rb'
+    - 'Rakefile'
+    - 'app/controllers/error_trap_controller.rb'
+    - 'app/controllers/hsts_controller.rb'
+    - 'spec/lib/util_spec.rb'
     - vendor/**
     - vendor/**/.*
 
+require:
+  - rubocop-rspec
+  - rubocop-performance
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Lint/SuppressedException:
+  Exclude:
+    - spec/**/*
+
+Lint/UriEscapeUnescape:
+  Enabled: false
+
 Lint/IneffectiveAccessModifier:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Metrics/BlockNesting:
+  Enabled: false
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Layout/DotPosition:
+  EnforcedStyle: leading
+
+Layout/ParameterAlignment:
+  Enabled: false
+
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/MultilineMethodCallBraceLayout:
+  EnforcedStyle: symmetrical
+
+Layout/EmptyLinesAroundBlockBody:
+  EnforcedStyle: no_empty_lines
+
+Layout/HeredocIndentation:
+  Enabled: false
+
+Layout/MultilineArrayBraceLayout:
+  EnforcedStyle: symmetrical
+
+Layout/MultilineHashBraceLayout:
+  EnforcedStyle: symmetrical
+
+Style/RescueStandardError:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/RegexpLiteral:
+  Exclude:
+    - spec/**/*
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/WordArray:
+  Enabled: false
+
+Style/Next:
+  Enabled: false
+
+Style/PercentLiteralDelimiters:
+  Enabled: false
+
+Style/GlobalVars:
+  Enabled: false
+
+Style/CommentAnnotation:
+  Enabled: false
+
+Style/SymbolProc:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/FormatString:
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/BarePercentLiterals:
+  Enabled: false
+
+Style/SingleLineBlockParams:
+  Enabled: false
+
+Style/MultilineBlockChain:
+  Enabled: false
+
+Style/RedundantCapitalW:
+  Enabled: false
+
+Style/RedundantPercentQ:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Exclude:
+    - spec/**/*
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+
+Style/NegatedIf:
+  Enabled: false
+
+Style/MutableConstant:
+  Enabled: false
+
+Style/ConditionalAssignment:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/SymbolArray:
+  Enabled: false
+
+Style/HashSyntax:
+  EnforcedStyle: ruby19
+
+Style/FormatStringToken:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/TernaryParentheses:
+  EnforcedStyle: require_parentheses_when_complex
+
+Style/PerlBackrefs:
+  Enabled: false
+
+Style/RegexpLiteral:
+  AllowInnerSlashes: false
+
+Style/BlockComments:
+  Enabled: false
+
+Style/RedundantParentheses:
+  Enabled: false
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
+
+Style/RedundantReturn:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: compact
+
+Style/ExpandPathArguments:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+
+RSpec/DescribeClass:
+  Exclude:
+    - spec/views/**/*
+    - spec/routing/**/*
+    - spec/requests/**/*
+    - spec/features/**/*
+
+RSpec/FilePath:
+  Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/HookArgument:
+  EnforcedStyle: implicit
+
+RSpec/MessageSpies:
+  EnforcedStyle: receive
+
+RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/VerifiedDoubles:
+  Enabled: false
+
+RSpec/LeadingSubject:
+  Enabled: false
+
+RSpec/ExpectInHook:
+  Enabled: false
+
+RSpec/ReturnFromStub:
+  Enabled: false
+
+RSpec/SubjectStub:
+  Enabled: false
+
+RSpec/EmptyLineAfterSubject:
+  Enabled: false
+
+RSpec/LetSetup:
+  Enabled: false
+
+RSpec/ImplicitExpect:
+  EnforcedStyle: is_expected
+
+RSpec/ScatteredLet:
+  Enabled: false
+
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/DescribedClass:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/HookArgument:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/VerifiedDoubles:
+  Enabled: false
+
+RSpec/InstanceVariable:
+  Enabled: false
+
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/FactoryBot/CreateList:
+  Enabled: false
+
+RSpec/BeforeAfterAll:
+  Enabled: false
+
+RSpec/RepeatedExample:
+  Enabled: false
+
+Naming/FileName:
+  Exclude:
+    - Gemfile
+    - Brewfile
+    - Guardfile
+
+Naming/AccessorMethodName:
+  Exclude:
+    - spec/support/pages/**/*
+
+Naming/VariableNumber:
+  Enabled: false
+
+Naming/MethodParameterName:
+  Enabled: false
+
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
+Capybara/CurrentPathExpectation:
   Enabled: false
 
 Performance/StringReplacement:
@@ -29,56 +361,3 @@ Performance/RedundantMerge:
 
 Performance/Casecmp:
   Enabled: false
-
-RSpec/AnyInstance:
-  Enabled: false
-
-RSpec/DescribedClass:
-  Enabled: false
-
-RSpec/MultipleExpectations:
-  Enabled: false
-
-RSpec/HookArgument:
-  Enabled: false
-
-RSpec/ExampleLength:
-  Enabled: false
-
-Style/Lambda:
-  Enabled: false
-
-RSpec/NestedGroups:
-  Enabled: false
-
-RSpec/VerifiedDoubles:
-  Enabled: false
-
-Style/RedundantReturn:
-  Enabled: false
-
-RSpec/InstanceVariable:
-  Enabled: false
-
-Style/FrozenStringLiteralComment:
-  Enabled: true
-
-Naming/MemoizedInstanceVariableName:
-  Enabled: false
-
-RSpec/MessageSpies:
-  Enabled: false
-
-RSpec/FactoryBot/CreateList:
-  Enabled: false
-
-RSpec/BeforeAfterAll:
-  Enabled: false
-
-Style/EmptyMethod:
-  EnforcedStyle: compact
-
-RSpec/RepeatedExample:
-  Enabled: false
-
-
