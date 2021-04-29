@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.requirements << 'Ruby >= 2.0.0'
-  #s.required_ruby_version = '2.7.2' # Needed for rubocop, copy pasted from .ruby-version file.
+  s.required_ruby_version = '>= 2.0' # Needed for rubocop
 
   s.add_dependency 'activesupport', '>= 5.2'
   s.add_dependency 'addressable'
