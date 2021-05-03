@@ -13,14 +13,17 @@ class LHC::Throttle < LHC::Interceptor
   def before_request
     options = request.options.dig(:throttle)
     return unless options
+
     break_options = options.dig(:break)
     return unless break_options
-    break_when_quota_reached! if break_options.match('%')
+
+    break_when_quota_reached! if break_options.match?('%')
   end
 
   def after_response
     options = response.request.options.dig(:throttle)
     return unless throttle?(options)
+
     self.class.track ||= {}
     self.class.track[options.dig(:provider)] = {
       limit: limit(options: options[:limit], response: response),
@@ -40,6 +43,7 @@ class LHC::Throttle < LHC::Interceptor
     track = (self.class.track || {}).dig(options[:provider])
     return if track.blank? || track[:remaining].blank? || track[:limit].blank? || track[:expires].blank?
     return if Time.zone.now > track[:expires]
+
     # avoid floats by multiplying with 100
     remaining = track[:remaining] * 100
     limit = track[:limit]
@@ -80,7 +84,8 @@ class LHC::Throttle < LHC::Interceptor
   def convert_expires(value)
     return if value.blank?
     return value.call(response) if value.is_a?(Proc)
-    return Time.parse(value) if value.match(/GMT/)
+    return Time.parse(value) if value.match?(/GMT/)
+
     Time.zone.at(value.to_i).to_datetime
   end
 end

@@ -43,6 +43,7 @@ class LHC::Error < StandardError
 
   def self.find(response)
     return LHC::Timeout if response.timeout?
+
     status_code = response.code.to_s[0..2].to_i
     error = map[status_code]
     error ||= LHC::UnknownError
@@ -65,6 +66,7 @@ class LHC::Error < StandardError
 
   def to_s
     return response.to_s unless response.is_a?(LHC::Response)
+
     request = response.request
     return unless request.is_a?(LHC::Request)
 

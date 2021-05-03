@@ -13,17 +13,20 @@ class LHC::Monitoring < LHC::Interceptor
 
   def before_request
     return unless statsd
+
     LHC::Monitoring.statsd.count("#{key}.before_request", 1)
   end
 
   def after_request
     return unless statsd
+
     LHC::Monitoring.statsd.count("#{key}.count", 1)
     LHC::Monitoring.statsd.count("#{key}.after_request", 1)
   end
 
   def after_response
     return unless statsd
+
     monitor_time!
     monitor_cache!
     monitor_response!
@@ -38,6 +41,7 @@ class LHC::Monitoring < LHC::Interceptor
   def monitor_cache!
     return if request.options[:cache].blank?
     return unless monitor_caching_configuration_check
+
     if response.from_cache?
       LHC::Monitoring.statsd.count("#{key}.cache.hit", 1)
     else
@@ -47,6 +51,7 @@ class LHC::Monitoring < LHC::Interceptor
 
   def monitor_caching_configuration_check
     return true if all_interceptor_classes.include?(LHC::Caching) && all_interceptor_classes.index(self.class) > all_interceptor_classes.index(LHC::Caching)
+
     warn("[WARNING] Your interceptors must include LHC::Caching and LHC::Monitoring and also in that order.")
   end
 
@@ -78,7 +83,8 @@ class LHC::Monitoring < LHC::Interceptor
   end
 
   def sanitize_url(url)
-    return url if url.match(%r{https?://})
+    return url if url.match?(%r{https?://})
+
     "http://#{url}"
   end
 

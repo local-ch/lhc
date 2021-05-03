@@ -3,6 +3,7 @@
 module ZipkinTracer
   class TraceContainer
     attr_reader :trace_id, :parent_id, :span_id, :sampled, :flags
+
     class << self
       attr_accessor :current
 
