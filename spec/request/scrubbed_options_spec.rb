@@ -59,4 +59,81 @@ describe LHC::Request do
       expect(request.scrubbed_options[:auth][:bearer_token]).not_to eq(LHC::Scrubber::SCRUB_DISPLAY)
     end
   end
+
+  # TODO write down that the configs for scrubbing are aplied to all requests
+
+  context 'custom data structures that respond to as_json (like LHS data or record)' do
+    before do
+      class CustomStructure
+
+        def initialize(data)
+          @data = data
+        end
+
+        def as_json
+          @data.as_json
+        end
+
+        def to_json
+          as_json.to_json
+        end
+      end
+
+      stub_request(:post, 'http://local.ch').with(body: custom_structure.to_json)
+    end
+
+    let(:custom_structure) do
+      CustomStructure.new(user_token: '12345')
+    end
+
+    let(:request) do
+      response = LHC.post(:local, body: custom_structure)
+      response.request
+    end
+
+    # TODO is this the right thing to do? Shall we parse custom data?
+    it 'provides srubbed request options' do
+      expect(request.scrubbed_options[:body]).not_to include(user_token: LHC::Scrubber::SCRUB_DISPLAY)
+    end
+  end
+
+  context 'encoded data' do
+    let(:body) { { user_token: 'user-token-body' } }
+
+    let(:request) do
+      response = LHC.post(:local, body: body.to_json)
+      response.request
+    end
+
+    before :each do
+      stub_request(:post, 'http://local.ch').with(body: body.to_json)
+    end
+
+    it 'provides srubbed request options' do
+      expect(request.scrubbed_options[:body]).not_to include(user_token: LHC::Scrubber::SCRUB_DISPLAY)
+    end
+  end
+
+  # TODO go on here
+  # TODO test also this context
+  # context 'array' do
+  #   let(:body) { [{ user_token: 'user-token-body' }] }
+
+  #   let(:request) do
+  #     response = LHC.post(:local, body: body)
+  #     response.request
+  #   end
+
+  #   before :each do
+  #     stub_request(:post, 'http://local.ch').with(body: body.to_json)
+  #   end
+
+  #   it 'provides srubbed request options' do
+  #     expect(request.scrubbed_options[:body]).not_to include(user_token: LHC::Scrubber::SCRUB_DISPLAY)
+  #   end
+  # end
+
+    #it 'does not encode the request body if it is already a string' do
+    #  LHC.post('http://datastore/q', body: encoded_data)
+    #end
 end

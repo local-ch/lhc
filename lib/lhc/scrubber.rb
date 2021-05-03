@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class LHC::Scrubber
-  attr_reader :scrubbed
+  attr_accessor :scrubbed
 
   SCRUB_DISPLAY = '[FILTERED]'
 
