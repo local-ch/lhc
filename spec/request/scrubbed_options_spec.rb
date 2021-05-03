@@ -97,7 +97,7 @@ describe LHC::Request do
     end
   end
 
-  context 'encoded data' do
+  context 'encoded data hash' do
     let(:body) { { user_token: 'user-token-body' } }
 
     let(:request) do
@@ -114,8 +114,6 @@ describe LHC::Request do
     end
   end
 
-  # TODO go on here
-  # TODO test also this context
   context 'array' do
     let(:body) { [{ user_token: 'user-token-body' }] }
 
@@ -129,11 +127,24 @@ describe LHC::Request do
     end
 
     it 'provides srubbed request options' do
-      expect(request.scrubbed_options[:body]).not_to include(user_token: LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:body]).to eq([user_token: LHC::Scrubber::SCRUB_DISPLAY])
     end
   end
 
-    #it 'does not encode the request body if it is already a string' do
-    #  LHC.post('http://datastore/q', body: encoded_data)
-    #end
+  context 'encoded array' do
+    let(:body) { [{ user_token: 'user-token-body' }] }
+
+    let(:request) do
+      response = LHC.post(:local, body: body.to_json)
+      response.request
+    end
+
+    before :each do
+      stub_request(:post, 'http://local.ch').with(body: body.to_json)
+    end
+
+    it 'provides srubbed request options' do
+      expect(request.scrubbed_options[:body]).to eq(['user_token' => LHC::Scrubber::SCRUB_DISPLAY])
+    end
+  end
 end

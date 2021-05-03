@@ -19,6 +19,17 @@ class LHC::Scrubber
     return if scrub_elements.blank?
     return if scrubbed.blank?
 
+    LHC::Scrubber.scrub_hash!(scrub_elements, scrubbed) if scrubbed.is_a?(Hash)
+    LHC::Scrubber.scrub_array!(scrub_elements, scrubbed) if scrubbed.is_a?(Array)
+  end
+
+  def self.scrub_array!(scrub_elements, scrubbed)
+    scrubbed.each do |scrubbed_hash|
+      LHC::Scrubber.scrub_hash!(scrub_elements, scrubbed_hash)
+    end
+  end
+
+  def self.scrub_hash!(scrub_elements, scrubbed)
     scrub_elements.each do |scrub_element|
       if scrubbed.key?(scrub_element.to_s)
         key = scrub_element.to_s
