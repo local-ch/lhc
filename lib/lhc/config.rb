@@ -13,6 +13,7 @@ class LHC::Config
   def endpoint(name, url, options = {})
     name = name.to_sym
     raise 'Endpoint already exists for that name' if @endpoints[name]
+
     @endpoints[name] = LHC::Endpoint.new(url, options)
   end
 
@@ -23,6 +24,7 @@ class LHC::Config
   def placeholder(name, value)
     name = name.to_sym
     raise 'Placeholder already exists for that name' if @placeholders[name]
+
     @placeholders[name] = value
   end
 
@@ -36,6 +38,7 @@ class LHC::Config
 
   def interceptors=(interceptors)
     raise 'Default interceptors already set and can only be set once' if @interceptors
+
     @interceptors = interceptors
   end
 

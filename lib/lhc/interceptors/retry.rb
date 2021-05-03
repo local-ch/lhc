@@ -10,6 +10,7 @@ class LHC::Retry < LHC::Interceptor
   def after_response
     response.request.options[:retries] ||= 0
     return unless retry?(response.request)
+
     response.request.options[:retries] += 1
     current_retry = response.request.options[:retries]
     begin
@@ -26,6 +27,7 @@ class LHC::Retry < LHC::Interceptor
     return false if request.response.success?
     return false if request.error_ignored?
     return false if !request.options.dig(:retry) && !LHC::Retry.all
+
     request.options[:retries] < max(request)
   end
 

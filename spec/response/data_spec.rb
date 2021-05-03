@@ -75,9 +75,9 @@ describe LHC::Response do
     it 'does not throw a stack level to deep issue when accessing data in a rescue context' do
       begin
         LHC.get('http://listings')
-      rescue LHC::Error => error
+      rescue LHC::Error => e
         expect(
-          error.response.request.response.data.meta.errors.detect { |item| item.code == 2000 }.msg
+          e.response.request.response.data.meta.errors.detect { |item| item.code == 2000 }.msg
         ).to eq 'I like to hide error messages (this is meta).'
       end
     end
