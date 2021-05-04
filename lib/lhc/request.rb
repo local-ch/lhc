@@ -182,6 +182,7 @@ class LHC::Request
   end
 
   def error
+    # binding.pry
     @error ||= LHC::Error.find(response)
   end
 

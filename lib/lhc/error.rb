@@ -72,8 +72,8 @@ class LHC::Error < StandardError
 
     debug = [] # TODO maybe in the URL
     debug << [request.method, request.url].map { |str| self.class.fix_invalid_encoding(str) }.join(' ')
-    debug << "Options: #{request.options}" # TODO HERE
-    debug << "Headers: #{request.headers}" # TODO HERE
+    debug << "Options: #{request.scrubbed_options}" # TODO Test this
+    debug << "Headers: #{request.scrubbed_headers}" # TODO Test this
     debug << "Response Code: #{response.code} (#{response.options[:return_code]})"
     debug << "Response Options: #{response.options}"
     debug << response.body
