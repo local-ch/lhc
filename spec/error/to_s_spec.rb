@@ -48,10 +48,11 @@ describe LHC::Error do
         double('LHC::Request',
                method: 'GET',
                url: 'http://example.com/sessions',
-               headers: { 'Bearer Token' => "aaaaaaaa-bbbb-cccc-dddd-eeee" },
-               options: { followlocation: true,
-                          auth: { bearer: "aaaaaaaa-bbbb-cccc-dddd-eeee" },
-                          params: { limit: 20 }, url: "http://example.com/sessions" })
+               scrubbed_headers: { 'Bearer Token' => LHC::Scrubber::SCRUB_DISPLAY },
+               scrubbed_options: { followlocation: true,
+                          auth: { bearer: LHC::Scrubber::SCRUB_DISPLAY },
+                          params: { limit: 20 }, url: "http://example.com/sessions" },
+              )
       end
 
       let(:response) do
@@ -72,8 +73,8 @@ describe LHC::Error do
       it 'produces correct debug output' do
         expect(subject.to_s.split("\n")).to eq(<<-MSG.strip_heredoc.split("\n"))
           GET http://example.com/sessions
-          Options: {:followlocation=>true, :auth=>{:bearer=>"aaaaaaaa-bbbb-cccc-dddd-eeee"}, :params=>{:limit=>20}, :url=>"http://example.com/sessions"}
-          Headers: {"Bearer Token"=>"aaaaaaaa-bbbb-cccc-dddd-eeee"}
+          Options: {:followlocation=>true, :auth=>{:bearer=>"#{LHC::Scrubber::SCRUB_DISPLAY}"}, :params=>{:limit=>20}, :url=>"http://example.com/sessions"}
+          Headers: {"Bearer Token"=>"#{LHC::Scrubber::SCRUB_DISPLAY}"}
           Response Code: 500 (internal_error)
           Response Options: {:return_code=>:internal_error, :response_headers=>""}
           {"status":500,"message":"undefined"}
