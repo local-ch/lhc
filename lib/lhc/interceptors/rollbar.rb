@@ -23,8 +23,8 @@ class LHC::Rollbar < LHC::Interceptor
       request: {
         url: request.url,
         method: request.method,
-        headers: request.headers,
-        params: request.params
+        headers: request.scrubbed_headers,
+        params: request.scrubbed_params
       }
     }.merge additional_params
     begin
