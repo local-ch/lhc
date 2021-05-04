@@ -98,8 +98,6 @@ describe LHC::Request do
     end
   end
 
-  # TODO write down that the configs for scrubbing are aplied to all requests
-
   context 'custom data structures that respond to as_json (like LHS data or record)' do
     before do
       class CustomStructure

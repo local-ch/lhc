@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 describe LHC do
-  # TODO write into readme that you need to also write down the default when you voerwrite the config
   it 'has a default value for scrubs' do
     expect(LHC.config.scrubs[:auth]).to eq [:bearer, :basic]
     expect(LHC.config.scrubs[:params]).to eq []

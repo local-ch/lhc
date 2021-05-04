@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe LHC::Request do
-  let(:headers) { { private_key: 'xyz-123' } } # TODO it has a einfluss if you send a strin or symbol here
+  let(:headers) { { private_key: 'xyz-123' } }
   let(:response) { LHC.get(:local, headers: headers) }
   let(:auth) { {} }
 
@@ -23,7 +23,7 @@ describe LHC::Request do
   end
 
   context 'when strings instead of symbols are provided' do
-    let(:headers) { { 'private_key' => 'xyz-123' } } # TODO it has a einfluss if you send a strin or symbol here
+    let(:headers) { { 'private_key' => 'xyz-123' } }
 
     it 'scrubs "private_key"' do
       LHC.config.scrubs[:headers] << 'private_key'
