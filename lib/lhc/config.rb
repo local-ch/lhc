@@ -5,6 +5,8 @@ require 'singleton'
 class LHC::Config
   include Singleton
 
+  attr_accessor :scrubs
+
   def initialize
     @endpoints = {}
     @placeholders = {}
@@ -22,10 +24,6 @@ class LHC::Config
     @endpoints.dup
   end
 
-  attr_reader :scrubs
-
-  attr_writer :scrubs
-
   def placeholder(name, value)
     name = name.to_sym
     raise 'Placeholder already exists for that name' if @placeholders[name]
@@ -41,7 +39,6 @@ class LHC::Config
     (@interceptors || []).dup
   end
 
-  # TODO also make something like this
   def interceptors=(interceptors)
     raise 'Default interceptors already set and can only be set once' if @interceptors
 

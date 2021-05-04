@@ -14,7 +14,7 @@ describe LHC::Request do
 
   it 'scrubs "private_key"' do
     LHC.config.scrubs[:headers] << 'private_key'
-    expect(response.request.scrubbed_headers).to include(private_key: LHC::Scrubber::SCRUB_DISPLAY) # TODO use constante
+    expect(response.request.scrubbed_headers).to include(private_key: LHC::Scrubber::SCRUB_DISPLAY)
   end
 
   it 'does not add a new attribute when a non existing header should be scrubbed' do

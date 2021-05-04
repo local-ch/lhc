@@ -106,7 +106,4 @@ describe LHC do
       expect(LHC.config.scrubs[:auth]).to be nil
     end
   end
-
-  # TODO test also header attributes
-  # TODO render warning when other attribute then `body, auth or header is provided`
 end

@@ -21,7 +21,6 @@ describe LHC::Logging do
     )
   end
 
-
   context 'source' do
     let(:source) { '/Users/Sebastian/LHC/test.rb' }
 
@@ -45,13 +44,13 @@ describe LHC::Logging do
 
     it 'does log not log sensitive params information before every request made with LHC' do
       expect(logger).to have_received(:info).once.with(
-        a_string_including('Params={:api_key=>"[FILTERED]"}')
+        a_string_including("Params={:api_key=>\"#{LHC::Scrubber::SCRUB_DISPLAY}\"}")
       )
     end
 
     it 'does log not log sensitive headers information before every request made with LHC' do
       expect(logger).to have_received(:info).once.with(
-        a_string_including(':private_key=>"[FILTERED]"')
+        a_string_including(":private_key=>\"#{LHC::Scrubber::SCRUB_DISPLAY}\"")
       )
     end
   end

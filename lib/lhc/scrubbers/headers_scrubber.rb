@@ -19,6 +19,7 @@ class LHC::HeadersScrubber < LHC::Scrubber
   def scrub_auth_headers!
     return if scrub_auth_elements.blank?
     return if auth_options.blank?
+
     scrub_basic_authentication_headers! if scrub_auth_elements.include?(:basic)
     scrub_bearer_authentication_headers! if scrub_auth_elements.include?(:bearer)
   end

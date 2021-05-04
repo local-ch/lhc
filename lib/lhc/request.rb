@@ -12,7 +12,6 @@ class LHC::Request
 
   TYPHOEUS_OPTIONS ||= [:params, :method, :body, :headers, :follow_location, :params_encoding]
 
-  # TODO are they needed to be withing this attr_accessor?
   attr_accessor :response,
                 :options,
                 :raw,
@@ -182,13 +181,10 @@ class LHC::Request
   end
 
   def error
-    # binding.pry
     @error ||= LHC::Error.find(response)
   end
 
   def throw_error(response)
-    # TODO here it also logs sensitive data
     raise error.new(error, response)
   end
-
 end

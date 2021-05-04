@@ -70,10 +70,10 @@ class LHC::Error < StandardError
     request = response.request
     return unless request.is_a?(LHC::Request)
 
-    debug = [] # TODO maybe in the URL
+    debug = []
     debug << [request.method, request.url].map { |str| self.class.fix_invalid_encoding(str) }.join(' ')
-    debug << "Options: #{request.scrubbed_options}" # TODO Test this
-    debug << "Headers: #{request.scrubbed_headers}" # TODO Test this
+    debug << "Options: #{request.scrubbed_options}"
+    debug << "Headers: #{request.scrubbed_headers}"
     debug << "Response Code: #{response.code} (#{response.options[:return_code]})"
     debug << "Response Options: #{response.options}"
     debug << response.body

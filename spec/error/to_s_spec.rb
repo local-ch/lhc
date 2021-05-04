@@ -50,9 +50,8 @@ describe LHC::Error do
                url: 'http://example.com/sessions',
                scrubbed_headers: { 'Bearer Token' => LHC::Scrubber::SCRUB_DISPLAY },
                scrubbed_options: { followlocation: true,
-                          auth: { bearer: LHC::Scrubber::SCRUB_DISPLAY },
-                          params: { limit: 20 }, url: "http://example.com/sessions" },
-              )
+                                   auth: { bearer: LHC::Scrubber::SCRUB_DISPLAY },
+                                   params: { limit: 20 }, url: "http://example.com/sessions" })
       end
 
       let(:response) do

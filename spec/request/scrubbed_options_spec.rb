@@ -53,7 +53,7 @@ describe LHC::Request do
               name: 'Muster',
               surname: 'Hans',
               password: 'test-1234',
-              password_confirmation: 'test-1234',
+              password_confirmation: 'test-1234'
             }
           }
         }
@@ -129,7 +129,6 @@ describe LHC::Request do
       response.request
     end
 
-    # TODO is this the right thing to do? Shall we parse custom data?
     it 'provides srubbed request options' do
       expect(request.scrubbed_options[:body]).to include('user_token' => LHC::Scrubber::SCRUB_DISPLAY)
     end

@@ -13,7 +13,6 @@ class LHC::BodyScrubber < LHC::Scrubber
     LHC.config.scrubs[:body]
   end
 
-  # TODO is this the right thing to do? Shall we parse custom data?
   def parse!
     return if scrubbed.nil?
     return if scrubbed.is_a?(Hash)
@@ -26,6 +25,6 @@ class LHC::BodyScrubber < LHC::Scrubber
     end
 
     parsed = JSON.parse(json)
-    self.scrubbed = parsed if (parsed.is_a?(Hash) || parsed.is_a?(Array))
+    self.scrubbed = parsed if parsed.is_a?(Hash) || parsed.is_a?(Array)
   end
 end
