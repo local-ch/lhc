@@ -39,5 +39,6 @@ class LHC::Scrubber
       next if key.blank?
       scrubbed[key] = SCRUB_DISPLAY
     end
+    scrubbed.values.each { |v| LHC::Scrubber.scrub_hash!(scrub_elements, v)  if v.class == Hash }
   end
 end

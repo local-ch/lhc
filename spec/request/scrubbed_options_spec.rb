@@ -44,6 +44,32 @@ describe LHC::Request do
     end
   end
 
+  context 'when body data is nested' do
+    let(:body) do
+      {
+        data: {
+          attributes: {
+            employee: {
+              name: 'Muster',
+              surname: 'Hans',
+              password: 'test-1234',
+              password_confirmation: 'test-1234',
+            }
+          }
+        }
+      }
+    end
+
+    it 'srubbes nested attributes' do
+      expect(request.scrubbed_options[:params]).to include(api_key: LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:headers]).to include(private_key: LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:body][:data][:attributes][:employee]).to include(password: LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:body][:data][:attributes][:employee]).to include(password_confirmation: LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:auth][:bearer_token]).to eq(LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:auth][:basic]).to be nil
+    end
+  end
+
   context 'basic authentication' do
     let(:username) { 'steve' }
     let(:password) { 'abcdefg' }
