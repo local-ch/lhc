@@ -14,8 +14,8 @@ class LHC::Logging < LHC::Interceptor
         "<#{request.object_id}>",
         request.method.upcase,
         "#{request.url} at #{Time.now.iso8601}",
-        "Params=#{request.params}",
-        "Headers=#{request.headers}",
+        "Params=#{request.scrubbed_params}",
+        "Headers=#{request.scrubbed_headers}",
         request.source ? "\nCalled from #{request.source}" : nil
       ].compact.join(' ')
     )
