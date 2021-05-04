@@ -32,6 +32,18 @@ describe LHC::Request do
     expect(request.scrubbed_options[:auth][:basic]).to be nil
   end
 
+  context 'when options do not have auth' do
+    let(:authorization_header) { {} }
+    let(:auth) { nil }
+
+    it 'provides srubbed request options' do
+      expect(request.scrubbed_options[:params]).to include(api_key: LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:headers]).to include(private_key: LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:body]).to include(user_token: LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:auth]).to be nil
+    end
+  end
+
   context 'basic authentication' do
     let(:username) { 'steve' }
     let(:password) { 'abcdefg' }
