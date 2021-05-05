@@ -31,6 +31,18 @@ describe LHC::Request do
     end
   end
 
+  context 'other authentication strategy' do
+    let(:api_key) { '123456' }
+    let(:authorization_header) { { 'Authorization' => "Apikey #{api_key}" } }
+    let(:headers) { authorization_header }
+
+    it 'provides srubbed Authorization header' do
+      LHC.config.scrubs[:headers] << 'Authorization'
+      expect(response.request.scrubbed_headers).to include('Authorization' => LHC::Scrubber::SCRUB_DISPLAY)
+      expect(response.request.headers).to include(authorization_header)
+    end
+  end
+
   describe 'auth' do
     before :each do
       LHC.config.interceptors = [LHC::Auth]
