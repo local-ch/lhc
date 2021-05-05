@@ -6,10 +6,6 @@ class LHC::AuthScrubber < LHC::Scrubber
     scrub_auth_options!
   end
 
-  # TODO For README: if it is not a standard validation, then simply scrub the whole Authorization header like this:
-  # config.scrubs[:headers] << 'Authorization'
-  # Note that now all Authorization headers in all request is filtered
-
   private
 
   def scrub_auth_options!
