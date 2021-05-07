@@ -495,14 +495,14 @@ You can configure global placeholders, that are used when generating urls from u
 ### Configuring scrubs
 
 You can filter out sensitive request data from your log files and rollbar by appending them to `LHS.config.scrubs`. These values will be marked `[FILTERED]` in the log and on rollbar. Also nested parameters are being filtered.
-The scrubbing configuration affects all request done by LHC independent of the endpoint. You can scrub any attribute within `params`, `headers` or `body`. For auth you either can choose `:bearer` or `:auth` (default is both).
+The scrubbing configuration affects all request done by LHC independent of the endpoint. You can scrub any attribute within `:params`, `:headers` or `:body`. For `:auth` you either can choose `:bearer` or `:basic` (default is both).
 
 LHS scrubs per default:
-- Bearer Token within the request header
-- Basic Auth username and password within the request header
-- password and password_confirmation within the request body
+- Bearer Token within the Request Header
+- Basic Auth `username` and `password` within the Request Header
+- `password` and `password_confirmation` within the Request Body
 
-Enhance the default scrubbing by pushing the name of the parameter, which should get scrubbed, as string to the existing configuration.
+Enhance the default scrubbing by pushing the name of the parameter, which should be scrubbed, as string to the existing configuration.
 You can also add multiple parameters at once by pushing multiple strings.
 
 Example:
@@ -520,7 +520,7 @@ For disabling scrubbing, add following configuration:
   end
 ```
 
-If you want to turn off `:bearer` or `:auth` scrubbing, then just overwrite the auth configuration.
+If you want to turn off `:bearer` or `:basic` scrubbing, then just overwrite the `:auth` configuration.
 
 Example:
 ```ruby
