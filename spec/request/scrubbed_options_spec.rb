@@ -32,6 +32,15 @@ describe LHC::Request do
     expect(request.scrubbed_options[:auth][:basic]).to be nil
   end
 
+  context 'when bearer auth is not a proc' do
+    let(:auth) { { bearer: bearer_token } }
+
+    it 'also scrubbes the bearer' do
+      expect(request.scrubbed_options[:auth][:bearer]).to eq(LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:auth][:bearer_token]).to eq(LHC::Scrubber::SCRUB_DISPLAY)
+    end
+  end
+
   context 'when options do not have auth' do
     let(:authorization_header) { {} }
     let(:auth) { nil }

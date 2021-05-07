@@ -27,6 +27,7 @@ class LHC::AuthScrubber < LHC::Scrubber
   def scrub_bearer_auth_options!
     return if scrubbed[:bearer].blank?
 
+    scrubbed[:bearer] = SCRUB_DISPLAY if scrubbed[:bearer].is_a?(String)
     scrubbed[:bearer_token] = SCRUB_DISPLAY
   end
 end
