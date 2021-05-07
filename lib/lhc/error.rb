@@ -78,5 +78,6 @@ class LHC::Error < StandardError
     debug << "Response Options: #{response.options}"
     debug << response.body
     debug << _message
-
-    debug.map { |str| self.class.fix_invalid_encoding(str) }.join("\n") end end
+    debug.map { |str| self.class.fix_invalid_encoding(str) }.join("\n")
+  end
+end
