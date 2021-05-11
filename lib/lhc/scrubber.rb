@@ -36,8 +36,7 @@ class LHC::Scrubber
       elsif scrubbed.key?(scrub_element.to_sym)
         key = scrub_element.to_sym
       end
-      next if key.blank?
-      next if scrubbed[key].blank?
+      next if key.blank? || scrubbed[key].blank?
 
       scrubbed[key] = SCRUB_DISPLAY
     end

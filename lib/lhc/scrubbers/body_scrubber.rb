@@ -14,9 +14,7 @@ class LHC::BodyScrubber < LHC::Scrubber
   end
 
   def parse!
-    return if scrubbed.nil?
-    return if scrubbed.is_a?(Hash)
-    return if scrubbed.is_a?(Array)
+    return if scrubbed.nil? || scrubbed.is_a?(Hash) || scrubbed.is_a?(Array)
 
     if scrubbed.is_a?(String)
       json = scrubbed
