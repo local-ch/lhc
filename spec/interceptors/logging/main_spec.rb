@@ -42,13 +42,13 @@ describe LHC::Logging do
       LHC.get('http://local.ch', params: { api_key: '123-abc' }, headers: { private_key: 'abc-123' })
     end
 
-    it 'does log not log sensitive params information before every request made with LHC' do
+    it 'does not log sensitive params information' do
       expect(logger).to have_received(:info).once.with(
         a_string_including("Params={:api_key=>\"#{LHC::Scrubber::SCRUB_DISPLAY}\"}")
       )
     end
 
-    it 'does log not log sensitive headers information before every request made with LHC' do
+    it 'does not log sensitive header information' do
       expect(logger).to have_received(:info).once.with(
         a_string_including(":private_key=>\"#{LHC::Scrubber::SCRUB_DISPLAY}\"")
       )
