@@ -6,7 +6,7 @@ class LHC::Scrubber
   SCRUB_DISPLAY = '[FILTERED]'
 
   def initialize(data)
-    @scrubbed = data.deep_dup
+    @scrubbed = data
   end
 
   private
