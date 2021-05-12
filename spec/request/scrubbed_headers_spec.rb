@@ -4,8 +4,7 @@ require 'rails_helper'
 
 describe LHC::Request do
   let(:headers) { { private_key: 'xyz-123' } }
-  let(:response) { binding.pry; 
-                   LHC.get(:local, headers: headers) }
+  let(:response) { LHC.get(:local, headers: headers) }
   let(:auth) { {} }
 
   before :each do
@@ -67,7 +66,8 @@ describe LHC::Request do
 
       it 'scrubs whole "Authorization" header' do
         LHC.config.scrubs[:headers] << 'Authorization'
-        expect(request.scrubbed_headers).to include('Authorization' => "#{LHC::Scrubber::SCRUB_DISPLAY}")
+        expect(request.scrubbed_headers).to include('Authorization' => LHC::Scrubber::SCRUB_DISPLAY)
+        expect(request.headers).to include(authorization_header)
       end
 
       it 'scrubs nothing' do
@@ -90,7 +90,8 @@ describe LHC::Request do
 
       it 'scrubs whole "Authorization" header' do
         LHC.config.scrubs[:headers] << 'Authorization'
-        expect(request.scrubbed_headers).to include(authorization_header)
+        expect(request.scrubbed_headers).to include('Authorization' => LHC::Scrubber::SCRUB_DISPLAY)
+        expect(request.headers).to include(authorization_header)
       end
 
       it 'scrubs nothing' do
