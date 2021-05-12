@@ -36,22 +36,34 @@ describe LHC::Rollbar do
         )
     end
 
-    context 'additional params' do
-      it 'does report errors to rollbar with additional data' do
-        stub_request(:get, 'http://local.ch')
-          .to_return(status: 400)
-        expect(-> { LHC.get('http://local.ch', rollbar: { additional: 'data' }) })
-          .to raise_error LHC::BadRequest
-        expect(::Rollbar).to have_received(:warning)
-          .with(
-            'Status: 400 URL: http://local.ch',
-            hash_including(
-              response: anything,
-              request: anything,
-              additional: 'data'
-            )
+    it 'does report errors to rollbar with additional data' do
+      stub_request(:get, 'http://local.ch')
+        .to_return(status: 400)
+      expect(-> { LHC.get('http://local.ch', rollbar: { additional: 'data' }) })
+        .to raise_error LHC::BadRequest
+      expect(::Rollbar).to have_received(:warning)
+        .with(
+          'Status: 400 URL: http://local.ch',
+          hash_including(
+            response: anything,
+            request: anything,
+            additional: 'data'
           )
-      end
+        )
+    end
+
+    it 'scrubs sensitive data' do
+      LHC.config.scrubs[:params] << 'api_key'
+      LHC.config.scrubs[:headers] << 'private_key'
+      stub_request(:get, 'http://local.ch?api_key=123-abc').to_return(status: 400)
+      expect(-> { LHC.get('http://local.ch', params: { api_key: '123-abc' }, headers: { private_key: 'abc-123' }) })
+        .to raise_error LHC::BadRequest
+      expect(::Rollbar).to have_received(:warning)
+        .with(
+          'Status: 400 URL: http://local.ch',
+          response: hash_including(body: anything, code: anything, headers: anything, time: anything, timeout?: anything),
+          request: hash_including(url: anything, method: anything, headers: hash_including(private_key: LHC::Scrubber::SCRUB_DISPLAY), params: { api_key: LHC::Scrubber::SCRUB_DISPLAY })
+        )
     end
   end
 end

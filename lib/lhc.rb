@@ -113,6 +113,17 @@ module LHC
   autoload :UnknownError,
            'lhc/errors/unknown_error'
 
+  autoload :Scrubber,
+           'lhc/scrubber'
+  autoload :AuthScrubber,
+           'lhc/scrubbers/auth_scrubber'
+  autoload :BodyScrubber,
+           'lhc/scrubbers/body_scrubber'
+  autoload :HeadersScrubber,
+           'lhc/scrubbers/headers_scrubber'
+  autoload :ParamsScrubber,
+           'lhc/scrubbers/params_scrubber'
+
   autoload :Interceptor,
            'lhc/interceptor'
   autoload :Interceptors,

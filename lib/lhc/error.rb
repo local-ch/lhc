@@ -72,13 +72,12 @@ class LHC::Error < StandardError
 
     debug = []
     debug << [request.method, request.url].map { |str| self.class.fix_invalid_encoding(str) }.join(' ')
-    debug << "Options: #{request.options}"
-    debug << "Headers: #{request.headers}"
+    debug << "Options: #{request.scrubbed_options}"
+    debug << "Headers: #{request.scrubbed_headers}"
     debug << "Response Code: #{response.code} (#{response.options[:return_code]})"
     debug << "Response Options: #{response.options}"
     debug << response.body
     debug << _message
-
     debug.map { |str| self.class.fix_invalid_encoding(str) }.join("\n")
   end
 end

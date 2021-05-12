@@ -8,7 +8,7 @@ describe LHC::Logging do
   before(:each) do
     LHC.config.interceptors = [LHC::Logging]
     LHC::Logging.logger = logger
-    stub_request(:get, 'http://local.ch').to_return(status: 200)
+    stub_request(:get, /http:\/\/local.ch.*/).to_return(status: 200)
   end
 
   it 'does log information before and after every request made with LHC' do
@@ -31,6 +31,26 @@ describe LHC::Logging do
       )
       expect(logger).to have_received(:info).once.with(
         %r{After LHC response for request <\d+> GET http://local.ch at \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2} Time=0ms URL=http://local.ch:80/ \nCalled from #{source}}
+      )
+    end
+  end
+
+  context 'sensitive data' do
+    before :each do
+      LHC.config.scrubs[:params] << 'api_key'
+      LHC.config.scrubs[:headers] << 'private_key'
+      LHC.get('http://local.ch', params: { api_key: '123-abc' }, headers: { private_key: 'abc-123' })
+    end
+
+    it 'does not log sensitive params information' do
+      expect(logger).to have_received(:info).once.with(
+        a_string_including("Params={:api_key=>\"#{LHC::Scrubber::SCRUB_DISPLAY}\"}")
+      )
+    end
+
+    it 'does not log sensitive header information' do
+      expect(logger).to have_received(:info).once.with(
+        a_string_including(":private_key=>\"#{LHC::Scrubber::SCRUB_DISPLAY}\"")
       )
     end
   end

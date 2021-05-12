@@ -51,6 +51,7 @@ use it like:
   * [Configuration](#configuration)
      * [Configuring endpoints](#configuring-endpoints)
      * [Configuring placeholders](#configuring-placeholders)
+     * [Configuring scrubs](#configuring-scrubs)
   * [Interceptors](#interceptors)
      * [Quick start: Configure/Enable Interceptors](#quick-start-configureenable-interceptors)
      * [Interceptors on local request level](#interceptors-on-local-request-level)
@@ -489,6 +490,50 @@ You can configure global placeholders, that are used when generating urls from u
   end
 
   LHC.get(:feedbacks) # http://datastore/v2/feedbacks
+```
+
+### Configuring scrubs
+
+You can filter out sensitive request data from your log files and rollbar by appending them to `LHS.config.scrubs`. These values will be marked `[FILTERED]` in the log and on rollbar. Also nested parameters are being filtered.
+The scrubbing configuration affects all request done by LHC independent of the endpoint. You can scrub any attribute within `:params`, `:headers` or `:body`. For `:auth` you either can choose `:bearer` or `:basic` (default is both).
+
+LHS scrubs per default:
+- Bearer Token within the Request Header
+- Basic Auth `username` and `password` within the Request Header
+- `password` and `password_confirmation` within the Request Body
+
+Enhance the default scrubbing by pushing the name of the parameter, which should be scrubbed, as string to the existing configuration.
+You can also add multiple parameters at once by pushing multiple strings.
+
+Example:
+```ruby
+  LHC.configure do |c|
+    c.scrubs[:params] << 'api_key'
+    c.scrubs[:body].push('user_token', 'secret_key')
+  end
+```
+
+For disabling scrubbing, add following configuration:
+```ruby
+  LHC.configure do |c|
+    c.scrubs = {}
+  end
+```
+
+If you want to turn off `:bearer` or `:basic` scrubbing, then just overwrite the `:auth` configuration.
+
+Example:
+```ruby
+  LHC.configure do |c|
+    c.scrubs[:auth] = [:bearer]
+  end
+```
+
+If your app has a different authentication strategy than Bearer Authentication or Basic Authentication then you can filter the data by scrubbing the whole header:
+```ruby
+  LHC.configure do |c|
+    c.scrubs[:headers] << 'Authorization'
+  end
 ```
 
 ## Interceptors

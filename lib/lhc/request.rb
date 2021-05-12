@@ -12,7 +12,13 @@ class LHC::Request
 
   TYPHOEUS_OPTIONS ||= [:params, :method, :body, :headers, :follow_location, :params_encoding]
 
-  attr_accessor :response, :options, :raw, :format, :error_handler, :errors_ignored, :source
+  attr_accessor :response,
+                :options,
+                :raw,
+                :format,
+                :error_handler,
+                :errors_ignored,
+                :source
 
   def initialize(options, self_executing = true)
     self.errors_ignored = (options.fetch(:ignore, []) || []).to_a.compact
@@ -54,6 +60,23 @@ class LHC::Request
 
   def run!
     raw.run
+  end
+
+  def scrubbed_params
+    LHC::ParamsScrubber.new(params.deep_dup).scrubbed
+  end
+
+  def scrubbed_headers
+    LHC::HeadersScrubber.new(headers.deep_dup, options[:auth]).scrubbed
+  end
+
+  def scrubbed_options
+    scrubbed_options = options.deep_dup
+    scrubbed_options[:params] = LHC::ParamsScrubber.new(scrubbed_options[:params]).scrubbed
+    scrubbed_options[:headers] = LHC::HeadersScrubber.new(scrubbed_options[:headers], scrubbed_options[:auth]).scrubbed
+    scrubbed_options[:auth] = LHC::AuthScrubber.new(scrubbed_options[:auth]).scrubbed
+    scrubbed_options[:body] = LHC::BodyScrubber.new(scrubbed_options[:body]).scrubbed
+    scrubbed_options
   end
 
   private
