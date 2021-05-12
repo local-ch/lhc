@@ -4,7 +4,8 @@ require 'rails_helper'
 
 describe LHC::Request do
   let(:headers) { { private_key: 'xyz-123' } }
-  let(:response) { LHC.get(:local, headers: headers) }
+  let(:response) { binding.pry; 
+                   LHC.get(:local, headers: headers) }
   let(:auth) { {} }
 
   before :each do
@@ -59,19 +60,19 @@ describe LHC::Request do
       let(:authorization_header) { { 'Authorization' => "Bearer #{bearer_token}" } }
       let(:auth) { { bearer: -> { bearer_token } } }
 
-      it 'provides srubbed request headers' do
+      it 'scrubs onlye the bearer token' do
         expect(request.scrubbed_headers).to include('Authorization' => "Bearer #{LHC::Scrubber::SCRUB_DISPLAY}")
         expect(request.headers).to include(authorization_header)
       end
 
-      context 'when nothing should get scrubbed' do
-        before :each do
-          LHC.config.scrubs = {}
-        end
+      it 'scrubs whole "Authorization" header' do
+        LHC.config.scrubs[:headers] << 'Authorization'
+        expect(request.scrubbed_headers).to include('Authorization' => "#{LHC::Scrubber::SCRUB_DISPLAY}")
+      end
 
-        it 'does not filter beaerer auth' do
-          expect(request.scrubbed_headers).to include(authorization_header)
-        end
+      it 'scrubs nothing' do
+        LHC.config.scrubs = {}
+        expect(request.scrubbed_headers).to include(authorization_header)
       end
     end
 
@@ -82,19 +83,19 @@ describe LHC::Request do
       let(:authorization_header) { { 'Authorization' => "Basic #{credentials_base_64_codiert}" } }
       let(:auth) { { basic: { username: username, password: password } } }
 
-      it 'provides srubbed request headers' do
+      it 'scrubs only credentials' do
         expect(request.scrubbed_headers).to include('Authorization' => "Basic #{LHC::Scrubber::SCRUB_DISPLAY}")
         expect(request.headers).to include(authorization_header)
       end
 
-      context 'when nothing should get scrubbed' do
-        before :each do
-          LHC.config.scrubs = {}
-        end
+      it 'scrubs whole "Authorization" header' do
+        LHC.config.scrubs[:headers] << 'Authorization'
+        expect(request.scrubbed_headers).to include(authorization_header)
+      end
 
-        it 'does not filter basic auth' do
-          expect(request.scrubbed_headers).to include(authorization_header)
-        end
+      it 'scrubs nothing' do
+        LHC.config.scrubs = {}
+        expect(request.scrubbed_headers).to include(authorization_header)
       end
     end
   end

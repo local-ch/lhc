@@ -4,7 +4,9 @@ class LHC::HeadersScrubber < LHC::Scrubber
   def initialize(data, auth_options)
     super(data)
     @auth_options = auth_options
+    binding.pry
     scrub!
+    binding.pry
     scrub_auth_headers!
   end
 
@@ -33,6 +35,7 @@ class LHC::HeadersScrubber < LHC::Scrubber
   def scrub_bearer_authentication_headers!
     return if auth_options[:bearer].blank? || scrubbed['Authorization'].blank?
 
+    binding.pry
     scrubbed['Authorization'].gsub!(auth_options[:bearer_token], SCRUB_DISPLAY)
   end
 end
