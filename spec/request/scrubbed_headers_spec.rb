@@ -59,7 +59,7 @@ describe LHC::Request do
       let(:authorization_header) { { 'Authorization' => "Bearer #{bearer_token}" } }
       let(:auth) { { bearer: -> { bearer_token } } }
 
-      it 'scrubs onlye the bearer token' do
+      it 'scrubs only the bearer token' do
         expect(request.scrubbed_headers).to include('Authorization' => "Bearer #{LHC::Scrubber::SCRUB_DISPLAY}")
         expect(request.headers).to include(authorization_header)
       end
