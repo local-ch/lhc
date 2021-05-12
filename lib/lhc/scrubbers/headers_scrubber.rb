@@ -25,14 +25,26 @@ class LHC::HeadersScrubber < LHC::Scrubber
   end
 
   def scrub_basic_authentication_headers!
-    return if auth_options[:basic].blank? || scrubbed['Authorization'].blank?
+    return if !scrub_basic_authentication_headers?
 
     scrubbed['Authorization'].gsub!(auth_options[:basic][:base_64_encoded_credentials], SCRUB_DISPLAY)
   end
 
   def scrub_bearer_authentication_headers!
-    return if auth_options[:bearer].blank? || scrubbed['Authorization'].blank?
+    return if !scrub_bearer_authentication_headers?
 
     scrubbed['Authorization'].gsub!(auth_options[:bearer_token], SCRUB_DISPLAY)
+  end
+
+  def scrub_basic_authentication_headers?
+    auth_options[:basic].present? &&
+      scrubbed['Authorization'].present? &&
+      scrubbed['Authorization'].include?(auth_options[:basic][:base_64_encoded_credentials])
+  end
+
+  def scrub_bearer_authentication_headers?
+    auth_options[:bearer].present? &&
+      scrubbed['Authorization'].present? &&
+      scrubbed['Authorization'].include?(auth_options[:bearer_token])
   end
 end
