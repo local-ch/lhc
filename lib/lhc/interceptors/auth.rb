@@ -56,10 +56,10 @@ class LHC::Auth < LHC::Interceptor
   # rubocop:enable Style/AccessorMethodName
 
   def reauthenticate!
-    # refresh token
+    # refresh access_token
     refresh_client_token_option.call
 
-    # Now as the token is refreshed
+    # Now as the token is refreshe
     # we need to use the refreshed bearer token
     # in the authorization header
     bearer_authentication! if auth_options[:bearer]
