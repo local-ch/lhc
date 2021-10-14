@@ -5,7 +5,10 @@ require 'rails_helper'
 describe LHC::Auth do
   let(:initial_token) { '123456' }
   let(:refresh_token) { 'abcdef' }
-  let(:options) { { bearer: initial_token, refresh_client_token: -> { refresh_token } } }
+
+  let(:options) do
+    { bearer: -> { DummyAuthentication.access_token }, refresh_client_token: -> { DummyAuthentication.refresh_token } }
+  end
   let!(:auth_failing) do
     stub_request(:get, 'http://local.ch')
       .with(headers: { 'Authorization' => "Bearer #{initial_token}" })
@@ -17,6 +20,23 @@ describe LHC::Auth do
   end
 
   before(:each) do
+    class DummyAuthentication
+
+      def self.refresh_token
+        # updates access_token
+      end
+
+      def self.access_token
+        # this is used as bearer token
+      end
+    end
+
+    # It does not matter what value this method returns it is not use by LHC.
+    # That method needs just to make sure that the value of the access_token
+    # is the new valid token
+    allow(DummyAuthentication).to receive(:refresh_token).and_return(nil)
+
+    allow(DummyAuthentication).to receive(:access_token).and_return(initial_token, refresh_token)
     LHC.config.interceptors = [LHC::Auth, LHC::Retry]
   end
 

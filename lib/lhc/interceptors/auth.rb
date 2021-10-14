@@ -73,7 +73,6 @@ class LHC::Auth < LHC::Interceptor
   end
 
   def reauthenticate?
-    # binding.pry if response.request.url.include?('https://opm.local-stg.cloud/v2/presences')
     !response.success? &&
       !auth_options[:reauthenticated] &&
       bearer_header_present? &&
