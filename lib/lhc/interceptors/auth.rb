@@ -56,9 +56,14 @@ class LHC::Auth < LHC::Interceptor
   # rubocop:enable Style/AccessorMethodName
 
   def reauthenticate!
-    # refresh token and update header
-    token = refresh_client_token_option.call
-    set_bearer_authorization_header(token)
+    # refresh token
+    refresh_client_token_option.call
+
+    # Now as the token is refreshed
+    # we need to use the refreshed bearer token
+    # in the authorization header
+    bearer_authentication! if auth_options[:bearer]
+
     # trigger LHC::Retry and ensure we do not trigger reauthenticate!
     # again should it fail another time
     new_options = request.options.dup
@@ -68,6 +73,7 @@ class LHC::Auth < LHC::Interceptor
   end
 
   def reauthenticate?
+    # binding.pry if response.request.url.include?('https://opm.local-stg.cloud/v2/presences')
     !response.success? &&
       !auth_options[:reauthenticated] &&
       bearer_header_present? &&
