@@ -97,9 +97,9 @@ class LHC::Auth < LHC::Interceptor
   end
 
   def refresh_client_token?
-    return true if refresh_client_token_option.is_a?(Proc)
+    return true if refresh_client_token_option.is_a?(Proc) && auth_options[:bearer].is_a?(Proc)
 
-    warn("[WARNING] The given refresh_client_token must be a Proc for reauthentication.")
+    warn("[WARNING] The given refresh_client_token and the given auth bearer must be a Proc for reauthentication.")
   end
 
   def retry_interceptor?

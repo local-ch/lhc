@@ -620,7 +620,9 @@ Adds the following to body of all requests:
 
 The current implementation can only offer reauthenticate for _client access tokens_. For this to work the following has to be given:
 
-* You have configured and implemented `LHC::Auth.refresh_client_token = -> { TokenRefreshUtil.client_access_token(true) }` which when called will force a refresh of the token and return the new value. It is also expected that this implementation will handle invalidating caches if necessary.
+* You have configured and implemented `LHC::Auth.refresh_client_token = -> { TokenRefreshUtil.client_access_token(refresh: true) }` which when called will force a refresh of the token. It is also expected that this implementation will handle invalidating caches if necessary.
+* You provide the bearer token as a proc `auth: { bearer: -> { TokenRefreshUtil.client_access_token } }`
+* Your implementation of the `client_access_token(refresh: true)` proc updates the `client_access_token` to return the refreshed token.
 * Your interceptors contain `LHC::Auth` and `LHC::Retry`, whereas `LHC::Retry` comes _after_ `LHC::Auth` in the chain.
 
 ##### Bearer Authentication with client access token
