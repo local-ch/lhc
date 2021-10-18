@@ -626,12 +626,10 @@ LHC.get('http://local.ch', auth: { bearer: -> { access_token }, refresh_client_t
 ```
 Where `TokenRefreshUtil.client_access_token(true)` forces a refresh of the token and returns the new token. It is also expected that this implementation will handle invalidating caches if necessary.
 
-You can also set a global `refresh_client_token` but that is not recommended when your app has multiple API endpoint with different access tokens.
-```
+You can also set a global `refresh_client_token`. This is not recommended for apps with multiple endpoint and different access tokens.
+```ruby
 LHC::Auth.refresh_client_token = -> { TokenRefreshUtil.client_access_token(true) }
 ```
-
-##### Bearer Authentication with client access token
 
 Reauthentication will be initiated if:
 
