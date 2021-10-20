@@ -618,12 +618,18 @@ Adds the following to body of all requests:
 
 ##### Reauthenticate
 
-The current implementation can only offer reauthenticate for _client access tokens_. For this to work the following has to be given:
+The current implementation offers only reauthentication for _client access tokens_.
+Make sure that your interceptors contain `LHC::Auth` and `LHC::Retry`, whereas `LHC::Retry` comes _after_ `LHC::Auth` in the chain.
+Provide the refresh token as following:
+```ruby
+LHC.get('http://local.ch', auth: { bearer: -> { access_token }, refresh_client_token: -> { TokenRefreshUtil.client_access_token(true) })
+```
+Where `TokenRefreshUtil.client_access_token(true)` forces a refresh of the token and returns the new token. It is also expected that this implementation will handle invalidating caches if necessary.
 
-* You have configured and implemented `LHC::Auth.refresh_client_token = -> { TokenRefreshUtil.client_access_token(true) }` which when called will force a refresh of the token and return the new value. It is also expected that this implementation will handle invalidating caches if necessary.
-* Your interceptors contain `LHC::Auth` and `LHC::Retry`, whereas `LHC::Retry` comes _after_ `LHC::Auth` in the chain.
-
-##### Bearer Authentication with client access token
+You can also set a global `refresh_client_token`. This is not recommended for apps with multiple endpoint and different access tokens.
+```ruby
+LHC::Auth.refresh_client_token = -> { TokenRefreshUtil.client_access_token(true) }
+```
 
 Reauthentication will be initiated if:
 
