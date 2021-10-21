@@ -72,6 +72,7 @@ class LHC::Request
 
   def scrubbed_options
     scrubbed_options = options.deep_dup
+    scrubbed_options[:cache] = LHC::CacheScrubber.new(scrubbed_options[:cache]).scrubbed
     scrubbed_options[:params] = LHC::ParamsScrubber.new(scrubbed_options[:params]).scrubbed
     scrubbed_options[:headers] = LHC::HeadersScrubber.new(scrubbed_options[:headers], scrubbed_options[:auth]).scrubbed
     scrubbed_options[:auth] = LHC::AuthScrubber.new(scrubbed_options[:auth]).scrubbed

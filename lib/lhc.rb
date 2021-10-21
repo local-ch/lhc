@@ -119,6 +119,8 @@ module LHC
            'lhc/scrubbers/auth_scrubber'
   autoload :BodyScrubber,
            'lhc/scrubbers/body_scrubber'
+  autoload :CacheScrubber,
+           'lhc/scrubbers/cache_scrubber'
   autoload :HeadersScrubber,
            'lhc/scrubbers/headers_scrubber'
   autoload :ParamsScrubber,
