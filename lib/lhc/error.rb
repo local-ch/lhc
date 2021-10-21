@@ -75,7 +75,7 @@ class LHC::Error < StandardError
     debug << "Options: #{request.scrubbed_options}"
     debug << "Headers: #{request.scrubbed_headers}"
     debug << "Response Code: #{response.code} (#{response.options[:return_code]})"
-    debug << "Response Options: #{response.options}"
+    debug << "Response Options: #{response.scrubbed_options}"
     debug << response.body
     debug << _message
     debug.map { |str| self.class.fix_invalid_encoding(str) }.join("\n")
