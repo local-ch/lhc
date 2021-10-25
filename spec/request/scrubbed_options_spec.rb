@@ -18,9 +18,12 @@ describe LHC::Request do
   let(:params) { { api_key: 'api-key-params' } }
   let(:headers) { { private_key: 'private-key-header' } }
   let(:body) { { user_token: 'user-token-body' } }
+  let(:cache) do
+    { key: "LHS_REQUEST_CYCLE_CACHE(v1) POST http://local.ch?#{params}" }
+  end
 
   let(:request) do
-    response = LHC.post(:local, params: params, headers: headers, body: body)
+    response = LHC.post(:local, params: params, headers: headers, body: body, cache: cache)
     response.request
   end
 
@@ -30,6 +33,8 @@ describe LHC::Request do
     expect(request.scrubbed_options[:body]).to include(user_token: LHC::Scrubber::SCRUB_DISPLAY)
     expect(request.scrubbed_options[:auth][:bearer_token]).to eq(LHC::Scrubber::SCRUB_DISPLAY)
     expect(request.scrubbed_options[:auth][:basic]).to be nil
+    expect(request.scrubbed_options[:cache])
+      .to include(key: "LHS_REQUEST_CYCLE_CACHE(v1) POST http://local.ch?{:api_key=>\"[FILTERED]\"}")
   end
 
   context 'when bearer auth is not a proc' do
@@ -104,6 +109,8 @@ describe LHC::Request do
       expect(request.scrubbed_options[:headers]).not_to include(private_key: LHC::Scrubber::SCRUB_DISPLAY)
       expect(request.scrubbed_options[:body]).not_to include(user_token: LHC::Scrubber::SCRUB_DISPLAY)
       expect(request.scrubbed_options[:auth][:bearer_token]).not_to eq(LHC::Scrubber::SCRUB_DISPLAY)
+      expect(request.scrubbed_options[:cache])
+        .not_to include(key: "LHS_REQUEST_CYCLE_CACHE(v1) POST http://local.ch?{:api_key=>\"[FILTERED]\"}")
     end
   end
 

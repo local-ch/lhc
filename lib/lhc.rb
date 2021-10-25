@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'local_uri'
 require 'typhoeus'
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/hash/keys'

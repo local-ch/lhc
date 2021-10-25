@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'activesupport', '>= 5.2'
   s.add_dependency 'addressable'
+  s.add_dependency 'local_uri'
   s.add_dependency 'typhoeus', '>= 0.11'
 
   s.add_development_dependency 'geminabox'

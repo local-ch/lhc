@@ -55,10 +55,12 @@ describe LHC::Error do
       end
 
       let(:response) do
+        options = { return_code: :internal_error, response_headers: "" }
         double('LHC::Response',
                request: request,
                code: 500,
-               options: { return_code: :internal_error, response_headers: "" },
+               options: options,
+               scrubbed_options: options,
                body: '{"status":500,"message":"undefined"}')
       end
 
