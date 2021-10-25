@@ -21,10 +21,8 @@ class LHC::EffectiveUrlScrubber < LHC::Scrubber
     return if scrubbed.blank?
 
     scrub_elements.each do |scrub_element|
-      # TODO maybe it makes sense to partse it as URL and then replace stuff
-      # and then make a string again isntead of using regex
-      value = scrubbed.match(/#{scrub_element}=(.*?)(&|$)/)[1]
-      scrubbed.gsub!(value, SCRUB_DISPLAY)
+      uri = LocalUri::URI.new(scrubbed)
+      self.scrubbed = CGI.unescape(uri.query.merge(scrub_element => SCRUB_DISPLAY).to_s)
     end
   end
 
