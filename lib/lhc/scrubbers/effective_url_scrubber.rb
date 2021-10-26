@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# TODO test this!!!
 class LHC::EffectiveUrlScrubber < LHC::Scrubber
   def initialize(data)
     super(data)
@@ -16,7 +15,6 @@ class LHC::EffectiveUrlScrubber < LHC::Scrubber
     scrub_effective_url!
   end
 
-  # TODO test this
   def scrub_effective_url!
     return if scrubbed.blank?
 

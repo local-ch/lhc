@@ -13,7 +13,7 @@ describe LHC::Response do
     LHC.config.scrubs[:params] << 'api_key'
   end
 
-  it 'provides headers' do
+  it 'scrubbes effective url' do
     response = LHC::Response.new(raw_response, nil)
     expect(response.scrubbed_options[:effective_url]).to eq "http://local.ch?api_key=#{LHC::Scrubber::SCRUB_DISPLAY}"
   end

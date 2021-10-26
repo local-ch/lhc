@@ -15,7 +15,6 @@ class LHC::CacheScrubber < LHC::Scrubber
     scrub_cache_key!
   end
 
-  # TODO test this
   def scrub_cache_key!
     return if scrubbed[:key].blank?
 
@@ -26,8 +25,8 @@ class LHC::CacheScrubber < LHC::Scrubber
   end
 
   def scrub_elements
-    # The cache key includes the whole request url and params are added
-    # to the request url so we need to scrub those params from the cache key.
+    # The cache key includes the whole request url inklusive params.
+    # We need to scrub those params from the cache key.
     LHC.config.scrubs[:params]
   end
 end
