@@ -58,6 +58,19 @@ describe LHC::Request do
     end
   end
 
+  context 'when parameter should not get scrubbed' do
+    let(:params) { { any_parameter: 'any-parameter' } }
+
+    let(:cache) do
+      { key: "LHS_REQUEST_CYCLE_CACHE(v1) POST http://local.ch?#{params}" }
+    end
+
+    it 'does not scrubb the parameter' do
+      expect(request.scrubbed_options[:cache])
+        .to include(key: "LHS_REQUEST_CYCLE_CACHE(v1) POST http://local.ch?#{params}")
+    end
+  end
+
   context 'when body data is nested' do
     let(:body) do
       {
