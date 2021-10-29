@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'local_uri'
 require 'typhoeus'
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/hash/keys'
@@ -119,6 +120,10 @@ module LHC
            'lhc/scrubbers/auth_scrubber'
   autoload :BodyScrubber,
            'lhc/scrubbers/body_scrubber'
+  autoload :CacheScrubber,
+           'lhc/scrubbers/cache_scrubber'
+  autoload :EffectiveUrlScrubber,
+           'lhc/scrubbers/effective_url_scrubber'
   autoload :HeadersScrubber,
            'lhc/scrubbers/headers_scrubber'
   autoload :ParamsScrubber,

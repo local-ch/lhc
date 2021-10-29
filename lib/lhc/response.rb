@@ -54,6 +54,12 @@ class LHC::Response
     request.format
   end
 
+  def scrubbed_options
+    scrubbed_options = options.deep_dup
+    scrubbed_options[:effective_url] = LHC::EffectiveUrlScrubber.new(scrubbed_options[:effective_url]).scrubbed
+    scrubbed_options
+  end
+
   private
 
   attr_accessor :raw
