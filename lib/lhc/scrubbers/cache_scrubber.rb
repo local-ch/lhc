@@ -19,7 +19,10 @@ class LHC::CacheScrubber < LHC::Scrubber
     return if scrubbed[:key].blank?
 
     scrub_elements.each do |scrub_element|
-      value = scrubbed[:key].match(/:#{scrub_element}=>"(.*?)"/)[-1]
+      matches = scrubbed[:key].match(/:#{scrub_element}=>"(.*?)"/)
+      next if matches.nil?
+
+      value = matches[-1]
       scrubbed[:key].gsub!(value, SCRUB_DISPLAY)
     end
   end
