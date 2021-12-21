@@ -27,6 +27,27 @@ describe LHC::Auth do
     expect(auth_suceeding_after_recovery).to have_been_made.once
   end
 
+  context 'without `auth` options' do
+    let(:headers) do
+      { 'Authorization' => "Bearer #{initial_token}" }
+    end
+
+    before do
+      LHC::Auth.refresh_client_token = -> { refresh_token }
+    end
+
+    after do
+      LHC::Auth.refresh_client_token = -> { nil }
+    end
+
+    it 'recovery is attempted' do
+      LHC.config.endpoint(:local, 'http://local.ch')
+      # the retried request (with updated Bearer), that should work
+      LHC.get(:local, { headers: headers })
+      expect(auth_suceeding_after_recovery).to have_been_made.once
+    end
+  end
+
   it "recovery is not attempted again when the request has reauthenticated: true " do
     LHC.config.endpoint(:local, 'http://local.ch', auth: options.merge(reauthenticated: true))
     expect { LHC.get(:local) }.to raise_error(LHC::Unauthorized)

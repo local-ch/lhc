@@ -50,7 +50,10 @@ class LHC::Auth < LHC::Interceptor
   end
 
   def set_bearer_authorization_header(token)
-    request.options[:auth].merge!(bearer_token: token)
+    auth_options = request.options[:auth] || Hash.new
+    auth_options.merge!(bearer_token: token)
+    request.options[:auth] = auth_options unless request.options.has_key?(:auth)
+
     set_authorization_header("Bearer #{token}")
   end
   # rubocop:enable Style/AccessorMethodName
