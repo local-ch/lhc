@@ -39,7 +39,7 @@ class LHC::Auth < LHC::Interceptor
     set_bearer_authorization_header(token)
   end
 
-  # rubocop:disable Style/AccessorMethodName
+  # rubocop:disable Naming/AccessorMethodName
   def set_authorization_header(value)
     request.headers['Authorization'] = value
   end
@@ -56,7 +56,7 @@ class LHC::Auth < LHC::Interceptor
 
     set_authorization_header("Bearer #{token}")
   end
-  # rubocop:enable Style/AccessorMethodName
+  # rubocop:enable Naming/AccessorMethodName
 
   def reauthenticate!
     # refresh token and update header
