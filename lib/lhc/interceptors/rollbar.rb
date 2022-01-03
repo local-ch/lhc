@@ -7,7 +7,7 @@ class LHC::Rollbar < LHC::Interceptor
   include LHC::FixInvalidEncodingConcern
 
   def after_response
-    return unless Object.const_defined?('Rollbar')
+    return unless Object.const_defined?(:Rollbar)
     return if response.success?
 
     request = response.request

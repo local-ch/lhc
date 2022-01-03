@@ -9,7 +9,7 @@ describe LHC::Rollbar do
 
   context 'Rollbar is undefined' do
     before(:each) do
-      Object.send(:remove_const, 'Rollbar') if Object.const_defined?('Rollbar')
+      Object.send(:remove_const, 'Rollbar') if Object.const_defined?(:Rollbar)
     end
     it 'does not report' do
       stub_request(:get, 'http://local.ch').to_return(status: 400)
