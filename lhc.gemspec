@@ -36,6 +36,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rubocop', '~> 1.0'
   s.add_development_dependency 'rubocop-performance', '~> 1.0'
   s.add_development_dependency 'rubocop-rspec', '~> 1.26.0'
+  s.add_development_dependency 'sprockets-rails'
   s.add_development_dependency 'timecop'
   s.add_development_dependency 'webmock'
 
