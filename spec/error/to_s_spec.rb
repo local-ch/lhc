@@ -15,7 +15,7 @@ describe LHC::Error do
         expect { "#{valid} #{invalid}" }.to raise_error Encoding::CompatibilityError
       end
       it 'to_json on an array raises an error' do
-        expect { [valid, invalid].to_json }.to raise_error Encoding::UndefinedConversionError
+        expect { [valid, invalid].to_json }.to raise_error JSON::GeneratorError
       end
 
       it 'to_s on a hash does not raise an error' do
@@ -23,7 +23,7 @@ describe LHC::Error do
       end
 
       it 'to_json on a hash does raise an error' do
-        expect { { valid: valid, invalid: invalid }.to_json }.to raise_error Encoding::UndefinedConversionError
+        expect { { valid: valid, invalid: invalid }.to_json }.to raise_error JSON::GeneratorError
       end
     end
 
