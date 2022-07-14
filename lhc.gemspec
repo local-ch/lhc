@@ -15,8 +15,7 @@ Gem::Specification.new do |s|
   s.summary     = 'Advanced HTTP Client for Ruby, fueled with interceptors'
   s.description = 'LHC is an extended/advanced HTTP client. Implementing basic http-communication enhancements like interceptors, exception handling, format handling, accessing response data, configuring endpoints and placeholders and fully compatible, RFC-compliant URL-template support.'
 
-  s.files        = `git ls-files`.split("\n")
-  s.test_files   = `git ls-files -- spec/*`.split("\n")
+  s.files         = `git ls-files`.split("\n")
   s.require_paths = ['lib']
 
   s.requirements << 'Ruby >= 2.0.0'

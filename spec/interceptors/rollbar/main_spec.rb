@@ -65,5 +65,24 @@ describe LHC::Rollbar do
           request: hash_including(url: anything, method: anything, headers: hash_including(private_key: LHC::Scrubber::SCRUB_DISPLAY), params: { api_key: LHC::Scrubber::SCRUB_DISPLAY })
         )
     end
+
+    context 'ignored errors' do
+      it 'does not report to rollbar if the error is ignored' do
+        stub_request(:get, 'http://local.ch').to_return(status: 404)
+        LHC.get('http://local.ch', ignore: [LHC::NotFound])
+        expect(::Rollbar).not_to have_received(:warning)
+      end
+
+      it 'does report to rollbar' do
+        stub_request(:get, 'http://local.ch').to_return(status: 400)
+        expect(-> { LHC.get('http://local.ch', ignore: [LHC::NotFound]) }).to raise_error LHC::BadRequest
+        expect(::Rollbar).not_to have_received(:warning)
+          .with(
+            'Status: 400 URL: http://local.ch',
+            response: hash_including(body: anything, code: anything, headers: anything, time: anything, timeout?: anything),
+            request: hash_including(url: anything, method: anything, headers: hash_including(private_key: LHC::Scrubber::SCRUB_DISPLAY), params: { api_key: LHC::Scrubber::SCRUB_DISPLAY })
+          )
+      end
+    end
   end
 end
