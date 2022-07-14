@@ -8,7 +8,7 @@ class LHC::Rollbar < LHC::Interceptor
 
   def after_response
     return unless Object.const_defined?(:Rollbar)
-    return if response.success?
+    return unless report?
 
     request = response.request
     additional_params = request.options.fetch(:rollbar, {})
@@ -33,5 +33,14 @@ class LHC::Rollbar < LHC::Interceptor
       sanitized_data = data.deep_transform_values { |value| self.class.fix_invalid_encoding(value) }
       Rollbar.warning("Status: #{response.code} URL: #{request.url}", sanitized_data)
     end
+  end
+
+  private
+
+  def report?
+    return false if response.success?
+    return false if response.request.error_ignored?
+
+    true
   end
 end
