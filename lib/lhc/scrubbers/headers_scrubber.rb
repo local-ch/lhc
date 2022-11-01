@@ -44,6 +44,7 @@ class LHC::HeadersScrubber < LHC::Scrubber
 
   def scrub_bearer_authentication_headers?
     auth_options[:bearer].present? &&
+      auth_options[:bearer_token] &&
       scrubbed['Authorization'].present? &&
       scrubbed['Authorization'].include?(auth_options[:bearer_token])
   end
