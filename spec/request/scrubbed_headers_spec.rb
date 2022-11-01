@@ -74,6 +74,14 @@ describe LHC::Request do
         LHC.config.scrubs = {}
         expect(request.scrubbed_headers).to include(authorization_header)
       end
+
+      context 'when the bearer_token is nil' do
+        let(:bearer_token) { nil }
+
+        it 'scrubs nothing' do
+          expect(request.scrubbed_headers).to include(authorization_header)
+        end
+      end
     end
 
     context 'basic authentication' do
